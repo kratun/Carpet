@@ -4,7 +4,7 @@
 
     using Carpet.Common.Constants;
 
-    public class ItemCreateInputModel //TODO : IMapTo<ItemDTO>, IMapFrom<ItemDTO>
+    public class ItemCreateInputModel // TODO : IMapTo<ItemDTO>, IMapFrom<ItemDTO>
     {
         [Required]
         [Display(Name = "Име")]

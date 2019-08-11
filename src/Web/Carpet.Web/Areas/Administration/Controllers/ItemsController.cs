@@ -1,9 +1,5 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Carpet.Web.InputModels.Administration;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -39,9 +35,9 @@
                 {
                     return this.View(itemCreate);
                 }
-                // TODO: Add insert logic here
 
-                return this.RedirectToAction(nameof(Index));
+                // TODO: Add insert logic here
+                return this.RedirectToAction(nameof(this.Index));
             }
             catch
             {
@@ -52,7 +48,7 @@
         // GET: Items/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return this.View();
         }
 
         // POST: Items/Edit/5
@@ -63,19 +59,18 @@
             try
             {
                 // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(this.Index));
             }
             catch
             {
-                return View();
+                return this.View();
             }
         }
 
         // GET: Items/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return this.View();
         }
 
         // POST: Items/Delete/5
@@ -86,12 +81,11 @@
             try
             {
                 // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(this.Index));
             }
             catch
             {
-                return View();
+                return this.View();
             }
         }
     }
