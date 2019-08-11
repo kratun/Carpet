@@ -6,10 +6,10 @@
     {
         public string OrderId { get; set; }
 
-        public Order Order { get; set; }
+        public virtual Order Order { get; set; }
 
         public string VehicleEmployeeId { get; set; }
 
-        public VehicleEmployee VehicleEmployee { get; set; }
+        public virtual VehicleEmployee VehicleEmployee { get; set; }
     }
 }

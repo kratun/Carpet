@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190811102937_AddCRMEntities.cs" />
+    <Compile Remove="Migrations\20190811102937_AddCRMEntities.Designer.cs" />
+    <Compile Remove="Migrations\20190811105307_AddCRMEntities.cs" />
+    <Compile Remove="Migrations\20190811105307_AddCRMEntities.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
 

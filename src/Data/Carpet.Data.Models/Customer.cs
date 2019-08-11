@@ -14,9 +14,9 @@
         }
 
         [Required]
+        [MinLength(2)]
         public string FirstName { get; set; }
 
-        [Required]
         public string LastName { get; set; }
 
         [NotMapped]
@@ -25,17 +25,18 @@
         [Required]
         public string PhoneNumber { get; set; }
 
+        [Required]
         public string PickUpAddress { get; set; }
 
         public string DeliveryAddress { get; set; }
 
         public string CreatorId { get; set; }
 
-        public Employee Creator { get; set; }
+        public virtual Employee Creator { get; set; }
 
         public string UserId { get; set; }
 
-        public CarpetUser User { get; set; }
+        public virtual CarpetUser User { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }

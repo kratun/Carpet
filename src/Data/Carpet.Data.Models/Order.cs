@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Text;
 
@@ -19,10 +20,6 @@
         public bool IsExpress { get; set; }
 
         public bool HasFlavor { get; set; }
-
-        public int StatusId { get; set; }
-
-        public OrderStatus Status { get; set; }
 
         public DateTime? PickUpFor { get; set; }
 
@@ -48,13 +45,18 @@
 
         public decimal TotalArea => this.OrderItems.Sum(oi => oi.ItemArea);
 
-        public decimal TotalPrice => this.OrderItems.Sum(oi => oi.TotalPrice);
+        public decimal TotalOrderAmount => this.OrderItems.Sum(oi => oi.TotalPrice);
 
         public bool IsPaid { get; set; }
 
         public decimal PaidAmount { get; set; }
 
         public string Description { get; set; }
+
+        [Required]
+        public int StatusId { get; set; }
+
+        public virtual OrderStatus Status { get; set; }
 
         public string CustomerId { get; set; }
 
@@ -74,7 +76,7 @@
         public override string ToString()
         {
             var result = new StringBuilder();
-            var totalPrice = this.TotalPrice;
+            var totalPrice = this.TotalOrderAmount;
             var totalArea = this.TotalArea;
             var itemTotalPrice = this.OrderItems.Sum(oi => oi.TotalPrice);
             var itemTotalArea = this.OrderItems.Sum(oi => oi.ItemArea);

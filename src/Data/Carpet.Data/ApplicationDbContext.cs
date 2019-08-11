@@ -96,6 +96,45 @@
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<VehicleEmployee>()
+                .HasKey(ve => ve.Id);
+
+            builder.Entity<Vehicle>(vehicle =>
+            {
+                vehicle.HasKey(ve => ve.Id);
+
+                vehicle.HasMany(v => v.VehicleEmployees)
+                .WithOne(v => v.Vehicle)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<Employee>(employee =>
+            {
+                employee.HasKey(ve => ve.Id);
+                employee.HasMany(v => v.VehicleEmployees)
+                .WithOne(v => v.Employee)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<OrderItem>(orderItem =>
+            {
+                orderItem.HasKey(o => o.Id);
+                orderItem.HasOne(o => o.Order)
+                .WithMany(oi => oi.OrderItems)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<Order>(order =>
+            {
+                order.HasMany(x => x.DeliveryVehicles)
+                .WithOne(x => x.Order)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                order.HasMany(x => x.PickUpVehicles)
+                .WithOne(x => x.Order)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
