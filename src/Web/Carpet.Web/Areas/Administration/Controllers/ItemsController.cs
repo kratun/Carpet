@@ -1,15 +1,31 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Carpet.Services.Data;
     using Carpet.Web.InputModels.Administration;
+    using Carpet.Web.ViewModels.Administration.Items;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     public class ItemsController : AdministrationController
     {
-        // GET: Items
-        public ActionResult Index()
+        private readonly IItemsService itemsService;
+
+        public ItemsController(IItemsService itemsService)
         {
-            return this.View();
+            this.itemsService = itemsService;
+        }
+
+        // GET: Items
+        public async Task<ActionResult> Index()
+        {
+            List<ItemIndexViewModel> items = await this.itemsService.GetAllItems()
+                .ToListAsync();
+
+            return this.View(items);
         }
 
         // GET: Items/Details/5
