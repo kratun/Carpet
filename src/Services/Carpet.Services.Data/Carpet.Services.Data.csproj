@@ -21,6 +21,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Carpet.Data.Common\Carpet.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\Carpet.Data.Models\Carpet.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\Carpet.Data\Carpet.Data.csproj" />
+    <ProjectReference Include="..\..\Web\Carpet.Web.ViewModels\Carpet.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\Carpet.Services.Mapping\Carpet.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>
