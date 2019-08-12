@@ -1,12 +1,10 @@
-﻿@model Carpet.Web.Areas.Administration.ViewModels.Dashboard.IndexViewModel
+﻿@using Carpet.Common.Constants
+@model Carpet.Web.Areas.Administration.ViewModels.Dashboard.IndexViewModel
 @{
     this.ViewData["Title"] = "Admin dashboard";
 }
 
-<h1>@this.ViewData["Title"]</h1>
-Settings: @this.Model.SettingsCount
-
-<h2 class="title text-center" style="margin-top: 35px;">ДОБАВЯНЕ НА АРТИКУЛ КЪМ ПОРЪЧКА</h2>
+<h1 class="title text-center" style="margin-top: 35px;">ДОБАВЯНЕ НА АРТИКУЛ КЪМ ПОРЪЧКА</h1>
 <h5 id="orderNumber" class="text-center">
     <span>от дата</span>
     <span>01.01.2019</span>
@@ -17,48 +15,16 @@ Settings: @this.Model.SettingsCount
 
 
 
-    <div class="d-flex flex-row justify-content-end" style="width:101%; margin-top: 35px;">
-        
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="mdo">Open modal for mdo</button>
-        
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog w-100" role="document">
-                <div class="modal-content" style="width:99%">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="row">
-                                <div class="form-group">
-                                    <label for="itemName" class="col-form-label">Recipient:</label>
-                                    <select type="text" class="form-control" id="itemName">
-                                        <option>Килим</option>
-                                        <option>Чипровски килим</option>
-                                        <option>Мокет</option>
-                                    </select>
+<div class="d-flex flex-row justify-content-end" style="width:101%; margin-top: 35px;">
 
-                                </div>
-                                <div class="form-group">
-                                    <label for="message-text" class="col-form-label">Message:</label>
-                                    <textarea class="form-control" id="message-text"></textarea>
-                                </div>
-                            </div>
+    <a class="btn btn-primary"
+       asp-area="@GlobalConstants.AreaAdministrationName"
+       asp-controller="@GlobalConstants.ContollerCustomersName"
+       asp-action="@GlobalConstants.ActionCreateName">Добави клинет</a>
 
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Send message</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    </div>
+
+</div>
 
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
@@ -82,18 +48,26 @@ Settings: @this.Model.SettingsCount
             {
                 <tr>
                     <td>@(i + 1)</td>
-                    <td  class="text-center">0888777999</td>
+                    <td class="text-center">0888777999</td>
                     <td>System Architect</td>
                     <td>гр. София, бул. Христо Смирненски 56, бл. 5, вх. 5</td>
                     <td>61</td>
-                    <td  class="text-center">2011/04/25</td>
+                    <td class="text-center">2011/04/25</td>
                     <td>$320,800</td>
                     <td class="justify-content-around">
                         <div>
-                            <a asp-area="Administration" asp-controller="Items" asp-action="Edit" asp-route-id="@(i+1)" class="btn btn-sm btn-outline-success" tabindex="0" aria-controls="example">Edit</a>
+                            <a asp-area="@GlobalConstants.AreaAdministrationName" 
+                               asp-controller="@GlobalConstants.ContollerCustomersName" 
+                               asp-action="@GlobalConstants.ActionEditName" 
+                               asp-route-id="@(Model)" 
+                               class="btn btn-sm btn-outline-success" tabindex="0" aria-controls="example">Edit</a>
                         </div>
                         <div>
-                            <a asp-area="Administration" asp-controller="Items" asp-action="Delete" asp-route-id="@(i+1)" class="btn btn-sm btn-outline-danger" tabindex="0" aria-controls="example">
+                            <a asp-area="@GlobalConstants.AreaAdministrationName" 
+                               asp-controller="@GlobalConstants.ContollerCustomersName" 
+                               asp-action="@GlobalConstants.ActionEditName" 
+                               asp-route-id="@(Model)" 
+                               class="btn btn-sm btn-outline-danger" tabindex="0" aria-controls="example">
                                 Delete
                             </a>
                         </div>
@@ -120,13 +94,4 @@ Settings: @this.Model.SettingsCount
 </div>
 
 <p class="intro text-center" style="margin-top: 85px;"></p>
-<script>
-    jQuery(document).ready(function () {
-            jQuery('#myTable').DataTable();
 
-            let result = $('#example_filter').text;
-            console.log(result);
-
-        });
-    
-</script>

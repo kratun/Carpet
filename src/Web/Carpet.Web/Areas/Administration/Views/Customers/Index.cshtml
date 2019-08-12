@@ -1,29 +1,75 @@
-﻿@model IEnumerable<Carpet.Web.ViewModels.Customers.CustomerAllInputModel>
+﻿@using Carpet.Common.Constants
+@model List<Carpet.Web.ViewModels.Customers.CustomerIndexViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="title text-center" style="margin-top: 35px;">СПИСЪК С КЛИЕНТИ</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="d-flex flex-row justify-content-end" style="width:100%; margin-top: 35px;">
+
+    <a class="btn btn-primary" style="width:180px;"
+       asp-area="@GlobalConstants.AreaAdministrationName"
+       asp-controller="@GlobalConstants.ContollerCustomersName"
+       asp-action="@GlobalConstants.ActionCreateName">Добави клинет</a>
+
+
+
+</div>
+<p class="intro text-center" style="margin-top: 10px;"></p>
+
+    <table id="customers" class="display" style="width:100%">
+        <thead>
+            <tr class="text-center">
+                <th>#</th>
+                <th>Име</th>
+                <th>Фамилия</th>
+                <th>Телефон</th>
+                <th>Адрес</th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i=0; i<Model.Count;i++)
+            {
+                <tr>
+                    <td>@(i+1)</td>
+                    <td>
+                        @Model[i].FirstName
+                    </td>
+                    <td>
+                        @Model[i].LastName
+                    </td>
+                    <td>
+                        @Model[i].PhoneNumber
+                    </td>
+                    <td>
+                        @Model[i].PickUpAddress
+                    </td>
+                    <td class="row justify-content-around">
+                        <div>
+                            <a asp-area="@GlobalConstants.AreaAdministrationName" 
+                               asp-controller="@GlobalConstants.ContollerCustomersName" 
+                               asp-action="@GlobalConstants.ActionEditName" 
+                               asp-route-id="@(Model[i].Id)" 
+                               class="btn btn-sm btn-outline-success" tabindex="0" aria-controls="example">Edit</a>
+                        </div>
+                        <div>
+                            <a asp-area="@GlobalConstants.AreaAdministrationName" 
+                               asp-controller="@GlobalConstants.ContollerCustomersName" 
+                               asp-action="@GlobalConstants.ActionDeleteName" 
+                               asp-route-id="@(Model[i].Id)"
+                               class="btn btn-sm btn-outline-danger" tabindex="0" aria-controls="example">
+                                Delete
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+<p class="intro text-center" style="margin-top: 85px;"></p>

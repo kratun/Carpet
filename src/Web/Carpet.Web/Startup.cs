@@ -12,8 +12,9 @@
     using Carpet.Services.Data;
     using Carpet.Services.Mapping;
     using Carpet.Services.Messaging;
+    using Carpet.Web.InputModels.Administration.Items;
     using Carpet.Web.ViewModels;
-
+    using Carpet.Web.ViewModels.Administration.Items;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -91,7 +92,6 @@
             // Identity stores
             services.AddTransient<IUserStore<CarpetUser>, ApplicationUserStore>();
             services.AddTransient<IRoleStore<CarpetRole>, ApplicationRoleStore>();
-            
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -103,12 +103,17 @@
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IItemsService, ItemsService>();
+            services.AddTransient<ICustomersService, CustomersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(ErrorViewModel).GetTypeInfo().Assembly,
+                typeof(ItemIndexViewModel).GetTypeInfo().Assembly,
+                typeof(ItemCreateInputModel).GetTypeInfo().Assembly,
+                typeof(Item).GetTypeInfo().Assembly);
 
             // TODO: if I am wrong -> Should Get Client Invatiant Culture
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;

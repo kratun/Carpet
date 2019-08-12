@@ -35,7 +35,6 @@
     <ProjectReference Include="..\..\Services\Carpet.Services.Data\Carpet.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\Carpet.Services.Mapping\Carpet.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\Carpet.Services.Messaging\Carpet.Services.Messaging.csproj" />
-    <ProjectReference Include="..\..\Services\Carpet.Services\Carpet.Services.csproj" />
     <ProjectReference Include="..\Carpet.Web.Infrastructure\Carpet.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Carpet.Web.InputModels\Carpet.Web.InputModels.csproj" />
     <ProjectReference Include="..\Carpet.Web.ViewModels\Carpet.Web.ViewModels.csproj" />

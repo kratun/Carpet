@@ -1,15 +1,32 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Carpet.Services.Data;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     public class CustomersController : AdministrationController
     {
+        private readonly ICustomersService customersService;
+
+        public CustomersController(ICustomersService customersService)
+        {
+            this.customersService = customersService;
+        }
+
         // GET: Customers
         [Route("/Administration/Customers")]
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            var customers = await this.customersService
+                .GetAllCustomers()
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(customers);
         }
 
         // GET: Customers/Details/5

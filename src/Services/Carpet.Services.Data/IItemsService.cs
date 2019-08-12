@@ -4,18 +4,19 @@
     using System.Threading.Tasks;
 
     using Carpet.Data.Models;
+    using Carpet.Web.InputModels.Administration.Items;
     using Carpet.Web.ViewModels.Administration.Items;
 
     public interface IItemsService
     {
-        IQueryable<ItemIndexViewModel> GetAllItems();
+        IQueryable<TViewModel> GetAllItems<TViewModel>();
 
-        Task<bool> Create(Item item);
+        Task<ItemIndexViewModel> Create(ItemCreateInputModel itemFromView);
 
-        Task<Item> GetById(int id);
+        Task<TViewModel> GetById<TViewModel>(int id);
 
-        Task<bool> Edit(int id, Item item);
+        Task<ItemEditViewModel> Edit(int id, ItemEditInputModel itemFromView);
 
-        Task<bool> Delete(int id);
+        Task<ItemIndexViewModel> Delete(int id);
     }
 }

@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Data\Carpet.Data\Carpet.Data.csproj" />
     <ProjectReference Include="..\..\Web\Carpet.Web\Carpet.Web.csproj" />
   </ItemGroup>
 
