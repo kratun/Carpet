@@ -1,4 +1,5 @@
-﻿@model Carpet.Web.ViewModels.Administration.Items.ItemEditViewModel
+﻿@using Carpet.Common.Constants
+@model Carpet.Web.ViewModels.Administration.Items.ItemEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -45,7 +46,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="@GlobalConstants.ActionIndexName">Back to List</a>
 </div>
 
 @section Scripts {

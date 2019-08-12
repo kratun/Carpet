@@ -2,13 +2,14 @@
 @model Carpet.Web.Areas.Administration.ViewModels.Dashboard.IndexViewModel
 @{
     this.ViewData["Title"] = "Admin dashboard";
+    Random rnd = new Random();
 }
 
 <h1 class="title text-center" style="margin-top: 35px;">ДОБАВЯНЕ НА АРТИКУЛ КЪМ ПОРЪЧКА</h1>
 <h5 id="orderNumber" class="text-center">
     <span>от дата</span>
     <span>01.01.2019</span>
-    <span>0888999777</span>
+    <span>0888000111</span>
     <span>гр. София, кв. Иван Вазов, бул./ул. Улица незнайна, № 4, вх. А</span>
 </h5>
 
@@ -48,12 +49,12 @@
             {
                 <tr>
                     <td>@(i + 1)</td>
-                    <td class="text-center">0888777999</td>
+                    <td class="text-center">0888000@(rnd.Next(100, 999))</td>
                     <td>System Architect</td>
                     <td>гр. София, бул. Христо Смирненски 56, бл. 5, вх. 5</td>
                     <td>61</td>
                     <td class="text-center">2011/04/25</td>
-                    <td>$320,800</td>
+                    <td>@(rnd.Next(1, 100)).@(rnd.Next(1, 99))</td>
                     <td class="justify-content-around">
                         <div>
                             <a asp-area="@GlobalConstants.AreaAdministrationName" 

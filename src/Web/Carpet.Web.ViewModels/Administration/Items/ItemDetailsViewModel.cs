@@ -1,9 +1,10 @@
 ﻿namespace Carpet.Web.ViewModels.Administration.Items
 {
+    using System.ComponentModel.DataAnnotations;
+
     using Carpet.Common.Constants;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
-    using System.ComponentModel.DataAnnotations;
 
     public class ItemDetailsViewModel : IMapTo<Item>, IMapFrom<Item>
     {

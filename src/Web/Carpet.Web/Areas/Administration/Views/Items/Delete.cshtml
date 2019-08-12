@@ -1,0 +1,50 @@
+﻿@using Carpet.Common.Constants
+@model Carpet.Web.ViewModels.Administration.Items.ItemDeleteViewModel
+
+@{
+    ViewData["Title"] = GlobalConstants.ActionDeleteName;
+}
+
+    <h1>Искате ли да изтриете тази услуга?</h1>
+
+<h3><span asp-validation-for="Id" class="text-danger"></span></h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OrdinaryPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OrdinaryPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ExpressAddOnPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ExpressAddOnPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.VacuumCleaningAddOnPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.VacuumCleaningAddOnPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FlavorAddOnPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FlavorAddOnPrice)
+        </dd>
+    </dl>
+
+    <form asp-action="@GlobalConstants.ActionDeleteName">
+        <input type="submit" value="@GlobalConstants.ActionDeleteName" class="btn btn-danger" /> |
+        <a asp-action="@GlobalConstants.ActionIndexName">Back to List</a>
+    </form>
+</div>

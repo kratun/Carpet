@@ -1,19 +1,26 @@
-﻿@model IEnumerable<Carpet.Web.ViewModels.Administration.Items.ItemIndexViewModel>
+﻿@using Carpet.Common.Constants
+@model IEnumerable<Carpet.Web.ViewModels.Administration.Items.ItemIndexViewModel>
 
 @{
     ViewData["Title"] = "Index";
+    var count = 1;
 }
 
-<h1>Index</h1>
+<h1>Услуги</h1>
+<div class="row justify-content-end" style="padding-right:18px">
+    <p>
+        <a asp-area="@GlobalConstants.AreaAdministrationName"
+           asp-controller="@GlobalConstants.ContollerItemsName"
+           asp-action="@(GlobalConstants.ActionCreateName)"
+           class="btn btn-outline-primary">Create New</a>
+    </p>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<table id="customers" class="display" style="width:100%">
     <thead>
-        <tr>
+        <tr class="text-center">
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                #
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -34,32 +41,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrdinaryPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpressAddOnPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VacuumCleaningAddOnPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FlavorAddOnPrice)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(count++)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrdinaryPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpressAddOnPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VacuumCleaningAddOnPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlavorAddOnPrice)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

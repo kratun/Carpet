@@ -18,13 +18,13 @@
         private readonly ApplicationDbContext context;
         private readonly IRepository<Item> itemRepository;
 
-        public ItemsService(ApplicationDbContext context, IRepository<Item> itemRepository)
+        public ItemsService(ApplicationDbContext context, IDeletableEntityRepository<Item> itemRepository)
         {
             this.context = context;
             this.itemRepository = itemRepository;
         }
 
-        public async Task<ItemIndexViewModel> Create(ItemCreateInputModel itemFromView)
+        public async Task<ItemIndexViewModel> CreateAsync(ItemCreateInputModel itemFromView)
         {
             var checkForName = this.itemRepository.All().FirstOrDefault(x => x.Name == itemFromView.Name);
 
@@ -43,12 +43,25 @@
             return itemToDb.To<ItemIndexViewModel>();
         }
 
-        public Task<ItemIndexViewModel> Delete(int id)
+        public async Task<ItemDeleteViewModel> DeleteByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var item = await this.itemRepository
+                .All()
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (item == null)
+            {
+                throw new NullReferenceException(string.Format(ItemConstants.NullReferenceItemId, id), new Exception(nameof(id)));
+            }
+
+            // item.IsDeleted = true;
+            this.itemRepository.Delete(item);
+            await this.itemRepository.SaveChangesAsync();
+
+            return item.To<ItemDeleteViewModel>();
         }
 
-        public async Task<ItemEditViewModel> Edit(int id, ItemEditInputModel itemFromView)
+        public async Task<ItemEditViewModel> EditByIdAsync(int id, ItemEditInputModel itemFromView)
         {
             var item = this.itemRepository.All().FirstOrDefault(x => x.Id == id);
 
@@ -78,12 +91,12 @@
             return item.To<ItemEditViewModel>();
         }
 
-        public IQueryable<TViewModel> GetAllItems<TViewModel>()
+        public IQueryable<TViewModel> GetAllItemsAsync<TViewModel>()
         {
             return this.itemRepository.All().Select(x => x.To<TViewModel>());
         }
 
-        public async Task<TViewModel> GetById<TViewModel>(int id)
+        public async Task<TViewModel> GetByIdAsync<TViewModel>(int id)
         {
             return await this.itemRepository.All().Where(x => x.Id == id).To<TViewModel>().FirstOrDefaultAsync();
         }

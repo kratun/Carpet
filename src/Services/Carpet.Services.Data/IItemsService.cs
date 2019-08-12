@@ -9,14 +9,14 @@
 
     public interface IItemsService
     {
-        IQueryable<TViewModel> GetAllItems<TViewModel>();
+        IQueryable<TViewModel> GetAllItemsAsync<TViewModel>();
 
-        Task<ItemIndexViewModel> Create(ItemCreateInputModel itemFromView);
+        Task<ItemIndexViewModel> CreateAsync(ItemCreateInputModel itemFromView);
 
-        Task<TViewModel> GetById<TViewModel>(int id);
+        Task<TViewModel> GetByIdAsync<TViewModel>(int id);
 
-        Task<ItemEditViewModel> Edit(int id, ItemEditInputModel itemFromView);
+        Task<ItemEditViewModel> EditByIdAsync(int id, ItemEditInputModel itemFromView);
 
-        Task<ItemIndexViewModel> Delete(int id);
+        Task<ItemDeleteViewModel> DeleteByIdAsync(int id);
     }
 }

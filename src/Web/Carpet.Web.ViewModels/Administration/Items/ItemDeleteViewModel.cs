@@ -6,7 +6,7 @@
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
 
-    public class ItemIndexViewModel : IMapFrom<Item>, IMapTo<Item>
+    public class ItemDeleteViewModel : IMapTo<Item>, IMapFrom<Item>
     {
         public int Id { get; set; }
 
