@@ -26,6 +26,22 @@
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<Employee> Employees { get; set; }
+
+        public DbSet<Item> Items { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderDeliveryVehicleEmployee> OrderDeliveryVehicleEmployees { get; set; }
+
+        public DbSet<OrderItem> OrderItems { get; set; }
+
+        public DbSet<OrderPickUpVehicleEmployee> OrderPickUpVehicleEmployees { get; set; }
+
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
