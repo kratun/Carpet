@@ -57,11 +57,6 @@
                 // var item = AutoMapper.Mapper.Map<Item>(itemCreate);
                 var result = await this.itemsService.CreateAsync(itemCreate);
 
-                if (result != null)
-                {
-                    // return this.RedirectToAction(nameof(this.Edit), result.Id);
-                }
-
                 return this.RedirectToAction(nameof(this.Index));
             }
             catch (ArgumentException e)

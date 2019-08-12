@@ -15,6 +15,7 @@
         public const string ContollerHomeName = "Home";
         public const string ContollerItemsName = "Items";
         public const string ContollerCustomersName = "Customers";
+        public const string ContollerOrdersName = "Orders";
         public const string ContollerEmployeesName = "Employees";
         public const string ContollerVehiclesName = "Vehicles";
 

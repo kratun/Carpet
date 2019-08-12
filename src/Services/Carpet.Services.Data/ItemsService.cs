@@ -15,12 +15,10 @@
 
     public class ItemsService : IItemsService
     {
-        private readonly ApplicationDbContext context;
         private readonly IRepository<Item> itemRepository;
 
-        public ItemsService(ApplicationDbContext context, IDeletableEntityRepository<Item> itemRepository)
+        public ItemsService(IDeletableEntityRepository<Item> itemRepository)
         {
-            this.context = context;
             this.itemRepository = itemRepository;
         }
 
@@ -54,7 +52,6 @@
                 throw new NullReferenceException(string.Format(ItemConstants.NullReferenceItemId, id), new Exception(nameof(id)));
             }
 
-            // item.IsDeleted = true;
             this.itemRepository.Delete(item);
             await this.itemRepository.SaveChangesAsync();
 
@@ -63,9 +60,9 @@
 
         public async Task<ItemEditViewModel> EditByIdAsync(int id, ItemEditInputModel itemFromView)
         {
-            var item = this.itemRepository.All().FirstOrDefault(x => x.Id == id);
+            var itemToDelete = this.itemRepository.All().FirstOrDefault(x => x.Id == id);
 
-            if (item == null)
+            if (itemToDelete == null)
             {
                 Exception innerException = new Exception(nameof(id));
                 throw new NullReferenceException(string.Format(ItemConstants.NullReferenceItemId, id), innerException);
@@ -78,17 +75,13 @@
                 throw new ArgumentException(string.Format(ItemConstants.ArgumentExceptionItemName, itemFromView.Name), nameof(itemFromView.Name));
             }
 
-            item.Name = itemFromView.Name;
-            item.OrdinaryPrice = itemFromView.OrdinaryPrice;
-            item.VacuumCleaningAddOnPrice = itemFromView.VacuumCleaningAddOnPrice;
-            item.FlavorAddOnPrice = itemFromView.FlavorAddOnPrice;
-            item.ExpressAddOnPrice = itemFromView.ExpressAddOnPrice;
+            var newItem = itemFromView.To<Item>();
 
-            this.itemRepository.Update(item);
-
+            this.itemRepository.Delete(itemToDelete);
+            await this.itemRepository.AddAsync(newItem);
             await this.itemRepository.SaveChangesAsync();
 
-            return item.To<ItemEditViewModel>();
+            return newItem.To<ItemEditViewModel>();
         }
 
         public IQueryable<TViewModel> GetAllItemsAsync<TViewModel>()
