@@ -3,18 +3,19 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.ViewModels.Customers;
 
     public interface ICustomersService
     {
-        IQueryable<CustomerIndexViewModel> GetAllCustomers();
+        IQueryable<TViewModel> GetAllCustomersAsync<TViewModel>();
 
-        Task<bool> Create(CustomerIndexViewModel customerInput);
+        Task<CustomerIndexViewModel> CreateAsync(CustomerCreateInputModel customerFromView);
 
-        Task<CustomerIndexViewModel> GetById(string id);
+        Task<TViewModel> GetByIdAsync<TViewModel>(int id);
 
-        Task<bool> Edit(int id, CustomerIndexViewModel customerEdit);
+        Task<CustomerEditViewModel> EditByIdAsync(int id, CustomerEditInputModel customerFromView);
 
-        Task<bool> Delete(string id);
+        Task<CustomerDeleteViewModel> DeleteByIdAsync(int id);
     }
 }

@@ -1,10 +1,11 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
-    using System.Linq;
+    using System;
     using System.Threading.Tasks;
 
     using Carpet.Services.Data;
-    using Microsoft.AspNetCore.Http;
+    using Carpet.Web.InputModels.Administration.Customers;
+    using Carpet.Web.ViewModels.Customers;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -21,22 +22,20 @@
         [Route("/Administration/Customers")]
         public async Task<IActionResult> Index()
         {
-            var customers = await this.customersService
-                .GetAllCustomers()
-                .OrderByDescending(x => x.CreatedOn)
+            var customers = await this.customersService.GetAllCustomersAsync<CustomerIndexViewModel>()
                 .ToListAsync();
 
             return this.View(customers);
         }
 
         // GET: Customers/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             return this.View();
         }
 
         // GET: Customers/Create
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return this.View();
         }
@@ -44,21 +43,34 @@
         // POST: Customers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(CustomerCreateInputModel customerCreate)
         {
             try
             {
-                // TODO: Add insert logic here
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(customerCreate);
+                }
+
+                var result = await this.customersService.CreateAsync(customerCreate);
                 return this.RedirectToAction(nameof(this.Index));
             }
-            catch
+            catch (ArgumentException e)
             {
-                return this.View();
+                // TODO: Error message that item name exist
+                this.ModelState.AddModelError(e.ParamName, e.Message);
+                return this.View(customerCreate);
+            }
+            catch (NullReferenceException e)
+            {
+                // TODO: Error message that item name exist
+                this.ModelState.AddModelError(e.InnerException.Message, e.Message);
+                return this.View(customerCreate);
             }
         }
 
         // GET: Customers/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             return this.View();
         }
@@ -66,7 +78,7 @@
         // POST: Customers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, CustomerEditInputModel customerEdit)
         {
             try
             {
@@ -80,7 +92,7 @@
         }
 
         // GET: Customers/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             return this.View();
         }
@@ -88,7 +100,7 @@
         // POST: Customers/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id, CustomerDeleteViewModel customerDelete)
         {
             try
             {

@@ -3,45 +3,58 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Carpet.Common.Constants;
     using Carpet.Data;
     using Carpet.Data.Common.Repositories;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
+    using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.ViewModels.Customers;
 
     public class CustomersService : ICustomersService
     {
-        private readonly ApplicationDbContext context;
         private readonly IRepository<Customer> customerRepository;
 
-        public CustomersService(ApplicationDbContext context, IRepository<Customer> customerRepository)
+        public CustomersService(IDeletableEntityRepository<Customer> customerRepository)
         {
-            this.context = context;
             this.customerRepository = customerRepository;
         }
 
-        public Task<bool> Create(CustomerIndexViewModel customerInput)
+        public async Task<CustomerIndexViewModel> CreateAsync(CustomerCreateInputModel customerFromView)
+        {
+            var checkForPhoneNumber = this.customerRepository.All().FirstOrDefault(x => x.PhoneNumber == customerFromView.PhoneNumber);
+
+            // If item exists return existing view model
+            if (checkForPhoneNumber != null)
+            {
+                throw new ArgumentException(string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber), nameof(customerFromView.PhoneNumber));
+            }
+
+            var customerToDb = customerFromView.To<Customer>();
+
+            await this.customerRepository.AddAsync(customerToDb);
+
+            await this.customerRepository.SaveChangesAsync();
+
+            return customerToDb.To<CustomerIndexViewModel>();
+        }
+
+        public async Task<CustomerDeleteViewModel> DeleteByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(string id)
+        public async Task<CustomerEditViewModel> EditByIdAsync(int id, CustomerEditInputModel customerFromView)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Edit(int id, CustomerIndexViewModel customerEdit)
+        public IQueryable<TViewModel> GetAllCustomersAsync<TViewModel>()
         {
-            throw new NotImplementedException();
+            return this.customerRepository.All().Select(x => x.To<TViewModel>());
         }
 
-        public IQueryable<CustomerIndexViewModel> GetAllCustomers()
-        {
-            return this.customerRepository.All().Select(x => x.To<CustomerIndexViewModel>());
-        }
-
-        public Task<CustomerIndexViewModel> GetById(string id)
+        public async Task<TViewModel> GetByIdAsync<TViewModel>(int id)
         {
             throw new NotImplementedException();
         }

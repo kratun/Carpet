@@ -7,7 +7,6 @@
     using Carpet.Services.Data;
     using Carpet.Web.InputModels.Administration.Items;
     using Carpet.Web.ViewModels.Administration.Items;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
