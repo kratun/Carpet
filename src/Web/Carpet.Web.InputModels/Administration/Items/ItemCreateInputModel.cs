@@ -9,23 +9,23 @@
     public class ItemCreateInputModel : IMapTo<Item>, IMapFrom<Item>
     {
         [Required]
-        [Display(Name = ItemConstants.ItemDisplayNameName)]
+        [Display(Name = ItemConstants.DisplayNameName)]
         public string Name { get; set; }
 
-        [Range(typeof(decimal), ItemConstants.ItemPriceMinValue, ItemConstants.ItemPriceMaxValue)]
-        [Display(Name = ItemConstants.ItemDisplayNameOrdinaryPrice)]
+        [Range(typeof(decimal), ItemConstants.PriceMinValue, ItemConstants.PriceMaxValue)]
+        [Display(Name = ItemConstants.DisplayNameOrdinaryPrice)]
         public decimal OrdinaryPrice { get; set; }
 
-        [Range(typeof(decimal), ItemConstants.ItemPriceMinValue, ItemConstants.ItemPriceMaxValue)]
-        [Display(Name = ItemConstants.ItemDisplayNameExpressAddOnPrice)]
+        [Range(typeof(decimal), ItemConstants.PriceMinValue, ItemConstants.PriceMaxValue)]
+        [Display(Name = ItemConstants.DisplayNameExpressAddOnPrice)]
         public decimal ExpressAddOnPrice { get; set; }
 
-        [Range(typeof(decimal), ItemConstants.ItemPriceMinValue, ItemConstants.ItemPriceMaxValue)]
-        [Display(Name = ItemConstants.ItemDisplayNameVacuumCleaningAddOnPrice)]
+        [Range(typeof(decimal), ItemConstants.PriceMinValue, ItemConstants.PriceMaxValue)]
+        [Display(Name = ItemConstants.DisplayNameVacuumCleaningAddOnPrice)]
         public decimal VacuumCleaningAddOnPrice { get; set; }
 
-        [Range(typeof(decimal), ItemConstants.ItemPriceMinValue, ItemConstants.ItemPriceMaxValue)]
-        [Display(Name = ItemConstants.ItemDisplayNameFlavorAddOnPrice)]
+        [Range(typeof(decimal), ItemConstants.PriceMinValue, ItemConstants.PriceMaxValue)]
+        [Display(Name = ItemConstants.DisplayNameFlavorAddOnPrice)]
         public decimal FlavorAddOnPrice { get; set; }
     }
 }

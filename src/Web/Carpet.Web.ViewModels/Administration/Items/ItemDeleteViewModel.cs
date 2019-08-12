@@ -10,19 +10,19 @@
     {
         public int Id { get; set; }
 
-        [Display(Name = ItemConstants.ItemDisplayNameName)]
+        [Display(Name = ItemConstants.DisplayNameName)]
         public string Name { get; set; }
 
-        [Display(Name = ItemConstants.ItemDisplayNameOrdinaryPrice)]
+        [Display(Name = ItemConstants.DisplayNameOrdinaryPrice)]
         public decimal OrdinaryPrice { get; set; }
 
-        [Display(Name = ItemConstants.ItemDisplayNameExpressAddOnPrice)]
+        [Display(Name = ItemConstants.DisplayNameExpressAddOnPrice)]
         public decimal ExpressAddOnPrice { get; set; }
 
-        [Display(Name = ItemConstants.ItemDisplayNameVacuumCleaningAddOnPrice)]
+        [Display(Name = ItemConstants.DisplayNameVacuumCleaningAddOnPrice)]
         public decimal VacuumCleaningAddOnPrice { get; set; }
 
-        [Display(Name = ItemConstants.ItemDisplayNameFlavorAddOnPrice)]
+        [Display(Name = ItemConstants.DisplayNameFlavorAddOnPrice)]
         public decimal FlavorAddOnPrice { get; set; }
     }
 }

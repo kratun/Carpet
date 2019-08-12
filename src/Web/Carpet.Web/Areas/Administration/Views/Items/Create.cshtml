@@ -21,22 +21,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="OrdinaryPrice" class="control-label"></label>
-                <input type="number" pattern="[0-9]+([,\.][0-9]+)?" step="@ItemConstants.ItemPriceStepViewValue" min="@ItemConstants.ItemPriceMinValue" asp-for="OrdinaryPrice" class="form-control" />
+                <input type="number" pattern="[0-9]+([,\.][0-9]+)?" step="@ItemConstants.PriceStepViewValue" min="@ItemConstants.PriceMinValue" asp-for="OrdinaryPrice" class="form-control" />
                 <span asp-validation-for="OrdinaryPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ExpressAddOnPrice" class="control-label"></label>
-                <input type="number" step="@ItemConstants.ItemPriceStepViewValue" min="@ItemConstants.ItemPriceMinValue" asp-for="ExpressAddOnPrice" class="form-control" />
+                <input type="number" step="@ItemConstants.PriceStepViewValue" min="@ItemConstants.PriceMinValue" asp-for="ExpressAddOnPrice" class="form-control" />
                 <span asp-validation-for="ExpressAddOnPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="VacuumCleaningAddOnPrice" class="control-label"></label>
-                <input type="number" step="@ItemConstants.ItemPriceStepViewValue" min="@ItemConstants.ItemPriceMinValue" asp-for="VacuumCleaningAddOnPrice" class="form-control" />
+                <input type="number" step="@ItemConstants.PriceStepViewValue" min="@ItemConstants.PriceMinValue" asp-for="VacuumCleaningAddOnPrice" class="form-control" />
                 <span asp-validation-for="VacuumCleaningAddOnPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FlavorAddOnPrice" class="control-label"></label>
-                <input type="number" step="@ItemConstants.ItemPriceStepViewValue" min="@ItemConstants.ItemPriceMinValue" asp-for="FlavorAddOnPrice" class="form-control" />
+                <input type="number" step="@ItemConstants.PriceStepViewValue" min="@ItemConstants.PriceMinValue" asp-for="FlavorAddOnPrice" class="form-control" />
                 <span asp-validation-for="FlavorAddOnPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
