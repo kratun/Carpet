@@ -23,7 +23,7 @@
 
         public async Task<CustomerIndexViewModel> CreateAsync(CustomerCreateInputModel customerFromView)
         {
-            var checkForPhoneNumber = this.customerRepository.All().FirstOrDefault(x => x.PhoneNumber == customerFromView.PhoneNumber);
+            var checkForPhoneNumber = await this.customerRepository.All().FirstOrDefaultAsync(x => x.PhoneNumber == customerFromView.PhoneNumber);
 
             // If customer with phone number exists return existing view model
             if (checkForPhoneNumber != null)
@@ -48,7 +48,7 @@
 
             if (customer == null)
             {
-                throw new NullReferenceException(string.Format(ItemConstants.NullReferenceItemId, id), new Exception(nameof(id)));
+                throw new NullReferenceException(string.Format(CustomerConstants.NullReferenceCustomerId, id), new Exception(nameof(id)));
             }
 
             this.customerRepository.Delete(customer);
@@ -59,7 +59,9 @@
 
         public async Task<CustomerEditViewModel> EditByIdAsync(string id, CustomerEditInputModel customerFromView)
         {
-            var customerToDelete = this.customerRepository.All().FirstOrDefault(x => x.Id == id);
+            var customerToDelete = await this.customerRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (customerToDelete == null)
             {
@@ -67,7 +69,9 @@
                 throw new NullReferenceException(string.Format(CustomerConstants.NullReferenceCustomerId, id), innerException);
             }
 
-            var checkForPhoneNumber = this.customerRepository.All().FirstOrDefault(x => x.PhoneNumber == customerFromView.PhoneNumber);
+            var checkForPhoneNumber = await this.customerRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.PhoneNumber == customerFromView.PhoneNumber);
 
             // If customer with phone number exists return existing view model
             if (checkForPhoneNumber != null && customerToDelete.Id != checkForPhoneNumber.Id)
@@ -75,13 +79,13 @@
                 throw new ArgumentException(string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber), nameof(customerFromView.PhoneNumber));
             }
 
-            var newItem = customerFromView.To<Customer>();
+            var newCustomer = customerFromView.To<Customer>();
 
             this.customerRepository.Delete(customerToDelete);
-            await this.customerRepository.AddAsync(newItem);
+            await this.customerRepository.AddAsync(newCustomer);
             await this.customerRepository.SaveChangesAsync();
 
-            return newItem.To<CustomerEditViewModel>();
+            return newCustomer.To<CustomerEditViewModel>();
         }
 
         public IQueryable<TViewModel> GetAllCustomersAsync<TViewModel>()

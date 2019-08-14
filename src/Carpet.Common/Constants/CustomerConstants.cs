@@ -1,6 +1,6 @@
 ﻿namespace Carpet.Common.Constants
 {
-    public class CustomerConstants
+    public static class CustomerConstants
     {
         public const int FirstNameMinValue = 2;
         public const int AddressMinLength = 5;

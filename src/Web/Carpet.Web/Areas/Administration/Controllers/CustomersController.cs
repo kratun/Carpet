@@ -97,9 +97,15 @@
             }
             catch (ArgumentException e)
             {
-                // TODO: Error message that item name exist
+                // TODO: Error message that customer with Registration nnumber same as edited exist
                 this.ModelState.AddModelError(e.ParamName, e.Message);
-                return this.View();
+                return this.View(customerEdit);
+            }
+            catch (NullReferenceException e)
+            {
+                // TODO: Error message that customer with Id does not exist
+                this.ModelState.AddModelError(e.InnerException.Message, e.Message);
+                return this.View(customerEdit);
             }
         }
 
