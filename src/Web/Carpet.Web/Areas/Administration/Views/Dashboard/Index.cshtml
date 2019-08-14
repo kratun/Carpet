@@ -29,8 +29,27 @@
 
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
+<div class="row d-lg-inline-flex">
+    
+        <table border="0" cellspacing="5" cellpadding="5">
+            <tbody>
+                <tr>
+                    <td>Начална дата:</td>
+                    <td><input type="text" id="min" name="min"></td>
+                </tr>
+                <tr>
+                    <td>Крайна дата:</td>
+                    <td><input type="text" id="max" name="max"></td>
+                </tr>
+            </tbody>
+        </table>
+   
+</div>
 <div class="row">
-
+    <hr style="color:black; width:300px;height:1px; margin-bottom:10px" />
+</div>
+        
+<div class="row">    
     <table id="example" class="display" style="width:100%">
         <thead>
             <tr class="text-center">
@@ -53,21 +72,21 @@
                     <td>System Architect</td>
                     <td>гр. София, бул. Христо Смирненски 56, бл. 5, вх. 5</td>
                     <td>61</td>
-                    <td class="text-center">2011/04/25</td>
+                    <td class="text-center">2011/04/@(rnd.Next(1, 28))</td>
                     <td>@(rnd.Next(1, 100)).@(rnd.Next(1, 99))</td>
                     <td class="justify-content-around">
                         <div>
-                            <a asp-area="@GlobalConstants.AreaAdministrationName" 
-                               asp-controller="@GlobalConstants.ContollerCustomersName" 
-                               asp-action="@GlobalConstants.ActionEditName" 
-                               asp-route-id="@(Model)" 
+                            <a asp-area="@GlobalConstants.AreaAdministrationName"
+                               asp-controller="@GlobalConstants.ContollerCustomersName"
+                               asp-action="@GlobalConstants.ActionEditName"
+                               asp-route-id="@(Model)"
                                class="btn btn-sm btn-outline-success" tabindex="0" aria-controls="example">Edit</a>
                         </div>
                         <div>
-                            <a asp-area="@GlobalConstants.AreaAdministrationName" 
-                               asp-controller="@GlobalConstants.ContollerCustomersName" 
-                               asp-action="@GlobalConstants.ActionEditName" 
-                               asp-route-id="@(Model)" 
+                            <a asp-area="@GlobalConstants.AreaAdministrationName"
+                               asp-controller="@GlobalConstants.ContollerCustomersName"
+                               asp-action="@GlobalConstants.ActionEditName"
+                               asp-route-id="@(Model)"
                                class="btn btn-sm btn-outline-danger" tabindex="0" aria-controls="example">
                                 Delete
                             </a>

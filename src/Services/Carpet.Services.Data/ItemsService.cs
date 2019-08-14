@@ -70,7 +70,7 @@
 
             var checkForName = this.itemRepository.All().FirstOrDefault(x => x.Name == itemFromView.Name);
 
-            if (checkForName != null && checkForName.Id != id)
+            if (checkForName != null && checkForName.Id != itemToDelete.Id)
             {
                 throw new ArgumentException(string.Format(ItemConstants.ArgumentExceptionItemName, itemFromView.Name), nameof(itemFromView.Name));
             }
