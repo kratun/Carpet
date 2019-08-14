@@ -1,11 +1,12 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Carpet.Services.Data;
     using Carpet.Web.InputModels.Administration.Customers;
-    using Carpet.Web.ViewModels.Customers;
+    using Carpet.Web.ViewModels.Administration.Customers;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -23,15 +24,17 @@
         public async Task<IActionResult> Index()
         {
             var customers = await this.customersService.GetAllCustomersAsync<CustomerIndexViewModel>()
+                .OrderByDescending(x => x.CreatedOn)
                 .ToListAsync();
 
             return this.View(customers);
         }
 
         // GET: Customers/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(string id)
         {
-            return this.View();
+            var customerToDetail = await this.customersService.GetByIdAsync<CustomerDetailsViewModel>(id);
+            return this.View(customerToDetail);
         }
 
         // GET: Customers/Create
@@ -70,46 +73,61 @@
         }
 
         // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(string id)
         {
-            return this.View();
+            var customerToEdit = await this.customersService.GetByIdAsync<CustomerEditViewModel>(id);
+            return this.View(customerToEdit);
         }
 
         // POST: Customers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CustomerEditInputModel customerEdit)
+        public async Task<IActionResult> Edit(string id, CustomerEditInputModel customerEdit)
         {
             try
             {
-                // TODO: Add update logic here
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(customerEdit);
+                }
+
+                var result = await this.customersService.EditByIdAsync(id, customerEdit);
+
                 return this.RedirectToAction(nameof(this.Index));
             }
-            catch
+            catch (ArgumentException e)
             {
+                // TODO: Error message that item name exist
+                this.ModelState.AddModelError(e.ParamName, e.Message);
                 return this.View();
             }
         }
 
         // GET: Customers/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            return this.View();
+            var customerToDelete = await this.customersService.GetByIdAsync<CustomerDeleteViewModel>(id);
+            return this.View(customerToDelete);
         }
 
         // POST: Customers/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, CustomerDeleteViewModel customerDelete)
+        public async Task<IActionResult> Delete(string id, CustomerDeleteInputModel customerDelete)
         {
             try
             {
-                // TODO: Add delete logic here
+                var customer = await this.customersService.DeleteByIdAsync(id);
+
                 return this.RedirectToAction(nameof(this.Index));
             }
-            catch
+            catch (NullReferenceException e)
             {
-                return this.View();
+                // TODO: Error message that item not exist
+                // this.ModelState.Root.AttemptedValue = "ModelOnly";
+                // this.ModelState.Root.RawValue = e.Message;
+                this.ModelState.AddModelError(e.InnerException.Message, e.Message);
+                return this.View(customerDelete);
             }
         }
     }

@@ -7,9 +7,11 @@
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
 
-    public class CustomerCreateInputModel : IMapTo<Customer>, IMapFrom<Customer>
+    public class CustomerDeleteInputModel : IMapTo<Customer>, IMapFrom<Customer>
     {
-        [Required(ErrorMessage =CustomerConstants.ErrorFieldRequired)]
+        public string Id { get; set; }
+
+        [Required(ErrorMessage = CustomerConstants.ErrorFieldRequired)]
         [MinLength(CustomerConstants.FirstNameMinValue, ErrorMessage = CustomerConstants.ErrorFieldNameLength)]
         [RegularExpression(CustomerConstants.NameValidation, ErrorMessage = CustomerConstants.ErrorFieldNameRegex)]
         [Display(Name = CustomerConstants.DisplayNameFirstName)]

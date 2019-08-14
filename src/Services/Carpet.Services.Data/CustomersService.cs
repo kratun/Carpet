@@ -3,13 +3,14 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Carpet.Common.Constants;
-    using Carpet.Data;
     using Carpet.Data.Common.Repositories;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Customers;
-    using Carpet.Web.ViewModels.Customers;
+    using Carpet.Web.ViewModels.Administration.Customers;
+    using Microsoft.EntityFrameworkCore;
 
     public class CustomersService : ICustomersService
     {
@@ -24,7 +25,7 @@
         {
             var checkForPhoneNumber = this.customerRepository.All().FirstOrDefault(x => x.PhoneNumber == customerFromView.PhoneNumber);
 
-            // If item exists return existing view model
+            // If customer with phone number exists return existing view model
             if (checkForPhoneNumber != null)
             {
                 throw new ArgumentException(string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber), nameof(customerFromView.PhoneNumber));
@@ -39,14 +40,48 @@
             return customerToDb.To<CustomerIndexViewModel>();
         }
 
-        public async Task<CustomerDeleteViewModel> DeleteByIdAsync(int id)
+        public async Task<CustomerDeleteViewModel> DeleteByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            var customer = await this.customerRepository
+                .All()
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (customer == null)
+            {
+                throw new NullReferenceException(string.Format(ItemConstants.NullReferenceItemId, id), new Exception(nameof(id)));
+            }
+
+            this.customerRepository.Delete(customer);
+            await this.customerRepository.SaveChangesAsync();
+
+            return customer.To<CustomerDeleteViewModel>();
         }
 
-        public async Task<CustomerEditViewModel> EditByIdAsync(int id, CustomerEditInputModel customerFromView)
+        public async Task<CustomerEditViewModel> EditByIdAsync(string id, CustomerEditInputModel customerFromView)
         {
-            throw new NotImplementedException();
+            var customerToDelete = this.customerRepository.All().FirstOrDefault(x => x.Id == id);
+
+            if (customerToDelete == null)
+            {
+                Exception innerException = new Exception(nameof(id));
+                throw new NullReferenceException(string.Format(CustomerConstants.NullReferenceCustomerId, id), innerException);
+            }
+
+            var checkForPhoneNumber = this.customerRepository.All().FirstOrDefault(x => x.PhoneNumber == customerFromView.PhoneNumber);
+
+            // If customer with phone number exists return existing view model
+            if (checkForPhoneNumber != null && customerToDelete.Id != checkForPhoneNumber.Id)
+            {
+                throw new ArgumentException(string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber), nameof(customerFromView.PhoneNumber));
+            }
+
+            var newItem = customerFromView.To<Customer>();
+
+            this.customerRepository.Delete(customerToDelete);
+            await this.customerRepository.AddAsync(newItem);
+            await this.customerRepository.SaveChangesAsync();
+
+            return newItem.To<CustomerEditViewModel>();
         }
 
         public IQueryable<TViewModel> GetAllCustomersAsync<TViewModel>()
@@ -54,9 +89,9 @@
             return this.customerRepository.All().Select(x => x.To<TViewModel>());
         }
 
-        public async Task<TViewModel> GetByIdAsync<TViewModel>(int id)
+        public async Task<TViewModel> GetByIdAsync<TViewModel>(string id)
         {
-            throw new NotImplementedException();
+            return this.customerRepository.All().FirstOrDefault(x => x.Id == id).To<TViewModel>();
         }
     }
 }

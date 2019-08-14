@@ -15,7 +15,7 @@
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
-    
+
 </head>
 <body>
     <header>
@@ -32,7 +32,10 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Поръчка</a>
+                            <a class="nav-link text-dark"
+                               asp-area="@GlobalConstants.AreaAdministrationName"
+                               asp-controller="@GlobalConstants.ContollerCustomersName"
+                               asp-action="@GlobalConstants.ActionIndexName">Клиенти</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Обработка на поръчки</a>
@@ -64,7 +67,7 @@
                                    asp-area="@GlobalConstants.AreaAdministrationName"
                                    asp-controller="@GlobalConstants.ContollerVehiclesName"
                                    asp-action="@GlobalConstants.ActionIndexName">Автомобили</a>
-                                <a class="dropdown-item" 
+                                <a class="dropdown-item"
                                    asp-area="@GlobalConstants.AreaAdministrationName"
                                    asp-controller="@GlobalConstants.ContollerItemsName"
                                    asp-action="@GlobalConstants.ActionIndexName">Продукти и Цени</a>
@@ -91,7 +94,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.Now.Year - Carpet - 
+            &copy; @DateTime.Now.Year - Carpet -
             <a asp-area="@string.Empty"
                asp-controller="@GlobalConstants.ContollerHomeName"
                asp-action="Privacy">Privacy</a>
@@ -124,10 +127,13 @@
             $('#example').DataTable({
                 "order": [[0, "asc"]]
             });
+        $('#items').DataTable({
+                "order": [[0, "asc"]]
+            });
 
-            
+
             $('#customers').DataTable({
-                "order": [[3, "asc"]]
+                "order": [[5, "desc"]]
             });
 
             let selectorInput = $('#example_filter').children(2).children(0);
@@ -135,7 +141,7 @@
                 console.log($(this).val());
             });
 
-            
+
 
 
         });

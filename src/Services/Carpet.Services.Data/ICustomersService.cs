@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
 
     using Carpet.Web.InputModels.Administration.Customers;
-    using Carpet.Web.ViewModels.Customers;
+    using Carpet.Web.ViewModels.Administration.Customers;
 
     public interface ICustomersService
     {
@@ -12,10 +12,10 @@
 
         Task<CustomerIndexViewModel> CreateAsync(CustomerCreateInputModel customerFromView);
 
-        Task<TViewModel> GetByIdAsync<TViewModel>(int id);
+        Task<TViewModel> GetByIdAsync<TViewModel>(string id);
 
-        Task<CustomerEditViewModel> EditByIdAsync(int id, CustomerEditInputModel customerFromView);
+        Task<CustomerEditViewModel> EditByIdAsync(string id, CustomerEditInputModel customerFromView);
 
-        Task<CustomerDeleteViewModel> DeleteByIdAsync(int id);
+        Task<CustomerDeleteViewModel> DeleteByIdAsync(string id);
     }
 }

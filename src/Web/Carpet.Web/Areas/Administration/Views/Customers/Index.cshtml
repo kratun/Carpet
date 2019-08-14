@@ -1,5 +1,5 @@
 ﻿@using Carpet.Common.Constants
-@model IEnumerable<Carpet.Web.ViewModels.Customers.CustomerIndexViewModel>
+@model IEnumerable<Carpet.Web.ViewModels.Administration.Customers.CustomerIndexViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -73,7 +73,7 @@
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @style="color:red"})
                 </td>
             </tr>
         }
