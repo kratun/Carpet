@@ -121,13 +121,36 @@
 
 
     <script type="text/javascript" asp-append-version="true">
+
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var min = new Date($('#min').val());
+                var max = new Date($('#max').val());
+                var date = new Date(data[5]) || 0; // use data for the date column
+
+                if ((isNaN(min) && isNaN(max)) ||
+                    (isNaN(min) && date <= max) ||
+                    (min <= date && isNaN(max)) ||
+                    (min <= date && date <= max)) {
+                    return true;
+                }
+                return false;
+            }
+        );
+
         $(document).ready(function () {
             jQuery('#myTable').DataTable();
 
-            $('#example').DataTable({
+            var ordersStatement = $('#example').DataTable({
                 "order": [[0, "asc"]]
             });
-        $('#items').DataTable({
+
+            // Event listener to the two range filtering inputs to redraw on input
+            $('#min, #max').keyup(function () {
+                ordersStatement.draw();
+            });
+
+            $('#items').DataTable({
                 "order": [[0, "asc"]]
             });
 

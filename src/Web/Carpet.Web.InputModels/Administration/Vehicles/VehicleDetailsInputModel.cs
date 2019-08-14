@@ -1,17 +1,16 @@
-﻿namespace Carpet.Data.Models
+﻿namespace Carpet.Web.InputModels.Administration.Vehicles
 {
-    using System.Collections.Generic;
+    using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     using Carpet.Common.Constants;
-    using Carpet.Data.Common.Models;
+    using Carpet.Data.Models;
+    using Carpet.Services.Mapping;
 
-    public class Vehicle : BaseDeletableModel<int>
+    public class VehicleDetailsInputModel : IMapTo<Vehicle>, IMapFrom<Vehicle>
     {
-        public Vehicle()
-        {
-            this.VehicleEmployees = new HashSet<VehicleEmployee>();
-        }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = VehicleConstants.ErrorFieldRequired)]
         [MinLength(VehicleConstants.MakeMinValue, ErrorMessage = VehicleConstants.ErrorFieldMakeLength)]
@@ -28,8 +27,10 @@
         [RegularExpression(VehicleConstants.RegistrationNumberValidation, ErrorMessage = VehicleConstants.ErrorFieldRegistrationNumberRegex)]
         public string RegistrationNumber { get; set; }
 
+        [Display(Name = VehicleConstants.DisplayNameIsDamage)]
         public bool IsDamaged { get; set; }
 
-        public virtual ICollection<VehicleEmployee> VehicleEmployees { get; set; }
+        [Display(Name = VehicleConstants.DisplayNameCreatedOn)]
+        public DateTime CreatedOn { get; set; }
     }
 }
