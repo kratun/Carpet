@@ -1,0 +1,76 @@
+﻿@using Carpet.Common.Constants
+@model IEnumerable<Carpet.Web.ViewModels.Administration.Employees.AllUsers.EmployeeAllUsersViewModel>
+
+@{
+    ViewData["Title"] = "AllUsers";
+    var count = 1;
+}
+
+<h1 class="title text-center" style="margin-top: 35px;">СПИСЪК С ПОТРЕБИТЕЛИ</h1>
+
+
+<p class="intro text-center" style="margin-top: 10px;"></p>
+
+<table id="users" class="display" style="width:100%">
+    <thead>
+        <tr class="text-center">
+            <th>
+                #
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(count++)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td>
+                    <a class="btn btn-outline-primary btn-sm"
+                       asp-area="@GlobalConstants.AreaAdministrationName"
+                       asp-controller="@GlobalConstants.ContollerEmployeesName"
+                       asp-action="@GlobalConstants.ActionCreateName"
+                       asp-route-id="@item.Id" >Назначи</a>
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @style = "color:red" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

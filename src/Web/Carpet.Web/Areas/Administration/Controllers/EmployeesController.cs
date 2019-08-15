@@ -5,47 +5,100 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Carpet.Services.Data;
+    using Carpet.Web.InputModels.Administration.Customers;
+    using Carpet.Web.ViewModels.Administration.Customers;
+    using Carpet.Web.ViewModels.Administration.Employees;
+    using Carpet.Web.ViewModels.Administration.Employees.AllUsers;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
 
     public class EmployeesController : AdministrationController
     {
-        // GET: Employees
-        public ActionResult Index()
+        private readonly IEmployeesService employeesService;
+        private readonly IRolesService rolesService;
+        private readonly ICarpetUsersService usersService;
+
+        public EmployeesController(IEmployeesService employeesService, IRolesService rolesService, ICarpetUsersService usersService)
         {
-            return this.View();
+            this.employeesService = employeesService;
+            this.rolesService = rolesService;
+            this.usersService = usersService;
+        }
+
+        // GET: Employees
+        public async Task<IActionResult> Index()
+        {
+            var employees = await this.employeesService.GetAllAsync<EmployeeIndexViewModel>()
+               .OrderByDescending(x => x.CreatedOn)
+               .ToListAsync();
+
+            return this.View(employees);
+        }
+
+        // GET: Potential Employees
+        public async Task<IActionResult> AllUsers()
+        {
+            var employees = await this.usersService.GetAllAsync()
+                .Where(x => x.Employees.Count == 0)
+               .OrderByDescending(x => x.CreatedOn)
+               .Select(x => new EmployeeAllUsersViewModel
+               {
+                   Id = x.Id,
+                   FirstName = x.FirstName,
+                   LastName = x.LastName,
+                   PhoneNumber = x.PhoneNumber,
+                   Email = x.Email,
+                   CreatedOn = x.CreatedOn,
+               })
+               .ToListAsync();
+
+            return this.View(employees);
         }
 
         // GET: Employees/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             return this.View();
         }
 
         // GET: Employees/Create
-        public ActionResult Create()
+        public async Task<IActionResult> Create(string id)
         {
-            return this.View();
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            // TODO: Refactor this
+            var employeeViewModel = await this.employeesService.GetNotHiredUserAsync(id);
+
+            //var roles = await this.rolesService.GetAllAsync().Select(x => new SelectListItem { Value = x.Id, Text = x.Name }).ToListAsync();
+
+            //employeeViewModel.RoleList = roles;
+            return this.View(employeeViewModel);
         }
 
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(EmployeeCreateInputModel employeeCreate)
         {
-            try
+            var result = await this.employeesService.CreateAsync(employeeCreate, this.ModelState);
+
+            if (!this.ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                return this.RedirectToAction(nameof(this.Index));
+                return this.View(result);
             }
-            catch
-            {
-                return this.View();
-            }
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Employees/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             return this.View();
         }
@@ -53,7 +106,7 @@
         // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -67,7 +120,7 @@
         }
 
         // GET: Employees/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             return this.View();
         }
@@ -75,7 +128,7 @@
         // POST: Employees/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {

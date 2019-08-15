@@ -8,9 +8,9 @@
 
         public const string DisplayNameName = "Наименование";
         public const string DisplayNameOrdinaryPrice = "Стандартна цена";
-        public const string DisplayNameExpressAddOnPrice = "Добавка към цена при експресна поръчка";
-        public const string DisplayNameVacuumCleaningAddOnPrice = "Добавка към цена при прахосмучене";
-        public const string DisplayNameFlavorAddOnPrice = "Добавка към цена при ароматизиране";
+        public const string DisplayNameExpressAddOnPrice = "Експресна поръчка";
+        public const string DisplayNameVacuumCleaningAddOnPrice = "Прахосмучене";
+        public const string DisplayNameFlavorAddOnPrice = "Ароматизиране";
 
         public const string NullReferenceItemId = "Не е намерена услуга с Id: {0}.";
         public const string ArgumentExceptionItemName = "Услуга с наименование: {0} съществува.";

@@ -1,20 +1,18 @@
-﻿namespace Carpet.Data.Models
+﻿namespace Carpet.Web.InputModels.Administration.Customers
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     using Carpet.Common.Constants;
-    using Carpet.Data.Common.Models;
+    using Carpet.Data.Models;
+    using Carpet.Services.Mapping;
+    using Carpet.Web.ViewModels.Administration.Customers;
 
-    public class Employee : BaseDeletableModel<string>, INamableEntity
+    public class EmployeeCreateInputModel : IMapTo<Employee>, IMapFrom<Employee>
     {
-        public Employee()
-        {
-            this.VehicleEmployees = new HashSet<VehicleEmployee>();
-        }
+        public string Id { get; set; }
 
-        [Required(ErrorMessage = EmployeeConstants.ErrorFieldRequired)]
+        [Required(ErrorMessage =EmployeeConstants.ErrorFieldRequired)]
         [MinLength(EmployeeConstants.FirstNameMinValue, ErrorMessage = EmployeeConstants.ErrorFieldFirstNameLength)]
         [RegularExpression(EmployeeConstants.NameValidation, ErrorMessage = EmployeeConstants.ErrorFieldFirstNameRegex)]
         [Display(Name = EmployeeConstants.DisplayNameFirstName)]
@@ -39,10 +37,8 @@
         [Display(Name = EmployeeConstants.DisplayNameSalary)]
         public decimal Salary { get; set; }
 
-        public string UserId { get; set; }
-
-        public virtual CarpetUser User { get; set; }
-
-        public virtual ICollection<VehicleEmployee> VehicleEmployees { get; set; }
+        [Required(ErrorMessage = EmployeeConstants.ErrorFieldRequired)]
+        [Display(Name = EmployeeConstants.DisplayNameEmployeeRoleName)]
+        public string RoleName { get; set; }
     }
 }

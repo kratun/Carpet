@@ -10,6 +10,7 @@
         public const string ActionCreateName = "Create";
         public const string ActionEditName = "Edit";
         public const string ActionDeleteName = "Delete";
+        public const string ActionAllUsersName = "AllUsers";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";
