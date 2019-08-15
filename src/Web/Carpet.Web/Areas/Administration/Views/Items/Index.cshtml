@@ -6,8 +6,8 @@
     var count = 1;
 }
 
-<h1>ЦЕНОРАЗПИС УСЛУГИ</h1>
-<div class="row justify-content-end" style="padding-right:18px">
+<h1 class="title text-center" style="margin-top: 35px;">ЦЕНОРАЗПИС УСЛУГИ</h1>
+<div class="row justify-content-end" style="padding-right:18px;">
     <p>
         <a asp-area="@GlobalConstants.AreaAdministrationName"
            asp-controller="@GlobalConstants.ContollerItemsName"
@@ -19,15 +19,19 @@
 <table id="items" class="display" style="width:100%">
     <thead>
         <tr class="text-center">
-            <th>
+            <th rowspan="2">
                 #
             </th>
-            <th>
+            <th rowspan="2">
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
+            <th rowspan="2">
                 @Html.DisplayNameFor(model => model.OrdinaryPrice)
             </th>
+            <th colspan="3">Добавка към цена при</th>
+            <th rowspan="2"></th>
+        </tr>
+        <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ExpressAddOnPrice)
             </th>
@@ -37,8 +41,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.FlavorAddOnPrice)
             </th>
-            <th></th>
         </tr>
+        
     </thead>
     <tbody>
         @foreach (var item in Model)
@@ -50,22 +54,22 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrdinaryPrice)
+                <td class="text-right" style="padding-right:30px;">
+                    @Html.DisplayFor(modelItem => item.OrdinaryPrice)<span> лв.</span>
+                </td>
+                <td class="text-right" style="padding-right:30px;">
+                    @Html.DisplayFor(modelItem => item.ExpressAddOnPrice)<span> лв.</span>
+                </td>
+                <td class="text-right" style="padding-right:30px;">
+                    @Html.DisplayFor(modelItem => item.VacuumCleaningAddOnPrice)<span> лв.</span>
+                </td>
+                <td class="text-right" style="padding-right:30px;">
+                    @Html.DisplayFor(modelItem => item.FlavorAddOnPrice)<span> лв.</span>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ExpressAddOnPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.VacuumCleaningAddOnPrice)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FlavorAddOnPrice)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary" }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger" })
                 </td>
             </tr>
         }

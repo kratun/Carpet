@@ -10,7 +10,7 @@
 
 <div class="d-flex flex-row justify-content-end" style="width:100%; margin-top: 35px;">
 
-    <a class="btn btn-primary" style="width:180px;"
+    <a class="btn btn-primary" style="width:194px;"
        asp-area="@GlobalConstants.AreaAdministrationName"
        asp-controller="@GlobalConstants.ContollerCustomersName"
        asp-action="@GlobalConstants.ActionCreateName">Добави клинет</a>
@@ -64,13 +64,13 @@
                     @Html.DisplayFor(modelItem => item.CreatedOn)
                 </td>
 
-                <td>
+                <td class="text-center">
                     <a class="btn btn-outline-primary btn-sm"
                        asp-area="@GlobalConstants.AreaAdministrationName"
                        asp-controller="@GlobalConstants.ContollerOrdersName"
                        asp-action="@GlobalConstants.ActionCreateName">Create Order</a>
                 </td>
-                <td>
+                <td class="text-center">
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                     @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @style="color:red"})
