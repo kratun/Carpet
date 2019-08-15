@@ -10,6 +10,7 @@
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Vehicles;
     using Carpet.Web.ViewModels.Administration.Vehicles;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
 
     public class VehiclesService : IVehiclesService
@@ -21,8 +22,13 @@
             this.vehicleRepository = vehicleRepository;
         }
 
-        public async Task<VehicleIndexViewModel> CreateAsync(VehicleCreateInputModel vehicleFromView)
+        public async Task<VehicleCreateViewModel> CreateAsync(VehicleCreateInputModel vehicleFromView, ModelStateDictionary modelState)
         {
+            if (!modelState.IsValid)
+            {
+                return vehicleFromView.To<Vehicle>().To<VehicleCreateViewModel>();
+            }
+
             var checkForRegistrationNumber = await this.vehicleRepository
                 .All()
                 .FirstOrDefaultAsync(x => x.RegistrationNumber == vehicleFromView.RegistrationNumber);
@@ -30,7 +36,8 @@
             // If customer with phone number exists return existing view model
             if (checkForRegistrationNumber != null)
             {
-                throw new ArgumentException(string.Format(VehicleConstants.ArgumentExceptionRegistrationNumber, vehicleFromView.RegistrationNumber), nameof(vehicleFromView.RegistrationNumber));
+                modelState.AddModelError(nameof(vehicleFromView.RegistrationNumber), string.Format(VehicleConstants.ArgumentExceptionRegistrationNumber, vehicleFromView.RegistrationNumber));
+                return vehicleFromView.To<Vehicle>().To<VehicleCreateViewModel>();
             }
 
             var vehicleToDb = vehicleFromView.To<Vehicle>();
@@ -39,7 +46,7 @@
 
             await this.vehicleRepository.SaveChangesAsync();
 
-            return vehicleToDb.To<VehicleIndexViewModel>();
+            return vehicleToDb.To<VehicleCreateViewModel>();
         }
 
         public async Task<VehicleDeleteViewModel> DeleteByIdAsync(int id)
@@ -59,8 +66,13 @@
             return vehicle.To<VehicleDeleteViewModel>();
         }
 
-        public async Task<VehicleEditViewModel> EditByIdAsync(int id, VehicleEditInputModel vehicleFromView)
+        public async Task<VehicleEditViewModel> EditByIdAsync(int id, VehicleEditInputModel vehicleFromView, ModelStateDictionary modelState)
         {
+            if (!modelState.IsValid)
+            {
+                return vehicleFromView.To<Vehicle>().To<VehicleEditViewModel>();
+            }
+
             var vehicleDeleteAfterEdit = await this.vehicleRepository
                 .All()
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -78,7 +90,8 @@
             // If vehicle with Registration Number exists and id's are different do not delete. Return existing view model
             if (checkForRegistrationNumber != null && vehicleDeleteAfterEdit.Id != checkForRegistrationNumber.Id)
             {
-                throw new ArgumentException(string.Format(VehicleConstants.ArgumentExceptionRegistrationNumber, vehicleFromView.RegistrationNumber), nameof(vehicleFromView.RegistrationNumber));
+                modelState.AddModelError(nameof(vehicleFromView.RegistrationNumber), string.Format(VehicleConstants.ArgumentExceptionRegistrationNumber, vehicleFromView.RegistrationNumber));
+                return vehicleFromView.To<Vehicle>().To<VehicleEditViewModel>();
             }
 
             var newVehicle = vehicleFromView.To<Vehicle>();

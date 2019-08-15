@@ -3,8 +3,10 @@
     using System.ComponentModel.DataAnnotations;
 
     using Carpet.Common.Constants;
+    using Carpet.Data.Models;
+    using Carpet.Services.Mapping;
 
-    public class CustomerCreateViewModel
+    public class CustomerCreateViewModel : IMapTo<Customer>, IMapFrom<Customer>
     {
         [Display(Name = CustomerConstants.DisplayNameFirstName)]
         public string FirstName { get; set; }

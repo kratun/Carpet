@@ -13,10 +13,11 @@
 
         [Required(ErrorMessage = CustomerConstants.ErrorFieldRequired)]
         [MinLength(CustomerConstants.FirstNameMinValue, ErrorMessage = CustomerConstants.ErrorFieldNameLength)]
-        [RegularExpression(CustomerConstants.NameValidation, ErrorMessage = CustomerConstants.ErrorFieldNameRegex)]
+        [RegularExpression(CustomerConstants.NameValidation, ErrorMessage = CustomerConstants.ErrorFieldFirstNameRegex)]
         [Display(Name = CustomerConstants.DisplayNameFirstName)]
         public string FirstName { get; set; }
 
+        [RegularExpression(CustomerConstants.NameValidation, ErrorMessage = CustomerConstants.ErrorFieldLastNameRegex)]
         [Display(Name = CustomerConstants.DisplayNameLastName)]
         public string LastName { get; set; }
 

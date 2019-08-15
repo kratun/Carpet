@@ -10,6 +10,7 @@
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.ViewModels.Administration.Customers;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
 
     public class CustomersService : ICustomersService
@@ -21,14 +22,20 @@
             this.customerRepository = customerRepository;
         }
 
-        public async Task<CustomerIndexViewModel> CreateAsync(CustomerCreateInputModel customerFromView)
+        public async Task<CustomerCreateViewModel> CreateAsync(CustomerCreateInputModel customerFromView, ModelStateDictionary modelState)
         {
+            if (!modelState.IsValid)
+            {
+                return customerFromView.To<Customer>().To<CustomerCreateViewModel>();
+            }
+
             var checkForPhoneNumber = await this.customerRepository.All().FirstOrDefaultAsync(x => x.PhoneNumber == customerFromView.PhoneNumber);
 
             // If customer with phone number exists return existing view model
             if (checkForPhoneNumber != null)
             {
-                throw new ArgumentException(string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber), nameof(customerFromView.PhoneNumber));
+                modelState.AddModelError(nameof(customerFromView.PhoneNumber), string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber));
+                return customerFromView.To<Customer>().To<CustomerCreateViewModel>();
             }
 
             var customerToDb = customerFromView.To<Customer>();
@@ -37,7 +44,7 @@
 
             await this.customerRepository.SaveChangesAsync();
 
-            return customerToDb.To<CustomerIndexViewModel>();
+            return customerToDb.To<CustomerCreateViewModel>();
         }
 
         public async Task<CustomerDeleteViewModel> DeleteByIdAsync(string id)
@@ -57,8 +64,13 @@
             return customer.To<CustomerDeleteViewModel>();
         }
 
-        public async Task<CustomerEditViewModel> EditByIdAsync(string id, CustomerEditInputModel customerFromView)
+        public async Task<CustomerEditViewModel> EditByIdAsync(string id, CustomerEditInputModel customerFromView, ModelStateDictionary modelState)
         {
+            if (!modelState.IsValid)
+            {
+                return customerFromView.To<Customer>().To<CustomerEditViewModel>();
+            }
+
             var customerToDelete = await this.customerRepository
                 .All()
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -76,7 +88,9 @@
             // If customer with phone number exists return existing view model
             if (checkForPhoneNumber != null && customerToDelete.Id != checkForPhoneNumber.Id)
             {
-                throw new ArgumentException(string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber), nameof(customerFromView.PhoneNumber));
+                modelState.AddModelError(nameof(customerFromView.PhoneNumber), string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber));
+                var result = customerFromView.To<Customer>().To<CustomerEditViewModel>();
+                return result;
             }
 
             var newCustomer = customerFromView.To<Customer>();

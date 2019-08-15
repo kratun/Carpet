@@ -11,6 +11,7 @@
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Items;
     using Carpet.Web.ViewModels.Administration.Items;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
 
     public class ItemsService : IItemsService
@@ -22,14 +23,20 @@
             this.itemRepository = itemRepository;
         }
 
-        public async Task<ItemIndexViewModel> CreateAsync(ItemCreateInputModel itemFromView)
+        public async Task<ItemIndexViewModel> CreateAsync(ItemCreateInputModel itemFromView, ModelStateDictionary modelState)
         {
+            if (!modelState.IsValid)
+            {
+                return itemFromView.To<Item>().To<ItemIndexViewModel>();
+            }
+
             var checkForName = this.itemRepository.All().FirstOrDefault(x => x.Name == itemFromView.Name);
 
             // If item exists return existing view model
             if (checkForName != null)
             {
-                throw new ArgumentException(string.Format(ItemConstants.ArgumentExceptionItemName, itemFromView.Name), nameof(itemFromView.Name));
+                modelState.AddModelError(nameof(itemFromView.Name), string.Format(ItemConstants.ArgumentExceptionItemName, itemFromView.Name));
+                return itemFromView.To<Item>().To<ItemIndexViewModel>();
             }
 
             var itemToDb = itemFromView.To<Item>();
@@ -58,8 +65,13 @@
             return item.To<ItemDeleteViewModel>();
         }
 
-        public async Task<ItemEditViewModel> EditByIdAsync(int id, ItemEditInputModel itemFromView)
+        public async Task<ItemEditViewModel> EditByIdAsync(int id, ItemEditInputModel itemFromView, ModelStateDictionary modelState)
         {
+            if (!modelState.IsValid)
+            {
+                return itemFromView.To<Item>().To<ItemEditViewModel>();
+            }
+
             var itemToDelete = this.itemRepository.All().FirstOrDefault(x => x.Id == id);
 
             if (itemToDelete == null)
@@ -72,7 +84,8 @@
 
             if (checkForName != null && checkForName.Id != itemToDelete.Id)
             {
-                throw new ArgumentException(string.Format(ItemConstants.ArgumentExceptionItemName, itemFromView.Name), nameof(itemFromView.Name));
+                modelState.AddModelError(nameof(itemFromView.Name), string.Format(ItemConstants.ArgumentExceptionItemName, itemFromView.Name));
+                return itemFromView.To<Item>().To<ItemEditViewModel>();
             }
 
             var newItem = itemFromView.To<Item>();

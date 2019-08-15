@@ -48,28 +48,14 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VehicleCreateInputModel vehicleCreate)
         {
-            try
-            {
-                if (!this.ModelState.IsValid)
-                {
-                    return this.View(vehicleCreate);
-                }
+            var result = await this.vehiclesService.CreateAsync(vehicleCreate, this.ModelState);
 
-                var result = await this.vehiclesService.CreateAsync(vehicleCreate);
-                return this.RedirectToAction(nameof(this.Index));
-            }
-            catch (ArgumentException e)
+            if (!this.ModelState.IsValid)
             {
-                // TODO: Error message that item name exist
-                this.ModelState.AddModelError(e.ParamName, e.Message);
-                return this.View(vehicleCreate);
+                return this.View(result);
             }
-            catch (NullReferenceException e)
-            {
-                // TODO: Error message that item name exist
-                this.ModelState.AddModelError(e.InnerException.Message, e.Message);
-                return this.View(vehicleCreate);
-            }
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Vehicles/Edit/5
@@ -84,29 +70,14 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, VehicleEditInputModel vehicleEdit)
         {
-            try
-            {
-                if (!this.ModelState.IsValid)
-                {
-                    return this.View(vehicleEdit);
-                }
+            var result = await this.vehiclesService.EditByIdAsync(id, vehicleEdit, this.ModelState);
 
-                var result = await this.vehiclesService.EditByIdAsync(id, vehicleEdit);
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(result);
+            }
 
-                return this.RedirectToAction(nameof(this.Index));
-            }
-            catch (ArgumentException e)
-            {
-                // TODO: Error message that vehicle same RegistrationNumber as edited exist
-                this.ModelState.AddModelError(e.ParamName, e.Message);
-                return this.View(vehicleEdit);
-            }
-            catch (NullReferenceException e)
-            {
-                // TODO: Error message that vehicle does not exist
-                this.ModelState.AddModelError(e.InnerException.Message, e.Message);
-                return this.View(vehicleEdit);
-            }
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Vehicles/Delete/5

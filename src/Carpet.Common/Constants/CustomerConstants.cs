@@ -14,8 +14,9 @@
         public const string DisplayNameDeliveryAddress = "Адрес за доставка";
         public const string DisplayNameCreatedOn = "Създаден на";
         public const string ErrorFieldRequired = "Полето {0} е задължително!";
-        public const string ErrorFieldNameRegex = "Името трябва да е във формат \"Мария\" или \"Анна-Мария\", или \"Анна Мария\" без допълнителни интервали.";
-        public const string ErrorFieldNameLength = "Името трябва да е минимум {1} букви.";
+        public const string ErrorFieldFirstNameRegex = "{0}то трябва да е изписано на кирилица във формат \"Мария\" или \"Анна-Мария\", или \"Анна Мария\" без допълнителни интервали.";
+        public const string ErrorFieldLastNameRegex = "{0}та трябва да е изписанa на кирилица във формат \"Иванова\" или \"Иванова-Тодорова\", или \"Иванова Тодорова\" без допълнителни интервали.";
+        public const string ErrorFieldNameLength = "{0}то трябва да е изписано на кирилица и да е минимум {1} букви.";
 
         public const string NullReferenceCustomerId = "Не е намерен клиент с Id: {0}.";
         public const string ArgumentExceptionCustomerPhone = "Клиент с телефон: {0} съществува.";

@@ -46,30 +46,14 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ItemCreateInputModel itemCreate)
         {
-            try
-            {
-                if (!this.ModelState.IsValid)
-                {
-                    return this.View(itemCreate);
-                }
+            var result = await this.itemsService.CreateAsync(itemCreate, this.ModelState);
 
-                // var item = AutoMapper.Mapper.Map<Item>(itemCreate);
-                var result = await this.itemsService.CreateAsync(itemCreate);
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(result);
+            }
 
-                return this.RedirectToAction(nameof(this.Index));
-            }
-            catch (ArgumentException e)
-            {
-                // TODO: Error message that item name exist
-                this.ModelState.AddModelError(e.ParamName, e.Message);
-                return this.View(itemCreate);
-            }
-            catch (NullReferenceException e)
-            {
-                // TODO: Error message that item name exist
-                this.ModelState.AddModelError(e.InnerException.Message, e.Message);
-                return this.View(itemCreate);
-            }
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Items/Edit/5
@@ -84,23 +68,14 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ItemEditInputModel itemEdit)
         {
-            try
-            {
-                if (!this.ModelState.IsValid)
-                {
-                    return this.View(itemEdit);
-                }
+            var result = await this.itemsService.EditByIdAsync(id, itemEdit, this.ModelState);
 
-                var result = await this.itemsService.EditByIdAsync(id, itemEdit);
-
-                return this.RedirectToAction(nameof(this.Index));
-            }
-            catch (ArgumentException e)
+            if (!this.ModelState.IsValid)
             {
-                // TODO: Error message that item name exist
-                this.ModelState.AddModelError(e.ParamName, e.Message);
-                return this.View();
+                return this.View(result);
             }
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Items/Delete/5
@@ -115,20 +90,9 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, ItemDeleteViewModel itemDelete)
         {
-            try
-            {
-                var item = await this.itemsService.DeleteByIdAsync(id);
+            var item = await this.itemsService.DeleteByIdAsync(id);
 
-                return this.RedirectToAction(nameof(this.Index));
-            }
-            catch (NullReferenceException e)
-            {
-                // TODO: Error message that item not exist
-                // this.ModelState.Root.AttemptedValue = "ModelOnly";
-                // this.ModelState.Root.RawValue = e.Message;
-                this.ModelState.AddModelError(e.InnerException.Message, e.Message);
-                return this.View(itemDelete);
-            }
+            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

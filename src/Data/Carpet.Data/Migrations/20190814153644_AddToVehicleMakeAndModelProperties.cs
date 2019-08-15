@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace Carpet.Data.Migrations
+﻿namespace Carpet.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddToVehicleMakeAndModelProperties : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
