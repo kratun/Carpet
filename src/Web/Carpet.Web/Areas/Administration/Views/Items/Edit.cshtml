@@ -5,49 +5,58 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>РЕДАКТИРАНЕ</h1>
-<h3>на услуга</h3>
-<hr />
+<h1 class="row justify-content-md-center">РЕДАКТИРАНЕ</h1>
 
-<div class="row">
-    <div class="col-md-4">
+<h4 class="row justify-content-md-center" style="margin-top:15px;">на услуга</h4>
+<hr class="row justify-content-md-center" />
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Name" class="control-label"></label><span>*</span>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="OrdinaryPrice" class="control-label"></label><span>*</span>
+                    <input type="number" step="0.01" asp-for="OrdinaryPrice" class="form-control text-right" />
+                    <span asp-validation-for="OrdinaryPrice" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="OrdinaryPrice" class="control-label"></label>
-                <input asp-for="OrdinaryPrice" class="form-control" />
-                <span asp-validation-for="OrdinaryPrice" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="ExpressAddOnPrice" class="control-label"></label><span>*</span>
+                    <input type="number" step="0.01" asp-for="ExpressAddOnPrice" class="form-control text-right" />
+                    <span asp-validation-for="ExpressAddOnPrice" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="VacuumCleaningAddOnPrice" class="control-label"></label><span>*</span>
+                    <input type="number" step="0.01" asp-for="VacuumCleaningAddOnPrice" class="form-control text-right" />
+                    <span asp-validation-for="VacuumCleaningAddOnPrice" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ExpressAddOnPrice" class="control-label"></label>
-                <input asp-for="ExpressAddOnPrice" class="form-control" />
-                <span asp-validation-for="ExpressAddOnPrice" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label asp-for="FlavorAddOnPrice" class="control-label"></label><span>*</span>
+                    <input type="number" step="0.01" asp-for="FlavorAddOnPrice" class="form-control text-right" />
+                    <span asp-validation-for="FlavorAddOnPrice" class="text-danger"></span>
+                </div>
+
             </div>
+            <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
             <div class="form-group">
-                <label asp-for="VacuumCleaningAddOnPrice" class="control-label"></label>
-                <input asp-for="VacuumCleaningAddOnPrice" class="form-control" />
-                <span asp-validation-for="VacuumCleaningAddOnPrice" class="text-danger"></span>
+                <input type="submit" value="Save" class="btn btn-primary form-control" />
             </div>
-            <div class="form-group">
-                <label asp-for="FlavorAddOnPrice" class="control-label"></label>
-                <input asp-for="FlavorAddOnPrice" class="form-control" />
-                <span asp-validation-for="FlavorAddOnPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div>
+                <a asp-action="@GlobalConstants.ActionIndexName">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="@GlobalConstants.ActionIndexName">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -1,9 +1,8 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using AutoMapper;
+
     using Carpet.Services.Data;
     using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.ViewModels.Administration.Customers;

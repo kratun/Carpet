@@ -5,50 +5,50 @@
     ViewData["Title"] = "Create";
 }
     
-        <h1 class="row justify-content-md-center">СЪЗДАЙ УСЛУГА</h1>
-   
+<h1 class="row justify-content-md-center">СЪЗДАВАНЕ</h1>
 
-<h4 class="row justify-content-md-center" style="margin-top:15px;">@ItemConstants.DisplayNameName на услуга и цени</h4>
+<h4 class="row justify-content-md-center" style="margin-top:15px;">на услуга</h4>
 <hr class="row justify-content-md-center"/>
 <div class="row justify-content-md-center">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label"></label><span>*</span>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="OrdinaryPrice" class="control-label"></label>
+                <label asp-for="OrdinaryPrice" class="control-label"></label><span>*</span>
                 <input type="number" pattern="[0-9]+([,\.][0-9]+)?" step="@ItemConstants.PriceStepViewValue" min="@ItemConstants.PriceMinValue" asp-for="OrdinaryPrice" class="form-control" />
                 <span asp-validation-for="OrdinaryPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ExpressAddOnPrice" class="control-label"></label>
+                <label asp-for="ExpressAddOnPrice" class="control-label"></label><span>*</span>
                 <input type="number" step="@ItemConstants.PriceStepViewValue" min="@ItemConstants.PriceMinValue" asp-for="ExpressAddOnPrice" class="form-control" />
                 <span asp-validation-for="ExpressAddOnPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VacuumCleaningAddOnPrice" class="control-label"></label>
+                <label asp-for="VacuumCleaningAddOnPrice" class="control-label"></label><span>*</span>
                 <input type="number" step="@ItemConstants.PriceStepViewValue" min="@ItemConstants.PriceMinValue" asp-for="VacuumCleaningAddOnPrice" class="form-control" />
                 <span asp-validation-for="VacuumCleaningAddOnPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FlavorAddOnPrice" class="control-label"></label>
+                <label asp-for="FlavorAddOnPrice" class="control-label"></label><span>*</span>
                 <input type="number" step="@ItemConstants.PriceStepViewValue" min="@ItemConstants.PriceMinValue" asp-for="FlavorAddOnPrice" class="form-control" />
                 <span asp-validation-for="FlavorAddOnPrice" class="text-danger"></span>
             </div>
+            <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary form-control" />
+            </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -2,8 +2,11 @@
 {
     public static class GlobalConstants
     {
+        // Roles constant name
         public const string AdministratorRoleName = "Administrator";
+        public const string SupervisorRoleName = "Supervisor";
         public const string OperatorRoleName = "Oparator";
+        public const string CarrierRoleName = "Carrier";
 
         // Action constant name
         public const string ActionIndexName = "Index";

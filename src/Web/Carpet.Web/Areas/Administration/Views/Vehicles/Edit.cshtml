@@ -1,57 +1,60 @@
-﻿@model Carpet.Web.ViewModels.Administration.Vehicles.VehicleEditViewModel
+﻿@using Carpet.Common.Constants
+@model Carpet.Web.ViewModels.Administration.Vehicles.VehicleEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>РЕДАКТИРАНЕ</h1>
+<h1 class="row justify-content-md-center">РЕДАКТИРАНЕ</h1>
 
-<h4>на превозно средство</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<h4 class="row justify-content-md-center" style="margin-top:15px;">на превозно средство</h4>
+<hr class="row justify-content-md-center" />
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
+        <form asp-action="@GlobalConstants.ActionEditName">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Make" class="control-label"></label><span>*</span>
+                    <input asp-for="Make" class="form-control" />
+                    <span asp-validation-for="Make" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Model" class="control-label"></label><span>*</span>
+                    <input asp-for="Model" class="form-control" />
+                    <span asp-validation-for="Model" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Make" class="control-label"></label>
-                <input asp-for="Make" class="form-control" />
-                <span asp-validation-for="Make" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="RegistrationNumber" class="control-label"></label><span>*</span>
+                    <input asp-for="RegistrationNumber" class="form-control" />
+                    <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="CreatedOn" class="control-label"></label>
+                    <input asp-for="CreatedOn" class="form-control" />
+                    <span asp-validation-for="CreatedOn" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Model" class="control-label"></label>
-                <input asp-for="Model" class="form-control" />
-                <span asp-validation-for="Model" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegistrationNumber" class="control-label"></label>
-                <input asp-for="RegistrationNumber" class="form-control" />
-                <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
+            <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
+            <div class="form-group form-check col-md-6">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDamaged" /> @Html.DisplayNameFor(model => model.IsDamaged)
+                    <input class="form-check-input" asp-for="IsDamaged" />@Html.DisplayNameFor(model => model.IsDamaged)
                 </label>
             </div>
+
             <div class="form-group">
-                <label asp-for="CreatedOn" class="control-label"></label>
-                <input asp-for="CreatedOn" class="form-control" />
-                <span asp-validation-for="CreatedOn" class="text-danger"></span>
+                <input type="submit" value="Save" class="btn form-control btn-primary" />
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div>
+                <a asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
