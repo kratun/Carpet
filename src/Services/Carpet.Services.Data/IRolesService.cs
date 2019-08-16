@@ -7,5 +7,7 @@
     public interface IRolesService
     {
         IQueryable<CarpetRole> GetAllAsync();
+
+        IQueryable<CarpetRole> GetAllWithoutAdministratorAsync();
     }
 }

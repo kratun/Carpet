@@ -1,20 +1,21 @@
 ﻿namespace Carpet.Services.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
+
     using Carpet.Common.Constants;
     using Carpet.Data.Common.Repositories;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Customers;
+    using Carpet.Web.InputModels.Administration.Employees.Edit;
     using Carpet.Web.ViewModels.Administration.Customers;
+    using Carpet.Web.ViewModels.Administration.Employees.Edit;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
-    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
+
+    using SelectListItem = Microsoft.AspNetCore.Mvc.Rendering.SelectListItem;
 
     public class EmployeesService : IEmployeesService
     {
@@ -31,12 +32,13 @@
 
         public async Task<EmployeeCreateViewModel> CreateAsync(EmployeeCreateInputModel employeeFromView, ModelStateDictionary modelState)
         {
-            var roles = await this.rolesService.GetAllAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
-            var errorModel = new EmployeeCreateViewModel();
-            errorModel.RoleList = roles;
+            var roles = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+
             if (!modelState.IsValid)
             {
-                errorModel = employeeFromView.To<Employee>().To<EmployeeCreateViewModel>();
+                var errorModel = employeeFromView.To<Employee>().To<EmployeeCreateViewModel>();
+
+                errorModel.RoleList = roles;
 
                 return errorModel;
             }
@@ -47,7 +49,11 @@
             if (checkForPhoneNumber != null)
             {
                 modelState.AddModelError(nameof(employeeFromView.PhoneNumber), string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberExist, employeeFromView.PhoneNumber));
-                errorModel = employeeFromView.To<Employee>().To<EmployeeCreateViewModel>();
+
+                var errorModel = employeeFromView.To<Employee>().To<EmployeeCreateViewModel>();
+
+                errorModel.RoleList = roles;
+
                 return errorModel;
             }
 
@@ -56,7 +62,11 @@
             if (user == null)
             {
                 modelState.AddModelError(nameof(employeeFromView.PhoneNumber), string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberNotExist, employeeFromView.PhoneNumber));
-                errorModel = employeeFromView.To<Employee>().To<EmployeeCreateViewModel>();
+
+                var errorModel = employeeFromView.To<Employee>().To<EmployeeCreateViewModel>();
+
+                errorModel.RoleList = roles;
+
                 return errorModel;
             }
 
@@ -71,8 +81,64 @@
             await this.employeeRepository.AddAsync(employeeToDb);
 
             await this.employeeRepository.SaveChangesAsync();
-           
+
             return employeeToDb.To<EmployeeCreateViewModel>();
+        }
+
+        public async Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView, ModelStateDictionary modelState)
+        {
+            var roles = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+
+            if (!modelState.IsValid)
+            {
+                var errorModel = employeeFromView.To<Employee>().To<EmployeeEditViewModel>();
+                errorModel.RoleList = roles;
+
+                return errorModel;
+            }
+
+            var employeeFromDb = await this.employeeRepository.All().FirstOrDefaultAsync(x => x.PhoneNumber == employeeFromView.PhoneNumber);
+
+            // If customer with phone number exists but employeeFromDb.Id != employeeFromView.Id do NOT Edit return view model
+            if (employeeFromDb != null && employeeFromDb.Id != employeeFromView.Id)
+            {
+                modelState.AddModelError(nameof(employeeFromView.PhoneNumber), string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberExist, employeeFromView.PhoneNumber));
+
+                var errorModel = employeeFromView.To<Employee>().To<EmployeeEditViewModel>();
+                errorModel.RoleList = roles;
+
+                return errorModel;
+            }
+
+            var user = await this.userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == employeeFromView.PhoneNumber);
+
+            if (user == null)
+            {
+                modelState.AddModelError(nameof(employeeFromView.PhoneNumber), string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberNotExist, employeeFromView.PhoneNumber));
+
+                var errorModel = employeeFromView.To<Employee>().To<EmployeeEditViewModel>();
+                errorModel.RoleList = roles;
+
+                return errorModel;
+            }
+
+            var role = roles.FirstOrDefault(x => x.Text == employeeFromView.RoleName);
+
+            await this.userManager.RemoveFromRoleAsync(user, employeeFromDb.RoleName);
+
+            await this.userManager.AddToRoleAsync(user, role.Text);
+
+            employeeFromDb.FirstName = employeeFromView.FirstName;
+            employeeFromDb.LastName = employeeFromView.LastName;
+            employeeFromDb.PhoneNumber = employeeFromView.PhoneNumber;
+            employeeFromDb.RoleName = employeeFromView.RoleName;
+            employeeFromDb.Salary = employeeFromView.Salary;
+
+            this.employeeRepository.Update(employeeFromDb);
+
+            await this.employeeRepository.SaveChangesAsync();
+
+            return employeeFromDb.To<EmployeeEditViewModel>();
         }
 
         public IQueryable<TViewModel> GetAllAsync<TViewModel>()
@@ -80,16 +146,16 @@
             return this.employeeRepository.All().Select(x => x.To<TViewModel>());
         }
 
-        public Task<TViewModel> GetByIdAsync<TViewModel>(string id)
+        public async Task<TViewModel> GetByIdAsync<TViewModel>(string id)
         {
-            throw new NotImplementedException();
+            return this.employeeRepository.All().FirstOrDefault(x => x.Id == id).To<TViewModel>();
         }
 
         public async Task<EmployeeCreateViewModel> GetNotHiredUserAsync(string id)
         {
-            var notHiredUser = await this.userManager.Users.Where(x => x.Id == id).Select(x => x.To<EmployeeCreateViewModel>()).FirstOrDefaultAsync();
+            var notHiredUser = this.userManager.Users.Where(x => x.Id == id).Select(x => x.To<EmployeeCreateViewModel>()).FirstOrDefault();
 
-            var roles = await this.rolesService.GetAllAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+            var roles = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
 
             notHiredUser.RoleList = roles;
 

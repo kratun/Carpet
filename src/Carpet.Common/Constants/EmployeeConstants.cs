@@ -18,7 +18,6 @@
         public const string DisplayNameEmployeeRoleName = "Роля";
         public const string DisplayNameEmployeeEmail = "Имайл";
 
-
         public const string ErrorFieldRequired = "Полето {0} е задължително!";
         public const string ErrorFieldFirstNameRegex = "{0}то трябва да е изписано на кирилица във формат \"Мария\" или \"Анна-Мария\", или \"Анна Мария\" без допълнителни интервали.";
         public const string ErrorFieldLastNameRegex = "{0}та трябва да е изписанa на кирилица във формат \"Иванова\" или \"Иванова-Тодорова\", или \"Иванова Тодорова\" без допълнителни интервали.";

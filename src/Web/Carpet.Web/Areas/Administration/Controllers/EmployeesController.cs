@@ -7,9 +7,12 @@
 
     using Carpet.Services.Data;
     using Carpet.Web.InputModels.Administration.Customers;
+    using Carpet.Web.InputModels.Administration.Employees;
+    using Carpet.Web.InputModels.Administration.Employees.Edit;
     using Carpet.Web.ViewModels.Administration.Customers;
     using Carpet.Web.ViewModels.Administration.Employees;
     using Carpet.Web.ViewModels.Administration.Employees.AllUsers;
+    using Carpet.Web.ViewModels.Administration.Employees.Edit;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -76,9 +79,6 @@
             // TODO: Refactor this
             var employeeViewModel = await this.employeesService.GetNotHiredUserAsync(id);
 
-            //var roles = await this.rolesService.GetAllAsync().Select(x => new SelectListItem { Value = x.Id, Text = x.Name }).ToListAsync();
-
-            //employeeViewModel.RoleList = roles;
             return this.View(employeeViewModel);
         }
 
@@ -98,25 +98,33 @@
         }
 
         // GET: Employees/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(string id)
         {
-            return this.View();
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            var employeeViewModel = await this.employeesService.GetByIdAsync<EmployeeEditViewModel>(id);
+            var roleList = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+            employeeViewModel.RoleList = roleList;
+
+            return this.View(employeeViewModel);
         }
 
         // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(string id, EmployeeEditInputModel employeeEdit)
         {
-            try
+            var result = await this.employeesService.EditByIdAsync(id, employeeEdit, this.ModelState);
+
+            if (!this.ModelState.IsValid)
             {
-                // TODO: Add update logic here
-                return this.RedirectToAction(nameof(this.Index));
+                return this.View(result);
             }
-            catch
-            {
-                return this.View();
-            }
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         // GET: Employees/Delete/5

@@ -1,18 +1,17 @@
-﻿namespace Carpet.Data.Models
+﻿namespace Carpet.Web.InputModels.Administration.Employees.Edit
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     using Carpet.Common.Constants;
-    using Carpet.Data.Common.Models;
+    using Carpet.Data.Models;
+    using Carpet.Services.Mapping;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
-    public class Employee : BaseDeletableModel<string>, INamableEntity
+    public class EmployeeEditInputModel : IMapTo<Employee>, IMapFrom<Employee>
     {
-        public Employee()
-        {
-            this.VehicleEmployees = new HashSet<VehicleEmployee>();
-        }
+        public string Id { get; set; }
 
         [Required(ErrorMessage = EmployeeConstants.ErrorFieldRequired)]
         [MinLength(EmployeeConstants.FirstNameMinValue, ErrorMessage = EmployeeConstants.ErrorFieldFirstNameLength)]
@@ -39,12 +38,15 @@
         [Display(Name = EmployeeConstants.DisplayNameSalary)]
         public decimal Salary { get; set; }
 
-        public string UserId { get; set; }
-
+        [Required(ErrorMessage = EmployeeConstants.ErrorFieldRequired)]
+        [Display(Name = EmployeeConstants.DisplayNameEmployeeRoleName)]
         public string RoleName { get; set; }
 
-        public virtual CarpetUser User { get; set; }
+        public string UserId { get; set; }
 
-        public virtual ICollection<VehicleEmployee> VehicleEmployees { get; set; }
+        public string RoleId { get; set; }
+
+        [Display(Name = EmployeeConstants.DisplayNameEmployeeRoleName)]
+        public ICollection<SelectListItem> RoleList { get; set; }
     }
 }

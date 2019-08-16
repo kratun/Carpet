@@ -1,16 +1,18 @@
-﻿@model Carpet.Web.ViewModels.Administration.Customers.EmployeeCreateViewModel
+﻿@using Carpet.Common.Constants
+@model Carpet.Web.ViewModels.Administration.Employees.Edit.EmployeeEditViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
+    var roles = (List<SelectListItem>)Model.RoleList;
 }
 
-<h1 class="row justify-content-md-center">НАЗНАЧАВАНЕ</h1>
+<h1 class="row justify-content-md-center">РЕДАКТИРАНЕ</h1>
 
 <h4 class="row justify-content-md-center" style="margin-top:15px;">Данни за служител</h4>
 <hr class="row justify-content-md-center" />
 <div class="row justify-content-md-center">
     <div class="col-md-6">
-        <form asp-action="Create">
+        <form asp-action="@GlobalConstants.ActionEditName">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="form-group col-md-6">
@@ -39,14 +41,14 @@
 
             <div class="form-group">
                 <label asp-for="RoleName"></label><span>*</span>
-                <select class="form-control" asp-for="RoleName" asp-items="@(List<SelectListItem>)Model.RoleList">
+                <select class="form-control" asp-for="RoleName" asp-items="@roles">
                     <option value="">Избери роля</option>
                 </select>
                 <span asp-validation-for="RoleName" class="text-danger"></span>
             </div>
             <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
             <div class="form-group">
-                <input type="submit" value="Назначи" class="btn btn-primary btn-block" />
+                <input type="submit" value="Edit" class="btn btn-primary btn-block" />
             </div>
             <div style="margin-top:auto">
                 <a asp-action="Index">Back to List</a>
@@ -54,7 +56,6 @@
         </form>
     </div>
 </div>
-
 
 
 @section Scripts {

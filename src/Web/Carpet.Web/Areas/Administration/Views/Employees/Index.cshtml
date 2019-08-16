@@ -10,7 +10,7 @@
 
 <div class="d-flex flex-row justify-content-end" style="width:100%; margin-top: 35px;">
 
-    <a class="btn btn-primary" style="width:180px;"
+    <a class="btn btn-primary" style="width:194px;"
        asp-area="@GlobalConstants.AreaAdministrationName"
        asp-controller="@GlobalConstants.ContollerEmployeesName"
        asp-action="@GlobalConstants.ActionAllUsersName">Избери от потребители</a>
@@ -37,7 +37,7 @@
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Salary)
+                @Html.DisplayNameFor(model => model.RoleName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedOn)
@@ -61,16 +61,16 @@
                 <td class="text-center">
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
-                <td class="text-right">
-                    @Html.DisplayFor(modelItem => item.Salary)
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
                 </td>
                 <td class="text-center">
                     @Html.DisplayFor(modelItem => item.CreatedOn)
                 </td>
                 <td class="text-center">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-primary" }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-primary" }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger" })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary" }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger" })
                 </td>
             </tr>
         }

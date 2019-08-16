@@ -20,8 +20,8 @@
         [Display(Name = EmployeeConstants.DisplayNamePhoneNumber)]
         public string PhoneNumber { get; set; }
 
-        [Display(Name = EmployeeConstants.DisplayNameSalary)]
-        public decimal Salary { get; set; }
+        [Display(Name = EmployeeConstants.DisplayNameEmployeeRoleName)]
+        public string RoleName { get; set; }
 
         [Display(Name = EmployeeConstants.DisplayNameCreatedOn)]
         public DateTime CreatedOn { get; set; }
