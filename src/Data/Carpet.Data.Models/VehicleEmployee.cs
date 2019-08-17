@@ -16,9 +16,5 @@
         public string EmployeeId { get; set; }
 
         public virtual Employee Employee { get; set; }
-
-        public string CarrierId { get; set; }
-
-        public virtual Employee Carrier { get; set; }
     }
 }

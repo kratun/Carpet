@@ -39,9 +39,9 @@
         [Display(Name = EmployeeConstants.DisplayNameSalary)]
         public decimal Salary { get; set; }
 
-        public string UserId { get; set; }
-
         public string RoleName { get; set; }
+
+        public string UserId { get; set; }
 
         public virtual CarpetUser User { get; set; }
 
