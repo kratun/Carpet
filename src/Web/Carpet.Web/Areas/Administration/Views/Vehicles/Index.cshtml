@@ -9,7 +9,7 @@
 
 <div class="d-flex flex-row justify-content-end" style="width:100%; margin-top: 35px;">
 
-    <a class="btn btn-primary" style="width:194px;"
+    <a class="btn btn-primary" style="width:180px; font-size:12px"
        asp-area="@GlobalConstants.AreaAdministrationName"
        asp-controller="@GlobalConstants.ContollerVehiclesName"
        asp-action="@GlobalConstants.ActionCreateName">Добави превозно средство</a>
@@ -19,7 +19,7 @@
 </div>
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
-<table id="customers" class="display" style="width:100%">
+<table id="vehicles" class="display" style="width:100%">
     <thead>
         <tr class="text-center">
             <th>
@@ -46,31 +46,31 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Make)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Model)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegistrationNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsDamagedStr)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedOn)
-                </td>
-                <td class="text-center">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-outline-primary" }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-outline-primary" }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-outline-danger" })
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Make)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegistrationNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDamagedStr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td class="text-center">
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary" })
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger" })
+            </td>
+        </tr>
         }
     </tbody>
 </table>

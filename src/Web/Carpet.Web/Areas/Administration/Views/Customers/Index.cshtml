@@ -10,7 +10,7 @@
 
 <div class="d-flex flex-row justify-content-end" style="width:100%; margin-top: 35px;">
 
-    <a class="btn btn-primary" style="width:194px;"
+    <a class="btn btn-primary" style="width:180px;"
        asp-area="@GlobalConstants.AreaAdministrationName"
        asp-controller="@GlobalConstants.ContollerCustomersName"
        asp-action="@GlobalConstants.ActionCreateName">Добави клинет</a>
@@ -46,6 +46,9 @@
     <tbody>
         @foreach (var item in Model)
         {
+        TODO: /*Replace whitespace in addres with "+"*/
+              //var GoogleSearchPickUpAddress = "//google.com/maps/search/" + "ул.+„акад.+Илчо+Димитров“+7Б+1618+кв.+Манастирски+ливади+София";
+
             <tr>
                 <td>@(count++)</td>
                 <td>
@@ -58,10 +61,15 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
+
+                    @*<a target="_blank" href=@item.GoogleSearchPickUpAddress>
+                        @Html.DisplayFor(modelItem => item.PickUpAddress)
+                    </a>*@
                     @Html.DisplayFor(modelItem => item.PickUpAddress)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatedOn)
+
                 </td>
 
                 <td class="text-center">
@@ -70,11 +78,13 @@
                        asp-controller="@GlobalConstants.ContollerOrdersName"
                        asp-action="@GlobalConstants.ActionCreateName">Create Order</a>
                 </td>
+
                 <td class="text-center">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @style="color:red"})
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:95%;" })
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
                 </td>
+
             </tr>
         }
     </tbody>
