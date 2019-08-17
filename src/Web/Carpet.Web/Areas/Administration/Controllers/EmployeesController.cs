@@ -1,20 +1,17 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Carpet.Common.Constants;
     using Carpet.Services.Data;
     using Carpet.Web.InputModels.Administration.Customers;
-    using Carpet.Web.InputModels.Administration.Employees;
+    using Carpet.Web.InputModels.Administration.Employees.Delete;
     using Carpet.Web.InputModels.Administration.Employees.Edit;
     using Carpet.Web.ViewModels.Administration.Customers;
-    using Carpet.Web.ViewModels.Administration.Employees;
     using Carpet.Web.ViewModels.Administration.Employees.AllUsers;
     using Carpet.Web.ViewModels.Administration.Employees.Edit;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
@@ -43,6 +40,7 @@
         }
 
         // GET: Potential Employees
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> AllUsers()
         {
             var employees = await this.usersService.GetAllAsync()
@@ -63,12 +61,14 @@
         }
 
         // GET: Employees/Details/5
-        public async Task<IActionResult> Details(int id)
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public IActionResult Details(int id)
         {
             return this.View();
         }
 
         // GET: Employees/Create
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Create(string id)
         {
             if (!this.ModelState.IsValid)
@@ -85,6 +85,7 @@
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Create(EmployeeCreateInputModel employeeCreate)
         {
             var result = await this.employeesService.CreateAsync(employeeCreate, this.ModelState);
@@ -98,6 +99,7 @@
         }
 
         // GET: Employees/Edit/5
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Edit(string id)
         {
             if (!this.ModelState.IsValid)
@@ -115,6 +117,7 @@
         // POST: Employees/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Edit(string id, EmployeeEditInputModel employeeEdit)
         {
             var result = await this.employeesService.EditByIdAsync(id, employeeEdit, this.ModelState);
@@ -128,25 +131,22 @@
         }
 
         // GET: Employees/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Delete(string id)
         {
-            return this.View();
+            var employeToDelete = await this.employeesService.GetByIdAsync<EmployeeDeleteViewModel>(id);
+            return this.View(employeToDelete);
         }
 
         // POST: Employees/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, IFormCollection collection)
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> Delete(string id, EmployeeDeleteInputModel employeeDelete)
         {
-            try
-            {
-                // TODO: Add delete logic here
-                return this.RedirectToAction(nameof(this.Index));
-            }
-            catch
-            {
-                return this.View();
-            }
+            var employee = await this.employeesService.DeleteByIdAsync(employeeDelete.Id);
+
+            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

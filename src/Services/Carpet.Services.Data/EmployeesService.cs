@@ -1,5 +1,6 @@
 ﻿namespace Carpet.Services.Data
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Customers;
+    using Carpet.Web.InputModels.Administration.Employees.Delete;
     using Carpet.Web.InputModels.Administration.Employees.Edit;
     using Carpet.Web.ViewModels.Administration.Customers;
     using Carpet.Web.ViewModels.Administration.Employees.Edit;
@@ -43,31 +45,21 @@
                 return errorModel;
             }
 
-            var checkForPhoneNumber = await this.employeeRepository.All().FirstOrDefaultAsync(x => x.PhoneNumber == employeeFromView.PhoneNumber);
+            var checkForId = await this.employeeRepository.All().FirstOrDefaultAsync(x => x.Id == employeeFromView.Id);
 
             // If customer with phone number exists return existing view model
-            if (checkForPhoneNumber != null)
+            if (checkForId != null)
             {
-                modelState.AddModelError(nameof(employeeFromView.PhoneNumber), string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberExist, employeeFromView.PhoneNumber));
-
-                var errorModel = employeeFromView.To<Employee>().To<EmployeeCreateViewModel>();
-
-                errorModel.RoleList = roles;
-
-                return errorModel;
+                Exception innerException = new Exception(nameof(employeeFromView.Id));
+                throw new NullReferenceException(string.Format(EmployeeConstants.NullReferenceId, employeeFromView.Id), innerException);
             }
 
-            var user = await this.userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == employeeFromView.PhoneNumber);
+            var user = await this.userManager.Users.FirstOrDefaultAsync(x => x.Id == employeeFromView.Id);
 
             if (user == null)
             {
-                modelState.AddModelError(nameof(employeeFromView.PhoneNumber), string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberNotExist, employeeFromView.PhoneNumber));
-
-                var errorModel = employeeFromView.To<Employee>().To<EmployeeCreateViewModel>();
-
-                errorModel.RoleList = roles;
-
-                return errorModel;
+                Exception innerException = new Exception(nameof(employeeFromView.Id));
+                throw new NullReferenceException(string.Format(EmployeeConstants.NullReferenceId, employeeFromView.Id), innerException);
             }
 
             var role = roles.FirstOrDefault(x => x.Text == employeeFromView.RoleName);
@@ -75,7 +67,7 @@
             await this.userManager.AddToRoleAsync(user, role.Text);
 
             var employeeToDb = employeeFromView.To<Employee>();
-
+            employeeToDb.Id = Guid.NewGuid().ToString();
             employeeToDb.User = user;
 
             await this.employeeRepository.AddAsync(employeeToDb);
@@ -83,6 +75,26 @@
             await this.employeeRepository.SaveChangesAsync();
 
             return employeeToDb.To<EmployeeCreateViewModel>();
+        }
+
+        public async Task<EmployeeDeleteViewModel> DeleteByIdAsync(string id)
+        {
+            var employee = await this.employeeRepository.All().FirstOrDefaultAsync(d => d.Id == id);
+
+            if (employee == null)
+            {
+                throw new NullReferenceException(string.Format(CustomerConstants.NullReferenceCustomerId, id), new Exception(nameof(id)));
+            }
+
+            if (!string.IsNullOrEmpty(employee.UserId))
+            {
+                employee.UserId = null;
+            }
+
+            this.employeeRepository.Delete(employee);
+            await this.employeeRepository.SaveChangesAsync();
+
+            return employee.To<EmployeeDeleteViewModel>();
         }
 
         public async Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView, ModelStateDictionary modelState)
@@ -97,17 +109,13 @@
                 return errorModel;
             }
 
-            var employeeFromDb = await this.employeeRepository.All().FirstOrDefaultAsync(x => x.PhoneNumber == employeeFromView.PhoneNumber);
+            var employeeFromDb = await this.employeeRepository.All().FirstOrDefaultAsync(x => x.Id == employeeFromView.Id);
 
             // If customer with phone number exists but employeeFromDb.Id != employeeFromView.Id do NOT Edit return view model
             if (employeeFromDb != null && employeeFromDb.Id != employeeFromView.Id)
             {
-                modelState.AddModelError(nameof(employeeFromView.PhoneNumber), string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberExist, employeeFromView.PhoneNumber));
-
-                var errorModel = employeeFromView.To<Employee>().To<EmployeeEditViewModel>();
-                errorModel.RoleList = roles;
-
-                return errorModel;
+                Exception innerException = new Exception(nameof(employeeFromView.Id));
+                throw new NullReferenceException(string.Format(EmployeeConstants.NullReferenceId, employeeFromView.Id), innerException);
             }
 
             var user = await this.userManager.Users.FirstOrDefaultAsync(x => x.PhoneNumber == employeeFromView.PhoneNumber);
@@ -148,7 +156,7 @@
 
         public async Task<TViewModel> GetByIdAsync<TViewModel>(string id)
         {
-            return this.employeeRepository.All().FirstOrDefault(x => x.Id == id).To<TViewModel>();
+            return await Task.FromResult(this.employeeRepository.All().FirstOrDefault(x => x.Id == id).To<TViewModel>());
         }
 
         public async Task<EmployeeCreateViewModel> GetNotHiredUserAsync(string id)

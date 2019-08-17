@@ -56,8 +56,12 @@
                                 <a class="dropdown-item" href="#">Справка 1</a>
                                 <a class="dropdown-item" href="#">Справка 2</a>
                                 <a class="dropdown-item" href="#">Справка 3</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Изтрити поръчки</a>
+                                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                {
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Изтрити поръчки</a>
+                                }
+
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -65,18 +69,21 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item"
                                    asp-area="@GlobalConstants.AreaAdministrationName"
-                                   asp-controller="@GlobalConstants.ContollerVehiclesName"
-                                   asp-action="@GlobalConstants.ActionIndexName">Автомобили</a>
-                                <a class="dropdown-item"
-                                   asp-area="@GlobalConstants.AreaAdministrationName"
-                                   asp-controller="@GlobalConstants.ContollerItemsName"
-                                   asp-action="@GlobalConstants.ActionIndexName">Продукти и Цени</a>
-                                <a class="dropdown-item"
-                                   asp-area="@GlobalConstants.AreaAdministrationName"
                                    asp-controller="@GlobalConstants.ContollerEmployeesName"
                                    asp-action="@GlobalConstants.ActionIndexName">Управление на служители</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Separated link</a>
+                                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                                {
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item"
+                                       asp-area="@GlobalConstants.AreaAdministrationName"
+                                       asp-controller="@GlobalConstants.ContollerVehiclesName"
+                                       asp-action="@GlobalConstants.ActionIndexName">Автомобили</a>
+                                    <a class="dropdown-item"
+                                       asp-area="@GlobalConstants.AreaAdministrationName"
+                                       asp-controller="@GlobalConstants.ContollerItemsName"
+                                       asp-action="@GlobalConstants.ActionIndexName">Продукти и Цени</a>
+                                }
+
                             </div>
                         </li>
                     </ul>
@@ -154,12 +161,20 @@
                 "order": [[0, "asc"]]
             });
 
+            $('#vehicles').DataTable({
+                "order": [[0, "asc"]]
+            });
+
+            $('#employees').DataTable({
+                "order": [[0, "asc"]]
+            });
+
             $('#users').DataTable({
                 "order": [[0, "asc"]]
             });
 
             $('#customers').DataTable({
-                "order": [[5, "desc"]]
+                "order": [[0, "asc"]]
             });
 
             let selectorInput = $('#example_filter').children(2).children(0);

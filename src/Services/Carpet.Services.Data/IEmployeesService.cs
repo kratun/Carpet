@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using Carpet.Web.InputModels.Administration.Customers;
+    using Carpet.Web.InputModels.Administration.Employees.Delete;
     using Carpet.Web.InputModels.Administration.Employees.Edit;
     using Carpet.Web.ViewModels.Administration.Customers;
     using Carpet.Web.ViewModels.Administration.Employees.Edit;
@@ -21,6 +22,6 @@
 
         Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView, ModelStateDictionary modelState);
 
-        // Task<EmployeeDeleteViewModel> DeleteByIdAsync(string id);
+        Task<EmployeeDeleteViewModel> DeleteByIdAsync(string id);
     }
 }
