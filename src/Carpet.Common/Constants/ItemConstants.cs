@@ -4,7 +4,7 @@
     {
         public const string PriceMinValue = "0.10";
         public const string PriceMaxValue = "1000.00";
-        public const string PriceStepViewValue = "any";
+        public const string PriceStepViewValue = "0.01";
 
         public const string DisplayNameName = "Наименование";
         public const string DisplayNameOrdinaryPrice = "Стандартна цена";

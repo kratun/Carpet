@@ -10,7 +10,7 @@
         public const string DisplayNameFirstName = "Име";
         public const string DisplayNameLastName = "Фамилия";
         public const string DisplayNamePhoneNumber = "Телефон";
-        public const string DisplayNamePickUpAddress = "Адрес за взинаме";
+        public const string DisplayNamePickUpAddress = "Адрес за взимане";
         public const string DisplayNameDeliveryAddress = "Адрес за доставка";
         public const string DisplayNameCreatedOn = "Създаден на";
         public const string ErrorFieldRequired = "Полето {0} е задължително!";

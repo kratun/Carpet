@@ -14,6 +14,8 @@
         public const string ActionEditName = "Edit";
         public const string ActionDeleteName = "Delete";
         public const string ActionAllUsersName = "AllUsers";
+        public const string ActionAddName = "Add";
+        public const string ActionRemoveName = "Remove";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";
@@ -22,6 +24,7 @@
         public const string ContollerOrdersName = "Orders";
         public const string ContollerEmployeesName = "Employees";
         public const string ContollerVehiclesName = "Vehicles";
+        public const string ContollerGarageName = "Garage";
 
         // Area constant name
         public const string AreaAdministrationName = "Administration";
