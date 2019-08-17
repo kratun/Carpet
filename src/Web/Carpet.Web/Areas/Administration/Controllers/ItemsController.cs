@@ -1,15 +1,17 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using Carpet.Common.Constants;
     using Carpet.Services.Data;
     using Carpet.Web.InputModels.Administration.Items;
     using Carpet.Web.ViewModels.Administration.Items;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
+    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class ItemsController : AdministrationController
     {
         private readonly IItemsService itemsService;

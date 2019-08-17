@@ -4,12 +4,15 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Carpet.Common.Constants;
     using Carpet.Services.Data;
     using Carpet.Web.InputModels.Administration.Vehicles;
     using Carpet.Web.ViewModels.Administration.Vehicles;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
+    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class VehiclesController : AdministrationController
     {
         private readonly IVehiclesService vehiclesService;
@@ -38,7 +41,7 @@
         }
 
         // GET: Vehicles/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return this.View();
         }

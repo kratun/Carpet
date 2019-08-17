@@ -110,7 +110,7 @@
 
         public async Task<TViewModel> GetByIdAsync<TViewModel>(int id)
         {
-            return this.vehicleRepository.All().FirstOrDefault(x => x.Id == id).To<TViewModel>();
+            return await this.vehicleRepository.All().Where(x => x.Id == id).To<TViewModel>().FirstOrDefaultAsync();
         }
     }
 }

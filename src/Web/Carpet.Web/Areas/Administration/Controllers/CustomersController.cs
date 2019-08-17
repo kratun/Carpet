@@ -37,7 +37,7 @@
         }
 
         // GET: Customers/Create
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return this.View();
         }
@@ -91,9 +91,9 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id, CustomerDeleteInputModel customerDelete)
         {
-                var customer = await this.customersService.DeleteByIdAsync(id);
+            var customer = await this.customersService.DeleteByIdAsync(id);
 
-                return this.RedirectToAction(nameof(this.Index));
+            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

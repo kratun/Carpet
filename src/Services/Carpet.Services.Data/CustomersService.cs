@@ -15,7 +15,7 @@
 
     public class CustomersService : ICustomersService
     {
-        private readonly IRepository<Customer> customerRepository;
+        private readonly IDeletableEntityRepository<Customer> customerRepository;
 
         public CustomersService(IDeletableEntityRepository<Customer> customerRepository)
         {
@@ -56,6 +56,13 @@
             if (customer == null)
             {
                 throw new NullReferenceException(string.Format(CustomerConstants.NullReferenceCustomerId, id), new Exception(nameof(id)));
+            }
+
+            // TODO DETOUCH USER!!!
+            if (!string.IsNullOrEmpty(customer.UserId))
+            {
+                customer.UserId = null;
+                customer.User = null;
             }
 
             this.customerRepository.Delete(customer);
@@ -109,7 +116,7 @@
 
         public async Task<TViewModel> GetByIdAsync<TViewModel>(string id)
         {
-            return this.customerRepository.All().FirstOrDefault(x => x.Id == id).To<TViewModel>();
+            return await this.customerRepository.All().Where(x => x.Id == id).To<TViewModel>().FirstOrDefaultAsync();
         }
     }
 }
