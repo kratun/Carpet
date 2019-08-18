@@ -1,0 +1,87 @@
+﻿@model Carpet.Web.ViewModels.Administration.Garage.Add.EmployeeAddViewModel
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+    var ActionAddOrRemove = string.IsNullOrEmpty(Model.RegistrationNumber) ? "Add" : "Remove";
+}
+
+
+<h1 class="row justify-content-md-center">ДОБАВИ / ПРЕМАХНИ</h1>
+
+<h4 class="row justify-content-md-center" style="margin-top:15px;">превозно средство</h4>
+<hr class="row justify-content-md-center" />
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
+        <form asp-action=@ActionAddOrRemove>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.PhoneNumber)
+                </dd>
+
+
+            </dl>
+            @if (string.IsNullOrEmpty(Model.RegistrationNumber))
+            {
+
+                <div class="form-group">
+                    <label asp-for="RegistrationNumber"></label><span>*</span>
+                    <select class="form-control" asp-for="RegistrationNumber" asp-items="@(List<SelectListItem>)Model.VehicleList">
+                        <option value="">Избери роля</option>
+                    </select>
+                    <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                </div>
+                <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
+                <div class="row">
+                    <div class="form-group col-md-6 form-inline">
+                        <input type="submit" value="Добави" class="btn btn-primary btn-block" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input value="Премахни" class="btn btn-outline-primary btn-block" disabled />
+                    </div>
+                </div>
+
+
+            }
+            else
+            {
+                <div class="form-group">
+                    <input asp-for="RegistrationNumber" class="form-control" hidden />
+                    <input asp-for="Id" class="form-control" hidden />
+                    
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <input value="Добави" class="btn btn-outline-primary btn-block" disabled />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="submit" value="Премахни" class="btn btn-primary btn-block" />
+                    </div>
+                </div>
+            }
+
+            <div style="margin-top:auto">
+                <a asp-area="@GlobalConstants.AreaAdministrationName"
+                   asp-controller="@GlobalConstants.ContollerEmployeesName"
+                   asp-action="Index">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+

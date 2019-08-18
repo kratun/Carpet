@@ -46,8 +46,8 @@
     <tbody>
         @foreach (var item in Model)
         {
-        TODO: /*Replace whitespace in addres with "+"*/
-              //var GoogleSearchPickUpAddress = "//google.com/maps/search/" + "ул.+„акад.+Илчо+Димитров“+7Б+1618+кв.+Манастирски+ливади+София";
+            /*TODO: *//*Replace whitespace in addres with "+"*/
+                      //var GoogleSearchPickUpAddress = "//google.com/maps/search/" + "ул.+„акад.+Илчо+Димитров“+7Б+1618+кв.+Манастирски+ливади+София";
 
             <tr>
                 <td>@(count++)</td>
@@ -73,10 +73,13 @@
                 </td>
 
                 <td class="text-center">
-                    <a class="btn btn-outline-primary btn-sm"
-                       asp-area="@GlobalConstants.AreaAdministrationName"
-                       asp-controller="@GlobalConstants.ContollerOrdersName"
-                       asp-action="@GlobalConstants.ActionCreateName">Create Order</a>
+                    <div class="col-md-12">
+                        <a class="btn btn-outline-primary btn-sm" style="vertical-align:auto;"
+                           asp-area="@GlobalConstants.AreaAdministrationName"
+                           asp-controller="@GlobalConstants.ContollerOrdersName"
+                           asp-action="@GlobalConstants.ActionCreateName">Create Order</a>
+                    </div>
+                    
                 </td>
 
                 <td class="text-center">

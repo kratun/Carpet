@@ -24,7 +24,7 @@
 
     <table id="employees" class="display" style="width:100%">
         <thead>
-            <tr class="text-center">
+            <tr class="text-center" style="font-size:13px">
 
                 <th>
                     #
@@ -51,7 +51,7 @@
         <tbody>
             @foreach (var employee in Model)
             {
-            <tr>
+            <tr style="font-size:13px">
                 <td>
                     @(count++)
                 </td>
@@ -76,7 +76,7 @@
                        asp-area="@GlobalConstants.AreaAdministrationName"
                        asp-controller="@GlobalConstants.ContollerGarageName"
                        asp-action="@GlobalConstants.ActionAddName"
-                       asp-route-id="@employee.Id">Add to vehicle</a>
+                       asp-route-id="@employee.Id">Add / Remove Vehicle</a>
                 </td>
                 <td class="text-center">
                     @Html.ActionLink("Edit", "Edit", new { id = employee.Id }, new { @class = "btn btn-sm btn-outline-primary" })
@@ -92,7 +92,7 @@ else if (this.User.IsInRole(GlobalConstants.OperatorRoleName))
 
     <table id="employees" class="display" style="width:100%">
         <thead>
-            <tr class="text-center">
+            <tr class="text-center" style="font-size:13px">
 
                 <th>
                     #
@@ -118,7 +118,7 @@ else if (this.User.IsInRole(GlobalConstants.OperatorRoleName))
         <tbody>
             @foreach (var employee in Model)
             {
-                <tr>
+                <tr style="font-size:13px">
                     <td>
                         @(count++)
                     </td>
@@ -142,7 +142,7 @@ else if (this.User.IsInRole(GlobalConstants.OperatorRoleName))
                            asp-area="@GlobalConstants.AreaAdministrationName"
                            asp-controller="@GlobalConstants.ContollerGarageName"
                            asp-action="@GlobalConstants.ActionAddName"
-                           asp-route-id="@employee.Id">Add to vehicle</a>
+                           asp-route-id="@employee.Id">Add / Remove Vehicle</a>
                     </td>
                 </tr>
             }

@@ -4,11 +4,6 @@
 
     public class VehicleEmployee : BaseDeletableModel<string>
     {
-        public VehicleEmployee()
-        {
-            // this.Orders = new HashSet<OrderVehicleEmployee>();
-        }
-
         public int VehicleId { get; set; }
 
         public virtual Vehicle Vehicle { get; set; }
