@@ -13,6 +13,8 @@
 
         Task<CustomerCreateViewModel> CreateAsync(CustomerCreateInputModel customerFromView, ModelStateDictionary modelState);
 
+        Task<CustomerAddAddressViewModel> AddAddressToCustomerAsync(CustomerAddAddressInputModel customerFromView, ModelStateDictionary modelState);
+
         Task<TViewModel> GetByIdAsync<TViewModel>(string id);
 
         Task<CustomerEditViewModel> EditByIdAsync(string id, CustomerEditInputModel customerFromView, ModelStateDictionary modelState);

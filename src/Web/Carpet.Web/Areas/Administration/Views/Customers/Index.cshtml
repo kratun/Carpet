@@ -13,7 +13,7 @@
     <a class="btn btn-primary" style="width:180px;"
        asp-area="@GlobalConstants.AreaAdministrationName"
        asp-controller="@GlobalConstants.ContollerCustomersName"
-       asp-action="@GlobalConstants.ActionCreateName">Добави клинет</a>
+       asp-action="@GlobalConstants.ActionCreateName">Добави клиент</a>
 
 
 
@@ -21,7 +21,7 @@
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
 <table id="customers" class="display" style="width:100%">
-    <thead>
+    <thead style="font-size:14px">
         <tr class="text-center">
             <th>#</th>
             <th>
@@ -37,10 +37,13 @@
                 @Html.DisplayNameFor(model => model.PickUpAddress)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.DeliveryAddress)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.CreatedOn)
             </th>
             <th></th>
-            <th></th>
+            <th>Управление на клиента</th>
         </tr>
     </thead>
     <tbody>
@@ -49,46 +52,52 @@
             /*TODO: *//*Replace whitespace in addres with "+"*/
                       //var GoogleSearchPickUpAddress = "//google.com/maps/search/" + "ул.+„акад.+Илчо+Димитров“+7Б+1618+кв.+Манастирски+ливади+София";
 
-            <tr>
-                <td>@(count++)</td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
+        <tr style="font-size:12px">
+            <td>@(count++)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
 
-                    @*<a target="_blank" href=@item.GoogleSearchPickUpAddress>
-                        @Html.DisplayFor(modelItem => item.PickUpAddress)
-                    </a>*@
-                    @Html.DisplayFor(modelItem => item.PickUpAddress)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                @*<a target="_blank" href=@item.GoogleSearchPickUpAddress>
+                @Html.DisplayFor(modelItem => item.PickUpAddress)
+            </a>*@
+                @Html.DisplayFor(modelItem => item.PickUpAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryAddress)
 
-                </td>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
 
-                <td class="text-center">
-                    <div class="col-md-12">
-                        <a class="btn btn-outline-primary btn-sm" style="vertical-align:auto;"
-                           asp-area="@GlobalConstants.AreaAdministrationName"
-                           asp-controller="@GlobalConstants.ContollerOrdersName"
-                           asp-action="@GlobalConstants.ActionCreateName">Create Order</a>
-                    </div>
-                    
-                </td>
+            </td>
 
-                <td class="text-center">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:95%;" })
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
-                </td>
+            <td class="text-center">
+                <div class="col-md-12">
+                    <a class="btn btn-outline-primary btn-sm" style="vertical-align:auto;"
+                       asp-area="@GlobalConstants.AreaAdministrationName"
+                       asp-controller="@GlobalConstants.ContollerOrdersName"
+                       asp-action="@GlobalConstants.ActionCreateName"
+                       asp-route-id="@item.Id">Create Order</a>
+                </div>
 
-            </tr>
+            </td>
+
+            <td class="text-center">
+                @Html.ActionLink("Add Address", "AddAddress", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
+                @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
+            </td>
+
+        </tr>
         }
     </tbody>
 </table>

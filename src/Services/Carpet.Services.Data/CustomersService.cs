@@ -29,12 +29,12 @@
                 return customerFromView.To<Customer>().To<CustomerCreateViewModel>();
             }
 
-            var checkForPhoneNumber = await this.customerRepository.All().FirstOrDefaultAsync(x => x.PhoneNumber == customerFromView.PhoneNumber);
+            var hasAnyCustomerWithPhoneNumber = await this.customerRepository.All().AnyAsync(x => x.PhoneNumber == customerFromView.PhoneNumber);
 
             // If customer with phone number exists return existing view model
-            if (checkForPhoneNumber != null)
+            if (hasAnyCustomerWithPhoneNumber)
             {
-                modelState.AddModelError(nameof(customerFromView.PhoneNumber), string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber));
+                modelState.AddModelError(string.Empty, string.Format(CustomerConstants.ArgumentExceptionCustomerExistAddAddress));
                 return customerFromView.To<Customer>().To<CustomerCreateViewModel>();
             }
 
@@ -78,35 +78,37 @@
                 return customerFromView.To<Customer>().To<CustomerEditViewModel>();
             }
 
-            var customerToDelete = await this.customerRepository
+            var customerToUpdate = await this.customerRepository
                 .All()
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == customerFromView.Id);
 
-            if (customerToDelete == null)
+            if (customerToUpdate == null)
             {
                 Exception innerException = new Exception(nameof(id));
                 throw new NullReferenceException(string.Format(CustomerConstants.NullReferenceCustomerId, id), innerException);
             }
 
-            var checkForPhoneNumber = await this.customerRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.PhoneNumber == customerFromView.PhoneNumber);
+            var hasAnyCustomerWithSameData = await this.customerRepository
+                .AllAsNoTracking()
+                .AnyAsync(x => HasMaxSameCustomerData(x, customerFromView.FirstName, customerFromView.LastName, customerFromView.PhoneNumber, customerFromView.PickUpAddress, customerFromView.DeliveryAddress));
 
-            // If customer with phone number exists return existing view model
-            if (checkForPhoneNumber != null && customerToDelete.Id != checkForPhoneNumber.Id)
+            if (hasAnyCustomerWithSameData)
             {
-                modelState.AddModelError(nameof(customerFromView.PhoneNumber), string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber));
+                modelState.AddModelError(string.Empty, CustomerConstants.ArgumentExceptionCustomerExist);
                 var result = customerFromView.To<Customer>().To<CustomerEditViewModel>();
                 return result;
             }
 
-            var newCustomer = customerFromView.To<Customer>();
+            customerToUpdate.FirstName = customerFromView.FirstName;
+            customerToUpdate.LastName = customerFromView.LastName;
+            customerToUpdate.PhoneNumber = customerFromView.PhoneNumber;
+            customerToUpdate.PickUpAddress = customerFromView.PickUpAddress;
+            customerToUpdate.DeliveryAddress = customerFromView.DeliveryAddress;
 
-            this.customerRepository.Delete(customerToDelete);
-            await this.customerRepository.AddAsync(newCustomer);
+            this.customerRepository.Update(customerToUpdate);
             await this.customerRepository.SaveChangesAsync();
 
-            return newCustomer.To<CustomerEditViewModel>();
+            return customerToUpdate.To<CustomerEditViewModel>();
         }
 
         public IQueryable<TViewModel> GetAllCustomersAsync<TViewModel>()
@@ -117,6 +119,59 @@
         public async Task<TViewModel> GetByIdAsync<TViewModel>(string id)
         {
             return await this.customerRepository.All().Where(x => x.Id == id).To<TViewModel>().FirstOrDefaultAsync();
+        }
+
+        public async Task<CustomerAddAddressViewModel> AddAddressToCustomerAsync(CustomerAddAddressInputModel customerFromView, ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                return customerFromView.To<Customer>().To<CustomerAddAddressViewModel>();
+            }
+
+            var hasAnyCustomerWithMaxSameData = await this.customerRepository.All().Where(x => x.PhoneNumber == customerFromView.PhoneNumber).AnyAsync(x => HasMaxSameCustomerData(x, customerFromView.FirstName, customerFromView.LastName, customerFromView.PhoneNumber, customerFromView.PickUpAddress, customerFromView.DeliveryAddress));
+
+            if (hasAnyCustomerWithMaxSameData)
+            {
+                modelState.AddModelError(string.Empty, CustomerConstants.ArgumentExceptionCustomerExist);
+                return customerFromView.To<Customer>().To<CustomerAddAddressViewModel>();
+            }
+
+            var hasAnyCustomerWithMinSameData = await this.customerRepository.All().Where(x => x.PhoneNumber == customerFromView.PhoneNumber).AnyAsync(x => !HasMinSameCustomerData(x, customerFromView.FirstName, customerFromView.LastName, customerFromView.PhoneNumber));
+
+            if (hasAnyCustomerWithMinSameData)
+            {
+                modelState.AddModelError(string.Empty, string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerFromView.PhoneNumber));
+                return customerFromView.To<Customer>().To<CustomerAddAddressViewModel>();
+            }
+
+            var customerToDb = customerFromView.To<Customer>();
+
+            // Remove mapped Key to create new Customer
+            customerToDb.Id = null;
+
+            // if User with Id NOT EXIST set Null
+            customerToDb.UserId = this.customerRepository.AllAsNoTracking().FirstOrDefault(x => x.Id == customerFromView.Id)?.UserId;
+
+            await this.customerRepository.AddAsync(customerToDb);
+
+            await this.customerRepository.SaveChangesAsync();
+
+            return customerToDb.To<CustomerAddAddressViewModel>();
+        }
+
+        private static bool HasMaxSameCustomerData(Customer checkForCustomer, string firstName, string lastName, string phoneNumber, string pickUpAddress, string deliveryAddress)
+        {
+            return HasMinSameCustomerData(checkForCustomer, firstName, lastName, phoneNumber) &&
+                            checkForCustomer.PickUpAddress == pickUpAddress &&
+                            checkForCustomer.DeliveryAddress == deliveryAddress;
+        }
+
+        private static bool HasMinSameCustomerData(Customer checkForCustomer, string firstName, string lastName, string phoneNumber)
+        {
+            return checkForCustomer != null &&
+                                        checkForCustomer.FirstName == firstName &&
+                                        checkForCustomer.LastName == lastName &&
+                                        checkForCustomer.PhoneNumber == phoneNumber;
         }
     }
 }

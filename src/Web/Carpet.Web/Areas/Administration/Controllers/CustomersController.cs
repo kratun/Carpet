@@ -57,6 +57,34 @@
             return this.RedirectToAction(nameof(this.Index));
         }
 
+        // GET: Customers/AddAddress{id}
+        public async Task<IActionResult> AddAddress(string id = null)
+        {
+            var customerForView = await this.customersService.GetByIdAsync<CustomerAddAddressViewModel>(id);
+
+            if (customerForView == null)
+            {
+                return this.RedirectToAction(nameof(this.Create));
+            }
+
+            return this.View(customerForView);
+        }
+
+        // POST: Customers/AddAddress
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAddress(CustomerAddAddressInputModel customerAddAddress)
+        {
+            var result = await this.customersService.AddAddressToCustomerAsync(customerAddAddress, this.ModelState);
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(result);
+            }
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(string id)
         {

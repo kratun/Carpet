@@ -19,6 +19,8 @@
         public const string ErrorFieldNameLength = "{0}то трябва да е изписано на кирилица и да е минимум {1} букви.";
 
         public const string NullReferenceCustomerId = "Не е намерен клиент с Id: {0}.";
-        public const string ArgumentExceptionCustomerPhone = "Клиент с телефон: {0} съществува.";
+        public const string ArgumentExceptionCustomerPhone = "Клиент с телефон: {0} съществува. Моля добавете нов адрес към него.";
+        public const string ArgumentExceptionCustomerExistAddAddress = "Клиент с тези данни съществува. Моля добавете нов адрес към него.";
+        public const string ArgumentExceptionCustomerExist = "Клиент с тези данни съществува или не сте направили редакция на текущия клиент.";
     }
 }

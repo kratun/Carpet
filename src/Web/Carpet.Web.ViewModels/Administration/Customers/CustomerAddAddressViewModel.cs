@@ -6,7 +6,7 @@
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
 
-    public class CustomerCreateViewModel : IMapTo<Customer>, IMapFrom<Customer>
+    public class CustomerAddAddressViewModel : IMapTo<Customer>, IMapFrom<Customer>
     {
         public string Id { get; set; }
 

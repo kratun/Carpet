@@ -8,12 +8,12 @@
     using Carpet.Services.Mapping;
     using Carpet.Web.ViewModels.Administration.Customers;
 
-    public class CustomerEditInputModel : IMapTo<Customer>, IMapFrom<Customer>, IMapTo<CustomerDetailsViewModel>, IMapFrom<CustomerEditViewModel>
+    public class CustomerAddAddressInputModel : IMapTo<Customer>, IMapFrom<Customer>
     {
         [Required]
         public string Id { get; set; }
 
-        [Required(ErrorMessage = CustomerConstants.ErrorFieldRequired)]
+        [Required(ErrorMessage =CustomerConstants.ErrorFieldRequired)]
         [MinLength(CustomerConstants.FirstNameMinValue, ErrorMessage = CustomerConstants.ErrorFieldNameLength)]
         [RegularExpression(CustomerConstants.NameValidation, ErrorMessage = CustomerConstants.ErrorFieldFirstNameRegex)]
         [Display(Name = CustomerConstants.DisplayNameFirstName)]

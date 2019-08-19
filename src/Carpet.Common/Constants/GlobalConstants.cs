@@ -16,6 +16,7 @@
         public const string ActionAllUsersName = "AllUsers";
         public const string ActionAddName = "Add";
         public const string ActionRemoveName = "Remove";
+        public const string ActionAddAddressName = "Remove";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";
