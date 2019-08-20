@@ -10,6 +10,10 @@
     using Carpet.Data.Repositories;
     using Carpet.Data.Seeding;
     using Carpet.Services.Data;
+    using Carpet.Services.Data.CustomerService;
+    using Carpet.Services.Data.EmployeesService;
+    using Carpet.Services.Data.OrdersService;
+    using Carpet.Services.Data.OrderStatusService;
     using Carpet.Services.Mapping;
     using Carpet.Services.Messaging;
     using Carpet.Web.InputModels.Administration.Items;
@@ -109,6 +113,8 @@
             services.AddTransient<IRolesService, RolesService>();
             services.AddTransient<ICarpetUsersService, CarpetUsersService>();
             services.AddTransient<IGarageService, GarageService>();
+            services.AddTransient<IOrdersService, OrdersService>();
+            services.AddTransient<IOrderStatusService, OrderStatusService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

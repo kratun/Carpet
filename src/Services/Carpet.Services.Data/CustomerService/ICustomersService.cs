@@ -1,4 +1,4 @@
-﻿namespace Carpet.Services.Data
+﻿namespace Carpet.Services.Data.CustomerService
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -10,6 +10,8 @@
     public interface ICustomersService
     {
         IQueryable<TViewModel> GetAllCustomersAsync<TViewModel>();
+
+        Task<bool> IsCustomerExistAsync(string id);
 
         Task<CustomerCreateViewModel> CreateAsync(CustomerCreateInputModel customerFromView, ModelStateDictionary modelState);
 

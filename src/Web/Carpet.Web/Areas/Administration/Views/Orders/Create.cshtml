@@ -1,7 +1,85 @@
-﻿
+﻿@model Carpet.Web.ViewModels.Administration.Orders.Create.OrderCreateViewModel
+
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1 class="row justify-content-md-center">СЪЗДАЙ ПОРЪЧКА</h1>
+
+<h4 class="row justify-content-md-center" style="margin-top:15px;">Данни за клиента</h4>
+<hr class="row justify-content-md-center" />
+<div class="row justify-content-md-center">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="CustomerId" class="form-control" hidden />
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="form-group col-4">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" disabled />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" disabled />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" disabled />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="PickUpAddress" class="control-label"></label>
+                    <input asp-for="PickUpAddress" class="form-control" disabled />
+                    <span asp-validation-for="PickUpAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="DeliveryAddress" class="control-label"></label>
+                    <input asp-for="DeliveryAddress" class="form-control" disabled />
+                    <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsExpress" /> @Html.DisplayNameFor(model => model.IsExpress)
+                        </label>
+                    </div>
+                    <div class="form-group form-check ">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="HasFlavor" /> @Html.DisplayNameFor(model => model.HasFlavor)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <label asp-for="ItemQuantitySetByUser" class="control-label"></label>
+                    <input type="number" step="1" asp-for="ItemQuantitySetByUser" class="form-control" />
+                    <span asp-validation-for="ItemQuantitySetByUser" class="text-danger"></span>
+                </div>
+            </div>
+            
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary btn-block" />
+                </div>
+            
+            
+
+
+
+        </form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+
+
 

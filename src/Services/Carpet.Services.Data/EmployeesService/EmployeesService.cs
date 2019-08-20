@@ -1,4 +1,4 @@
-﻿namespace Carpet.Services.Data
+﻿namespace Carpet.Services.Data.EmployeesService
 {
     using System;
     using System.Linq;
@@ -159,11 +159,17 @@
             return await Task.FromResult(this.employeeRepository.All().FirstOrDefault(x => x.Id == id).To<TViewModel>());
         }
 
+        public async Task<string> GetIdByUserNameAsync(string username)
+        {
+            var result = await this.employeeRepository.All().Where(x => x.User.UserName == username).Select(x => x.Id).FirstOrDefaultAsync();
+            return result;
+        }
+
         public async Task<EmployeeCreateViewModel> GetNotHiredUserAsync(string id)
         {
-            var notHiredUser = this.userManager.Users.Where(x => x.Id == id).Select(x => x.To<EmployeeCreateViewModel>()).FirstOrDefault();
+            var notHiredUser = userManager.Users.Where(x => x.Id == id).Select(x => x.To<EmployeeCreateViewModel>()).FirstOrDefault();
 
-            var roles = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+            var roles = await rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
 
             notHiredUser.RoleList = roles;
 

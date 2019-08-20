@@ -3,7 +3,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Carpet.Services.Data;
+    using Carpet.Services.Data.CustomerService;
     using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.ViewModels.Administration.Customers;
     using Microsoft.AspNetCore.Mvc;

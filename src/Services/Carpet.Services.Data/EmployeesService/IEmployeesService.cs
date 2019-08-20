@@ -1,4 +1,4 @@
-﻿namespace Carpet.Services.Data
+﻿namespace Carpet.Services.Data.EmployeesService
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -23,5 +23,7 @@
         Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView, ModelStateDictionary modelState);
 
         Task<EmployeeDeleteViewModel> DeleteByIdAsync(string id);
+
+        Task<string> GetIdByUserNameAsync(string name);
     }
 }

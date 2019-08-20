@@ -1,4 +1,4 @@
-﻿namespace Carpet.Services.Data
+﻿namespace Carpet.Services.Data.CustomerService
 {
     using System;
     using System.Linq;
@@ -157,6 +157,11 @@
             await this.customerRepository.SaveChangesAsync();
 
             return customerToDb.To<CustomerAddAddressViewModel>();
+        }
+
+        public async Task<bool> IsCustomerExistAsync(string id)
+        {
+            return await this.customerRepository.AllAsNoTracking().AnyAsync(x => x.Id == id);
         }
 
         private static bool HasMaxSameCustomerData(Customer checkForCustomer, string firstName, string lastName, string phoneNumber, string pickUpAddress, string deliveryAddress)

@@ -1,15 +1,26 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
+    using Carpet.Common.Constants;
+    using Carpet.Services.Data.CustomerService;
+    using Carpet.Services.Data.OrdersService;
+    using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.ViewModels.Administration.Orders.Create;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     public class OrdersController : AdministrationController
     {
+        private readonly IOrdersService ordersService;
+        private readonly ICustomersService customersService;
+
+        public OrdersController(IOrdersService ordersService, ICustomersService customersService)
+        {
+            this.ordersService = ordersService;
+            this.customersService = customersService;
+        }
+
         // GET: Orders
         public async Task<IActionResult> Index()
         {
@@ -25,24 +36,30 @@
         // GET: Orders/Create
         public async Task<IActionResult> Create(string id)
         {
-            return View();
+            var customer = await this.customersService.GetByIdAsync<OrderCreateViewModel>(id);
+
+            if (customer == null)
+            {
+                return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerCustomersName}");
+            }
+
+            return this.View(customer);
         }
 
         // POST: Orders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormCollection collection)
+        public async Task<IActionResult> Create(OrderCreateInputModel orederCreate)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            var userName = this.User.Identity.Name;
+            var result = await this.ordersService.CreateAsync(orederCreate, userName, this.ModelState);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            if (!this.ModelState.IsValid)
             {
-                return View();
+                return this.View(result);
             }
+
+            return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerCustomersName}");
         }
 
         // GET: Orders/Edit/5
