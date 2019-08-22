@@ -1,6 +1,7 @@
 ﻿namespace Carpet.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@
     using Carpet.Web.InputModels.Administration.Vehicles;
     using Carpet.Web.ViewModels.Administration.Vehicles;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
 
     public class VehiclesService : IVehiclesService
@@ -111,6 +113,11 @@
         public async Task<TViewModel> GetByIdAsync<TViewModel>(int id)
         {
             return await this.vehicleRepository.All().Where(x => x.Id == id).To<TViewModel>().FirstOrDefaultAsync();
+        }
+
+        public async Task<List<SelectListItem>> GetVehicleNames()
+        {
+            return await this.vehicleRepository.All().Where(x => !x.IsDamaged).Select(x => new SelectListItem { Value = x.RegistrationNumber, Text = x.RegistrationNumber }).ToListAsync();
         }
     }
 }

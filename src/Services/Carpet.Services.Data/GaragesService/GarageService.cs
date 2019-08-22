@@ -1,17 +1,16 @@
 ﻿namespace Carpet.Services.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Carpet.Common.Constants;
     using Carpet.Data.Common.Repositories;
     using Carpet.Data.Models;
-    using Carpet.Services.Data.EmployeesService;
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Garage;
     using Carpet.Web.ViewModels.Administration.Garage.Add;
-    using Carpet.Web.ViewModels.Administration.Garage.Remove;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
@@ -33,7 +32,7 @@
 
         public async Task<EmployeeAddViewModel> GetByIdAsync(string id, ModelStateDictionary modelState)
         {
-            var vehicles = await this.GetVehicleNames();
+            var vehicles = await this.vehiclesService.GetVehicleNames();
 
             var employeeFromDb = await this.employeesService.GetByIdAsync<EmployeeAddViewModel>(id);
 
@@ -71,6 +70,7 @@
                 throw new NullReferenceException(string.Format(GarageConstants.NullReferenceId, employeeFromView.RegistrationNumber), innerException);
             }
 
+            // TODO: CHECK ORDERS BY STATUS AND DO NOT REMOVE IF is in status StatusPickUpArrangeHourRangeWaiting, StatusPickUpArrangedDateWaiting, StatusPickUpArrangedDateCоnfirmed, StatusPickedUpConfirm, StatusDeliveryArrangeHourRangeWaiting, StatusDeliveryArrangedDateCоnfirmed, StatusDeliverConfirmed
             this.garageRepository.Delete(vehicleEmployee);
 
             await this.garageRepository.SaveChangesAsync();
@@ -80,7 +80,7 @@
 
         public async Task<EmployeeAddViewModel> SetVehicleToEmployeeAsync(EmployeeAddInputModel employeeFromView, ModelStateDictionary modelState)
         {
-            var vehicles = await this.GetVehicleNames();
+            var vehicles = await this.vehiclesService.GetVehicleNames();
 
             if (!modelState.IsValid)
             {
@@ -129,9 +129,9 @@
             return employee.To<EmployeeAddViewModel>();
         }
 
-        private async Task<System.Collections.Generic.List<SelectListItem>> GetVehicleNames()
+        public async Task<List<SelectListItem>> GetVehicleNames()
         {
-            return await this.vehiclesService.GetAllAsync<Vehicle>().Where(x => !x.IsDamaged).Select(x => new SelectListItem { Value = x.RegistrationNumber, Text = x.RegistrationNumber }).ToListAsync();
+            return await this.garageRepository.All().Where(x => !x.Vehicle.IsDamaged).Select(x => new SelectListItem { Value = x.Id, Text = x.Vehicle.RegistrationNumber }).ToListAsync();
         }
     }
 }

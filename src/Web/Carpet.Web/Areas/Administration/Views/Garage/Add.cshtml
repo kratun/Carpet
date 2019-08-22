@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <label asp-for="RegistrationNumber"></label><span>*</span>
                     <select class="form-control" asp-for="RegistrationNumber" asp-items="@(List<SelectListItem>)Model.VehicleList">
-                        <option value="">Избери роля</option>
+                        <option value="">Избери превозно средство</option>
                     </select>
                     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
                 </div>
