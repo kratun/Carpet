@@ -167,9 +167,9 @@
 
         public async Task<EmployeeCreateViewModel> GetNotHiredUserAsync(string id)
         {
-            var notHiredUser = userManager.Users.Where(x => x.Id == id).Select(x => x.To<EmployeeCreateViewModel>()).FirstOrDefault();
+            var notHiredUser = this.userManager.Users.Where(x => x.Id == id).Select(x => x.To<EmployeeCreateViewModel>()).FirstOrDefault();
 
-            var roles = await rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+            var roles = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
 
             notHiredUser.RoleList = roles;
 

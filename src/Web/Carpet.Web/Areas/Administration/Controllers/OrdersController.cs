@@ -1,24 +1,34 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Carpet.Common.Constants;
+    using Carpet.Services.Data;
     using Carpet.Services.Data.CustomerService;
     using Carpet.Services.Data.OrdersService;
+    using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
+    using Carpet.Web.ViewModels.Administration.Orders.AllCreated;
+    using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpHours;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     public class OrdersController : AdministrationController
     {
         private readonly IOrdersService ordersService;
         private readonly ICustomersService customersService;
+        private readonly IGarageService garageService;
 
-        public OrdersController(IOrdersService ordersService, ICustomersService customersService)
+        public OrdersController(IOrdersService ordersService, ICustomersService customersService, IGarageService garageService)
         {
             this.ordersService = ordersService;
             this.customersService = customersService;
+            this.garageService = garageService;
         }
 
         // GET: Orders
@@ -60,6 +70,73 @@
             }
 
             return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerCustomersName}");
+        }
+
+        // GET: Orders/AllCreated
+        public async Task<IActionResult> AllCreated()
+        {
+            var orders = await this.ordersService.GetAllCreatedAsync<OrderAllCreatedViewModel>()
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
+        }
+
+        // GET: Orders/AddVehicleForPickUp
+        public async Task<IActionResult> AddVehicleForPickUp(string id)
+        {
+            var order = await this.ordersService.GetByIdAsync<OrderAddVehicleToPickUpViewModel>(id);
+
+            if (order == null)
+            {
+                return this.RedirectToAction(nameof(this.AllCreated));
+            }
+
+            order.VehicleList = await this.garageService.GetVehicleNames();
+
+            order.PickUpFor = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day + OrderConstants.AddIntOne);
+
+            return this.View(order);
+        }
+
+        // POST: Orders/AddVehicleForPickUp
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddVehicleForPickUp(OrderAddVehicleForPickUpInputModel orederVehicleFOrPickUp)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.AddVehicleForPickUpAsync(orederVehicleFOrPickUp, userName, this.ModelState);
+
+            if (!this.ModelState.IsValid)
+            {
+                result.VehicleList = await this.garageService.GetVehicleNames();
+                return this.View(result);
+            }
+
+            return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerOrdersName}/{GlobalConstants.ActionAllCreatedName}");
+        }
+
+        // GET: Orders/AllWaitingPickUpHours
+        public async Task<IActionResult> AllWaitingPickUpHours()
+        {
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderAllWaitingPickUpHoursViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusPickUpArrangeHourRangeWaiting)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
+        }
+
+        // GET: Orders/WaitingPickUpConfirmation
+        public async Task<IActionResult> AllWaitingPickUpConfirmation()
+        {
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderAllWaitingPickUpHoursViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusPickUpArrangedDateCоnfirmed)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
         }
 
         // GET: Orders/Edit/5

@@ -40,7 +40,14 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Обработка на поръчки</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Подготовка за вземане</a>
+                                <a class="dropdown-item"
+                                   asp-area="@GlobalConstants.AreaAdministrationName"
+                                   asp-controller="@GlobalConstants.ContollerOrdersName"
+                                   asp-action="@GlobalConstants.ActionAllCreatedName">Подготовка за вземане</a>
+                                <a class="dropdown-item"
+                                   asp-area="@GlobalConstants.AreaAdministrationName"
+                                   asp-controller="@GlobalConstants.ContollerOrdersName"
+                                   asp-action="@GlobalConstants.ActionAllWaitingPickUpHoursName">Чакащи часови диапазон за вземане</a>
                                 <a class="dropdown-item" href="#">Обработка след вземане</a>
                                 <a class="dropdown-item" href="#">В процес на изпиране</a>
                                 <a class="dropdown-item" href="#">Подготвка за връщане</a>
@@ -158,8 +165,12 @@
             $('#min, #max').keyup(function () {
                 ordersStatement.draw();
             });
-
+        
             $('#items').DataTable({
+                "order": [[0, "asc"]]
+            });
+
+            $('#ordersAllCreated').DataTable({
                 "order": [[0, "asc"]]
             });
 

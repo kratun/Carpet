@@ -60,12 +60,12 @@
                 </div>
 
                 <div class="form-group col-6">
-                    <label asp-for="ItemQuantitySetByUser" class="control-label"></label>
+                    <label asp-for="ItemQuantitySetByUser" class="control-label"></label><span>*</span>
                     <input type="number" step="1" asp-for="ItemQuantitySetByUser" class="form-control" />
                     <span asp-validation-for="ItemQuantitySetByUser" class="text-danger"></span>
                 </div>
             </div>
-            
+            <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-primary btn-block" />
                 </div>

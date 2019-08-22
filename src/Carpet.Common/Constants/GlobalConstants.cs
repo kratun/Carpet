@@ -17,6 +17,10 @@
         public const string ActionAddName = "Add";
         public const string ActionRemoveName = "Remove";
         public const string ActionAddAddressName = "Remove";
+        public const string ActionAllCreatedName = "AllCreated";
+        public const string ActionAddVehicleForPickUpName = "AddVehicleForPickUp";
+        public const string ActionAllWaitingPickUpHoursName = "AllWaitingPickUpHours";
+        public const string ActionSetPickUpHoursName = "SetPickUpHours";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";
@@ -29,5 +33,8 @@
 
         // Area constant name
         public const string AreaAdministrationName = "Administration";
+
+        public const string YesString = "Да";
+        public const string NoString = "Не";
     }
 }

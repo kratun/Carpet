@@ -5,7 +5,6 @@
 
     using Carpet.Common.Constants;
     using Carpet.Services.Data;
-    using Carpet.Services.Data.EmployeesService;
     using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.InputModels.Administration.Employees.Delete;
     using Carpet.Web.InputModels.Administration.Employees.Edit;
