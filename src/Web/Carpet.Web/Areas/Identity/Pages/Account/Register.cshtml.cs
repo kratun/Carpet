@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Carpet.Common.Constants;
+    using Carpet.Data.Common.Repositories;
     using Carpet.Data.Models;
 
     using Microsoft.AspNetCore.Authorization;
@@ -25,17 +26,20 @@
         private readonly UserManager<CarpetUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
+        private readonly IDeletableEntityRepository<Employee> employeeRepository;
 
         public RegisterModel(
             UserManager<CarpetUser> userManager,
             SignInManager<CarpetUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IDeletableEntityRepository<Employee> employeeRepository)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.employeeRepository = employeeRepository;
         }
 
         [BindProperty]
@@ -81,6 +85,20 @@
                     if (isRoot)
                     {
                         await this.userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
+                        var employee = new Employee
+                        {
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            User = user,
+                            PhoneNumber = user.PhoneNumber,
+                            Salary = 1.0m,
+                            RoleName = GlobalConstants.AdministratorRoleName,
+                        };
+
+                        await this.employeeRepository.AddAsync(employee);
+
+                        await this.employeeRepository.SaveChangesAsync();
                     }
 
                     this.logger.LogInformation("User created a new account with password.");
@@ -113,32 +131,37 @@
 
         public class InputModel
         {
-            [Required]
-            [Display(Name = "First Name")]
+            [Required(ErrorMessage = UserConstants.ErrorFieldRequired)]
+            [MinLength(UserConstants.FirstNameMinValue, ErrorMessage = UserConstants.ErrorFieldFirstNameLength)]
+            [RegularExpression(UserConstants.NameValidation, ErrorMessage = UserConstants.ErrorFieldFirstNameRegex)]
+            [Display(Name = UserConstants.DisplayNameFirstName)]
             public string FirstName { get; set; }
 
-            [Required]
-            [Display(Name = "Last Name")]
+            [Required(ErrorMessage = UserConstants.ErrorFieldRequired)]
+            [MinLength(UserConstants.LastNameMinValue, ErrorMessage = UserConstants.ErrorFieldLastNameLength)]
+            [RegularExpression(UserConstants.NameValidation, ErrorMessage = UserConstants.ErrorFieldLastNameRegex)]
+            [Display(Name = UserConstants.DisplayNameLastName)]
             public string LastName { get; set; }
 
-            [Required]
-            [Display(Name = "Phone Number")]
+            [Required(ErrorMessage = UserConstants.ErrorFieldRequired)]
+            [RegularExpression(UserConstants.PhoneValidation)]
+            [Display(Name = UserConstants.DisplayNamePhoneNumber)]
             public string PhoneNumber { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = UserConstants.ErrorFieldRequired)]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = UserConstants.DisplayNameEmail)]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = UserConstants.ErrorFieldRequired)]
+            [StringLength(UserConstants.PasswordMaxLength, ErrorMessage = UserConstants.ErrorFieldPasswordLength, MinimumLength = UserConstants.PasswordMinLength)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = UserConstants.DisplayNamePassword)]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = UserConstants.DisplayNameConfirmPassword)]
+            [Compare("Password", ErrorMessage = UserConstants.ErrorFieldPasswordMismatch)]
             public string ConfirmPassword { get; set; }
         }
     }
