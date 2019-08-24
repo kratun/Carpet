@@ -5,8 +5,10 @@
 
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
+    using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
 
     public interface IOrdersService
@@ -22,5 +24,9 @@
         IQueryable<TViewModel> GetAllCreatedAsync<TViewModel>();
 
         Task<OrderAddVehicleToPickUpViewModel> AddVehicleForPickUpAsync(OrderAddVehicleForPickUpInputModel orederVehicleFOrPickUp, string username, ModelStateDictionary modelState);
+
+        Task<string> GetByOrderIdRegistrationNumberAsync(string id);
+
+        Task<OrderPickUpRangeHoursViewModel> SetPickUpRangeHoursAsync(OrderPickUpRangeHoursInputModel orderFromView, string username, ModelStateDictionary modelState);
     }
 }

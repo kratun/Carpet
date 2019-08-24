@@ -20,7 +20,8 @@
         public const string ActionAllCreatedName = "AllCreated";
         public const string ActionAddVehicleForPickUpName = "AddVehicleForPickUp";
         public const string ActionAllWaitingPickUpHoursName = "AllWaitingPickUpHours";
-        public const string ActionSetPickUpHoursName = "SetPickUpHours";
+        public const string ActionPickUpRangeHoursName = "PickUpRangeHours";
+        public const string ActionAllWaitingPickUpConfirmationName = "AllWaitingPickUpConfirmation";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";

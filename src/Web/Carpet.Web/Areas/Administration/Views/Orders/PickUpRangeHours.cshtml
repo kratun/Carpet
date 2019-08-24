@@ -1,0 +1,101 @@
+﻿@model Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours.OrderPickUpRangeHoursViewModel
+
+@{
+    ViewData["Title"] = "PickUpRangeHours";
+}
+
+<h1 class="row justify-content-md-center">Добавяне на</h1>
+
+<h4 class="row justify-content-md-center" style="margin-top:15px;">Превозно средство и дата за вземане към поръчка</h4>
+<hr class="row justify-content-md-center" />
+<div class="row justify-content-md-center" style="font-size:14px">
+    <div class="col-md-9">
+        <form asp-action="@GlobalConstants.ActionPickUpRangeHoursName">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" class="form-control" hidden />
+            <div class="row">
+                <div class="form-group col-4">
+                    <label asp-for="Customer.FirstName" class="control-label"></label>
+                    <input asp-for="Customer.FirstName" class="form-control" disabled />
+                    <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="Customer.LastName" class="control-label"></label>
+                    <input asp-for="Customer.LastName" class="form-control" disabled />
+                    <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="Customer.PhoneNumber" class="control-label"></label>
+                    <input asp-for="Customer.PhoneNumber" class="form-control" disabled />
+                    <span asp-validation-for="Customer.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-4">
+                    <label asp-for="IsExpress" class="control-label"></label>
+                    <input asp-for="IsExpress" class="form-control" disabled />
+                    <span asp-validation-for="IsExpress" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="ItemQuantitySetByUser" class="control-label"></label>
+                    <input asp-for="ItemQuantitySetByUser" class="form-control" disabled />
+                    <span asp-validation-for="ItemQuantitySetByUser" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="CreatedOn" class="control-label"></label>
+                    <input asp-for="CreatedOn" class="form-control" disabled />
+                    <span asp-validation-for="CreatedOn" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Customer.PickUpAddress" class="control-label"></label>
+                    <input asp-for="Customer.PickUpAddress" class="form-control" disabled />
+                    <span asp-validation-for="Customer.PickUpAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="StatusName" class="control-label"></label>
+                    <input asp-for="StatusName" class="form-control" disabled />
+                    <span asp-validation-for="StatusName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-3">
+                    <label asp-for="PickUpFor" class="control-label"></label>
+                    <input asp-for="PickUpFor" class="form-control" disabled/>
+                    <span asp-validation-for="PickUpFor" class="text-danger"></span>
+                </div>
+                <div class="form-group col-3">
+                    <label asp-for="RegistrationNumber" class="control-label"></label>
+                    <input asp-for="RegistrationNumber" class="form-control" disabled/>
+                    <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group col-3">
+                    <label asp-for="PickUpForStartHour" class="control-label"></label>
+                    @*<input asp-for="PickUpForStartHour" id="timepickerOne" class="timepickerOne form-control text-center" jt-timepicker="" time="model.time" time-string="model.timeString" default-time="model.options.defaultTime" time-format="model.options.timeFormat" start-time="model.options.startTime" min-time="model.options.minTime" max-time="model.options.maxTime" interval="model.options.interval" dynamic="model.options.dynamic" scrollbar="model.options.scrollbar" dropdown="model.options.dropdown" />*@
+                    <select class="form-control" asp-for="PickUpForStartHour" asp-items="@(List<SelectListItem>)Model.PickUpForStartHours">
+                        <option value="">Начален час</option>
+                    </select>
+                    <span asp-validation-for="PickUpForStartHour" class="text-danger"></span>
+                </div>
+                <div class="form-group col-3">
+                    <label asp-for="PickUpForEndHour" class="control-label"></label>
+                    @*<input asp-for="PickUpForEndHour" id="timepickerTwo" class="timepickerTwo form-control text-center" jt-timepicker="" time="model.time" time-string="model.timeString" default-time="model.options.defaultTime" time-format="model.options.timeFormat" start-time="model.options.startTime" min-time="model.options.minTime" max-time="model.options.maxTime" interval="model.options.interval" dynamic="model.options.dynamic" scrollbar="model.options.scrollbar" dropdown="model.options.dropdown" />*@
+                <select class="form-control" asp-for="PickUpForEndHour" asp-items="@(List<SelectListItem>)Model.PickUpForEndHours">
+                    <option value="">Краен час</option>
+                </select>
+                    <span asp-validation-for="PickUpForEndHour" class="text-danger"></span>
+                </div>
+            </div>
+            <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
+            <div class="form-group">
+                <input type="submit" value="Set Range Hours " class="btn btn-primary btn-block" />
+            </div>
+            <div>
+                <a asp-area="@GlobalConstants.AreaAdministrationName"
+                   asp-controller="@GlobalConstants.ContollerOrdersName"
+                   asp-action="@GlobalConstants.ActionAllWaitingPickUpHoursName">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>

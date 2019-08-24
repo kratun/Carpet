@@ -24,28 +24,27 @@
         public const int ItemQuantitySetByUserMaxValue = 50;
         public const int AddIntOne = 1;
 
-        //public const int AddressMinLength = 5;
-        //public const string PhoneValidation = "^0[1-9][0-9]{1,8}|\\+[1-9][0-9]{1,14}|00[1-9][0-9]{1,14}$";
-        //public const string NameValidation = "^([а-яА-Я]{1}[а-яА-Я]*[-| ]?[а-яА-Я]*[а-яА-Я]{1})$";
-
         public const string DisplayNameIsExpress = "Експресна";
         public const string DisplayNameHasFlavor = "Ароматизиране";
         public const string DisplayNameItemQuantitySetByUser = "Брой артикули";
         public const string DisplayNameCreatedOn = "Създаден на";
         public const string DisplayNameStatus = "Статус на поръчка";
         public const string DisplayNamePickUpDate = "Дата за взимане";
+        public const string DisplayNamePickUpForStartHour = "Начален час";
+        public const string DisplayNamePickUpForEndHour = "Краен час";
+        public const string DisplayNameHoursRange = "Часови диапазон";
+
+        public const string PropertyNamePickUpForEndHour = "PickUpForEndHour";
 
         public const string ErrorFieldRequired = "Полето {0} е задължително!";
         public const string ErrorFieldItemQuantitySetByUserRange = "Полето {0} може да бъде в диапазона {1} - {2}";
-        //public const string ErrorFieldLastNameRegex = "{0}та трябва да е изписанa на кирилица във формат \"Иванова\" или \"Иванова-Тодорова\", или \"Иванова Тодорова\" без допълнителни интервали.";
-        //public const string ErrorFieldNameLength = "{0}то трябва да е изписано на кирилица и да е минимум {1} букви.";
+        public const string ErrorFieldPickUpForStartHour = "Началният час съвпада или е след крайният час.";
 
         public const string NullReferenceCustomerId = "Не е намерен клиент с Id: {0}.";
         public const string NullReferenceStatusNameNotFound = "Не е намерен Статус с име: {0}.";
         public const string NullReferenceCreatorUsernameNotFound = "Не е намерен Служител с Username: {0}.";
         public const string NullReferenceOrderIdNotFound = "Не е намерена поръчка с ID: {0}.";
-        //public const string ArgumentExceptionCustomerPhone = "Клиент с телефон: {0} съществува. Моля добавете нов адрес към него.";
-        //public const string ArgumentExceptionCustomerExistAddAddress = "Клиент с тези данни съществува. Моля добавете нов адрес към него.";
-        //public const string ArgumentExceptionCustomerExist = "Клиент с тези данни съществува или не сте направили редакция на текущия клиент.";
+
+        public const string HourList = "07:00;08:00;09:00;10:00;11:00;12:00;13:00;14:00;15:00;16:00;17:00;18:00;19:00;20:00;";
     }
 }

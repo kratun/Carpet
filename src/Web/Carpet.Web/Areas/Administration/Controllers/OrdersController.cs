@@ -10,12 +10,16 @@
     using Carpet.Services.Data.OrdersService;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
     using Carpet.Web.ViewModels.Administration.Orders.AllCreated;
+    using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpConfirmation;
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpHours;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
+    using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
 
     public class OrdersController : AdministrationController
@@ -128,11 +132,51 @@
             return this.View(orders);
         }
 
+        // GET: Orders/PickUpRangeHours
+        public async Task<IActionResult> PickUpRangeHours(string id)
+        {
+            var order = await this.ordersService.GetByIdAsync<OrderPickUpRangeHoursViewModel>(id);
+
+            if (order == null || order.StatusName != OrderConstants.StatusPickUpArrangeHourRangeWaiting)
+            {
+                return this.RedirectToAction(nameof(this.AllWaitingPickUpHours));
+            }
+
+            var hourList = OrderConstants.HourList.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+            order.PickUpForStartHours = hourList.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+            order.PickUpForEndHours = hourList.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+
+            return this.View(order);
+        }
+
+        // POST: Orders/PickUpRangeHours
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PickUpRangeHours(OrderPickUpRangeHoursInputModel orderFromView)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.SetPickUpRangeHoursAsync(orderFromView, userName, this.ModelState);
+
+            var hourList = OrderConstants.HourList.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+            result.PickUpForStartHours = hourList.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+            result.PickUpForEndHours = hourList.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(result);
+            }
+
+            return this.RedirectToAction(nameof(this.AllWaitingPickUpHours));
+        }
+
         // GET: Orders/WaitingPickUpConfirmation
         public async Task<IActionResult> AllWaitingPickUpConfirmation()
         {
-            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderAllWaitingPickUpHoursViewModel>()
-                .Where(x => x.StatusName == OrderConstants.StatusPickUpArrangedDateCоnfirmed)
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderAllWaitingPickUpConfirmationViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusPickUpArrangedDateWaiting)
                 .OrderByDescending(x => x.CreatedOn)
                 .ToListAsync();
 

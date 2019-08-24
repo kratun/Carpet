@@ -13,8 +13,10 @@
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
+    using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
 
@@ -115,6 +117,46 @@
         public async Task<TViewModel> GetByIdAsync<TViewModel>(string id)
         {
             return await this.orderRepository.All().Where(x => x.Id == id).To<TViewModel>().FirstOrDefaultAsync();
+        }
+
+        public async Task<string> GetByOrderIdRegistrationNumberAsync(string id)
+        {
+            var registrationNumber = await this.GetAllAsNoTrackingAsync<Order>().Where(x => x.Id == id).Select(x => x.PickUpVehicles.FirstOrDefault().VehicleEmployee.Vehicle.RegistrationNumber).FirstOrDefaultAsync();
+
+            return registrationNumber;
+        }
+
+        public async Task<OrderPickUpRangeHoursViewModel> SetPickUpRangeHoursAsync(OrderPickUpRangeHoursInputModel orderFromView, string username, ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                var errorModel = await this.GetByIdAsync<OrderPickUpRangeHoursViewModel>(orderFromView.Id);
+                errorModel.PickUpForStartHour = orderFromView.PickUpForStartHour;
+                errorModel.PickUpForEndHour = orderFromView.PickUpForEndHour;
+
+                return errorModel;
+            }
+
+            var orderFromDb = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == orderFromView.Id);
+
+            // If order with Id NOT exists
+            if (orderFromDb == null)
+            {
+                throw new ArgumentNullException(nameof(orderFromView.Id), string.Format(OrderConstants.NullReferenceOrderIdNotFound, orderFromView.Id));
+            }
+
+            orderFromDb.PickUpForStartHour = orderFromView.PickUpForStartHour;
+            orderFromDb.PickUpForEndHour = orderFromView.PickUpForEndHour;
+
+            orderFromDb.StatusId = await this.orderStatusService.GetIdByNameAsync(OrderConstants.StatusPickUpArrangedDateWaiting);
+
+            orderFromDb.CreatorId = await this.employeesService.GetIdByUserNameAsync(username);
+
+            this.orderRepository.Update(orderFromDb);
+
+            await this.orderRepository.SaveChangesAsync();
+
+            return orderFromDb.To<OrderPickUpRangeHoursViewModel>();
         }
     }
 }

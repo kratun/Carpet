@@ -15,7 +15,7 @@
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
-
+    <link href="~/css/jquery.timepicker.min.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -48,6 +48,10 @@
                                    asp-area="@GlobalConstants.AreaAdministrationName"
                                    asp-controller="@GlobalConstants.ContollerOrdersName"
                                    asp-action="@GlobalConstants.ActionAllWaitingPickUpHoursName">Чакащи часови диапазон за вземане</a>
+                                <a class="dropdown-item"
+                                   asp-area="@GlobalConstants.AreaAdministrationName"
+                                   asp-controller="@GlobalConstants.ContollerOrdersName"
+                                   asp-action="@GlobalConstants.ActionAllWaitingPickUpConfirmationName">Чакащи потвърждение за взимане от клиент</a>
                                 <a class="dropdown-item" href="#">Обработка след вземане</a>
                                 <a class="dropdown-item" href="#">В процес на изпиране</a>
                                 <a class="dropdown-item" href="#">Подготвка за връщане</a>
@@ -135,6 +139,7 @@
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" asp-append-version="true" />
     <script type="text/javascript" src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" asp-append-version="true"></script>
     @*<script type="text/javascript" src="~/js/jquery.dataTables.min.js" asp-append-version="true"></script>*@
+    <script src="~/js/jquery.timepicker.min.js" asp-append-version="true"></script>
 
     <script type="text/javascript" asp-append-version="true">
 
@@ -196,7 +201,62 @@
             });
 
 
+            //HoursRangeListStart
+            var one = $('#timepickerOne');
+			var two = $('#timepickerTwo');
+			var hourOne = 8;
+			
+				one.timepicker({
+						timeFormat: 'HH:mm',
+						// year, month, day and seconds are not important
+						minTime: new Date(0, 0, 0, hourOne, 0, 0),
+						maxTime: new Date(0, 0, 0, 20, 0, 0),
+						// time entries start being generated at 6AM but the plugin 
+						// shows only those within the [minTime, maxTime] interval
+						startHour: hourOne,
+						// the value of the first item in the dropdown, when the input
+						// field is empty. This overrides the startHour and startMinute 
+						// options
+						startTime: new Date(0, 0, 0, hourOne, 0, 0),
+						// items in the dropdown are separated by at interval minutes
+						interval: 60,
+						change: function(time) {
+							// the input field
+							var element = $(this), text;
+							
+							let hourTwo = parseInt(element.val().split(':',1))+2;
+							console.log(hourTwo);
+							two.val('');
+							
+							// get access to this Timepicker instance
+							var timepicker = element.timepicker();
+							console.log(timepicker);
+							text = 'Selected time is: ' + timepicker.format(time);
+							element.siblings('span.help-line').text(text);
+						}
+						
+				});
+				
+				
+				two.timepicker({
+									timeFormat: 'HH:mm',
+									// year, month, day and seconds are not important
+									minTime: new Date(0, 0, 0, hourOne, 0, 0),
+									maxTime: new Date(0, 0, 0, 20, 0, 0),
+									// time entries start being generated at 6AM but the plugin 
+									// shows only those within the [minTime, maxTime] interval
+									startHour: hourOne,
+									// the value of the first item in the dropdown, when the input
+									// field is empty. This overrides the startHour and startMinute 
+									// options
+									startTime: new Date(0, 0, 0, hourOne, 0, 0),
+									// items in the dropdown are separated by at interval minutes
+									interval: 60,
+									
+									
+							});
 
+            ///HoursRangeListEND
 
         });
 
