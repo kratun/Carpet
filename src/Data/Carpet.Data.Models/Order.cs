@@ -41,12 +41,6 @@
 
         public int ItemQuantitySetByUser { get; set; }
 
-        public int TotalItemQuantity => this.OrderItems.Count;
-
-        public decimal TotalArea => this.OrderItems.Sum(oi => oi.ItemArea);
-
-        public decimal TotalOrderAmount => this.OrderItems.Sum(oi => oi.TotalPrice);
-
         public bool IsPaid { get; set; }
 
         public decimal PaidAmount { get; set; }
@@ -71,21 +65,5 @@
         public virtual ICollection<OrderPickUpVehicleEmployee> PickUpVehicles { get; set; }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
-
-        // public ICollection<VehicleEmployee> VehicleEmployees { get; set; }
-        public override string ToString()
-        {
-            var result = new StringBuilder();
-            var totalPrice = this.TotalOrderAmount;
-            var totalArea = this.TotalArea;
-            var itemTotalPrice = this.OrderItems.Sum(oi => oi.TotalPrice);
-            var itemTotalArea = this.OrderItems.Sum(oi => oi.ItemArea);
-            result.AppendLine($"Total price: {totalPrice}");
-            result.AppendLine($"Total Area: {totalArea}");
-            result.AppendLine($"Total price is equal: {totalPrice == itemTotalPrice}");
-            result.AppendLine($"Total area is equal: {totalArea == itemTotalArea}");
-
-            return result.ToString();
-        }
     }
 }

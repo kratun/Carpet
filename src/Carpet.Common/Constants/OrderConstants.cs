@@ -33,6 +33,10 @@
         public const string DisplayNamePickUpForStartHour = "Начален час";
         public const string DisplayNamePickUpForEndHour = "Краен час";
         public const string DisplayNameHoursRange = "Часови диапазон";
+        public const string DisplayNameWidth = "Дължина";
+        public const string DisplayNameHeight = "Ширина";
+        public const string DisplayNameDescription = "Бележки";
+        public const string DisplayNameItem = "Услуга";
 
         public const string PropertyNamePickUpForEndHour = "PickUpForEndHour";
 

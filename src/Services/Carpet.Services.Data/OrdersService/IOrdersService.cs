@@ -3,9 +3,11 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Carpet.Web.InputModels.Administration.Orders.AddItems;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
+    using Carpet.Web.ViewModels.Administration.Orders.AddItems;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
@@ -28,5 +30,9 @@
         Task<string> GetByOrderIdRegistrationNumberAsync(string id);
 
         Task<OrderPickUpRangeHoursViewModel> SetPickUpRangeHoursAsync(OrderPickUpRangeHoursInputModel orderFromView, string username, ModelStateDictionary modelState);
+
+        Task<bool> OrderPickUpConfirmedAsync(string id, string username, ModelStateDictionary modelState);
+
+        Task<OrderAddItemsViewModel> AddItemAsync(OrderAddItemInputModel orderFromView, string username, ModelStateDictionary modelState);
     }
 }

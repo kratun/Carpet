@@ -1,7 +1,6 @@
 ﻿namespace Carpet.Services.Data.OrdersService
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -9,11 +8,14 @@
     using Carpet.Data.Common.Repositories;
     using Carpet.Data.Models;
     using Carpet.Services.Data.CustomerService;
+    using Carpet.Services.Data.OrderItemsService;
     using Carpet.Services.Data.OrderStatusService;
     using Carpet.Services.Mapping;
+    using Carpet.Web.InputModels.Administration.Orders.AddItems;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
+    using Carpet.Web.ViewModels.Administration.Orders.AddItems;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
@@ -26,13 +28,17 @@
         private readonly ICustomersService customersService;
         private readonly IOrderStatusService orderStatusService;
         private readonly IEmployeesService employeesService;
+        private readonly IItemsService itemsService;
+        private readonly IOrderItemsService orderItemsService;
 
-        public OrdersService(IDeletableEntityRepository<Order> orderRepository, ICustomersService customersService, IOrderStatusService orderStatusService, IEmployeesService employeesService)
+        public OrdersService(IDeletableEntityRepository<Order> orderRepository, ICustomersService customersService, IOrderStatusService orderStatusService, IEmployeesService employeesService, IItemsService itemsService, IOrderItemsService orderItemsService)
         {
             this.orderRepository = orderRepository;
             this.customersService = customersService;
             this.orderStatusService = orderStatusService;
             this.employeesService = employeesService;
+            this.itemsService = itemsService;
+            this.orderItemsService = orderItemsService;
         }
 
         public async Task<OrderAddVehicleToPickUpViewModel> AddVehicleForPickUpAsync(OrderAddVehicleForPickUpInputModel orderFromView, string username, ModelStateDictionary modelState)
@@ -157,6 +163,72 @@
             await this.orderRepository.SaveChangesAsync();
 
             return orderFromDb.To<OrderPickUpRangeHoursViewModel>();
+        }
+
+        public async Task<bool> OrderPickUpConfirmedAsync(string id, string username, ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                return false;
+            }
+
+            var orderFromDb = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            // If order with Id NOT exists
+            if (orderFromDb == null)
+            {
+                throw new ArgumentNullException(nameof(id), string.Format(OrderConstants.NullReferenceOrderIdNotFound, id));
+            }
+
+            orderFromDb.StatusId = await this.orderStatusService.GetIdByNameAsync(OrderConstants.StatusPickUpArrangedDateCоnfirmed);
+
+            orderFromDb.CreatorId = await this.employeesService.GetIdByUserNameAsync(username);
+
+            this.orderRepository.Update(orderFromDb);
+
+            await this.orderRepository.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<OrderAddItemsViewModel> AddItemAsync(OrderAddItemInputModel orderFromView, string username, ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                var errorModel = await this.orderRepository.AllAsNoTracking().Where(x => x.Id == orderFromView.Id).To<OrderAddItemsViewModel>().FirstOrDefaultAsync();
+                return errorModel;
+            }
+
+            var order = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == orderFromView.Id);
+
+            if (order == null)
+            {
+                // TODO: exception
+            }
+
+            var isItemExist = await this.itemsService.GetAllItemsAsync<Item>().AnyAsync(x => x.Id == orderFromView.ItemId);
+
+            if (!isItemExist)
+            {
+                // TODO: exception
+            }
+
+            var orderItem = new OrderItem
+            {
+                ItemId = orderFromView.ItemId,
+                OrderId = order.Id,
+                ItemWidth = orderFromView.ItemWidth,
+                ItemHeight = orderFromView.ItemHeight,
+                Description = orderFromView.Description,
+            };
+
+            order.OrderItems.Add(orderItem);
+
+            this.orderRepository.Update(order);
+
+            await this.orderRepository.SaveChangesAsync();
+
+            return order.To<OrderAddItemsViewModel>();
         }
     }
 }

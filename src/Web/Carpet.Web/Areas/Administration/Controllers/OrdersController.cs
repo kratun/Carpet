@@ -7,13 +7,17 @@
     using Carpet.Common.Constants;
     using Carpet.Services.Data;
     using Carpet.Services.Data.CustomerService;
+    using Carpet.Services.Data.OrderItemsService;
     using Carpet.Services.Data.OrdersService;
+    using Carpet.Web.InputModels.Administration.Orders.AddItems;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
+    using Carpet.Web.ViewModels.Administration.Orders.AddItems;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
     using Carpet.Web.ViewModels.Administration.Orders.AllCreated;
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpConfirmation;
+    using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpFromCustomer;
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpHours;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
@@ -27,12 +31,16 @@
         private readonly IOrdersService ordersService;
         private readonly ICustomersService customersService;
         private readonly IGarageService garageService;
+        private readonly IItemsService itemsService;
+        private readonly IOrderItemsService orderItemsService;
 
-        public OrdersController(IOrdersService ordersService, ICustomersService customersService, IGarageService garageService)
+        public OrdersController(IOrdersService ordersService, ICustomersService customersService, IGarageService garageService, IItemsService itemsService, IOrderItemsService orderItemsService)
         {
             this.ordersService = ordersService;
             this.customersService = customersService;
             this.garageService = garageService;
+            this.itemsService = itemsService;
+            this.orderItemsService = orderItemsService;
         }
 
         // GET: Orders
@@ -172,7 +180,7 @@
             return this.RedirectToAction(nameof(this.AllWaitingPickUpHours));
         }
 
-        // GET: Orders/WaitingPickUpConfirmation
+        // GET: Orders/AllWaitingPickUpConfirmation
         public async Task<IActionResult> AllWaitingPickUpConfirmation()
         {
             var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderAllWaitingPickUpConfirmationViewModel>()
@@ -181,6 +189,87 @@
                 .ToListAsync();
 
             return this.View(orders);
+        }
+
+        // GET: Orders/PickUpDateConfirmedByCustomer
+        [HttpGet]
+        public async Task<IActionResult> PickUpDateConfirmedByCustomer(string id)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.OrderPickUpConfirmedAsync(id, userName, this.ModelState);
+
+            return this.RedirectToAction(nameof(this.AllWaitingPickUpConfirmation));
+        }
+
+        // GET: Orders/AllWaitngPickedUp
+        public async Task<IActionResult> AllWaitngPickedUp()
+        {
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderAllWaitingPickUpFromCustomerViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusPickUpArrangedDateCоnfirmed)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
+        }
+
+        // Get : Orders/AddItems
+        [HttpGet]
+        public async Task<IActionResult> AddItems(string id)
+        {
+            var order = await this.ordersService.GetAllAsNoTrackingAsync<OrderAddItemsViewModel>().FirstOrDefaultAsync(x => x.Id == id);
+
+            if (order == null || order.StatusName != OrderConstants.StatusPickUpArrangedDateCоnfirmed)
+            {
+                return this.RedirectToAction(nameof(this.AllWaitingPickUpHours));
+            }
+
+            foreach (var item in order.OrderItems)
+            {
+                item.TotalPrice = this.GetTotalAmount(item);
+            }
+
+            order.ItemList = await this.itemsService.GetAllItemsAsync<OrderOrderItemItemAddItemsViewModel>().Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToListAsync();
+
+            return this.View(order);
+        }
+
+        // POST: Orders/AddItems
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddItems(OrderAddItemInputModel orderfromView)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.AddItemAsync(orderfromView, userName, this.ModelState);
+
+            result.ItemList = await this.itemsService.GetAllItemsAsync<OrderOrderItemItemAddItemsViewModel>().Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToListAsync();
+
+            foreach (var item in result.OrderItems)
+            {
+                item.TotalPrice = this.GetTotalAmount(item);
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(result);
+            }
+
+            return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerOrdersName}/{GlobalConstants.ActionAddItemsName}/{result.Id}");
+        }
+
+        // DeleteItem
+        [HttpGet]
+        public async Task<IActionResult> DeleteItem(OrderDeleteItemInputModel modelFromView)
+        {
+            var result = await this.orderItemsService.DeleteByIdAsync(modelFromView.OrderItemId);
+
+            if (!result)
+            {
+                return this.RedirectToAction(nameof(this.AllWaitingPickUpHours));
+            }
+
+            return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerOrdersName}/{GlobalConstants.ActionAddItemsName}/{modelFromView.Id}");
         }
 
         // GET: Orders/Edit/5
@@ -227,6 +316,27 @@
             {
                 return View();
             }
+        }
+
+        private decimal GetTotalAmount(OrderOrderItemAddItemsViewModel orderItem)
+        {
+            var currentPrice = orderItem.Item.OrdinaryPrice;
+            if (orderItem.HasFlavor)
+            {
+                currentPrice += orderItem.Item.FlavorAddOnPrice;
+            }
+
+            if (orderItem.HasVacuumCleaning)
+            {
+                currentPrice += orderItem.Item.VacuumCleaningAddOnPrice;
+            }
+
+            if (orderItem.IsExpress)
+            {
+                currentPrice += orderItem.Item.ExpressAddOnPrice;
+            }
+
+            return currentPrice * orderItem.ItemArea;
         }
     }
 }

@@ -61,7 +61,7 @@
                 @Html.DisplayFor(modelItem => item.HoursRange)
             </td>
             <td>
-                @Html.ActionLink("Confirm", GlobalConstants.ActionPickUpRangeHoursName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })
+                @Html.ActionLink("Confirm", GlobalConstants.ActionPickUpDateConfirmedByCustomerName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
