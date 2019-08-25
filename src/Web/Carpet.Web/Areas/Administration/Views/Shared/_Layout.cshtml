@@ -43,7 +43,7 @@
                                 <a class="dropdown-item"
                                    asp-area="@GlobalConstants.AreaAdministrationName"
                                    asp-controller="@GlobalConstants.ContollerOrdersName"
-                                   asp-action="@GlobalConstants.ActionAllCreatedName">Подготовка за вземане</a>
+                                   asp-action="@GlobalConstants.ActionAllCreatedName">Чакащи добавяне на кола и дата за вземане</a>
                                 <a class="dropdown-item"
                                    asp-area="@GlobalConstants.AreaAdministrationName"
                                    asp-controller="@GlobalConstants.ContollerOrdersName"
@@ -56,6 +56,8 @@
                                    asp-area="@GlobalConstants.AreaAdministrationName"
                                    asp-controller="@GlobalConstants.ContollerOrdersName"
                                    asp-action="@GlobalConstants.ActionAllWaitngPickedUpName">Чакащи взимане от клиент</a>
+                                <a class="dropdown-item"
+                                   asp-route="@GlobalConstants.RouteOrdersDeliveryWaitingVehicle">Чакащи добавяне на кола и дата за връщане</a>
                                 
                                 <a class="dropdown-item" href="#">Обработка след вземане</a>
                                 <a class="dropdown-item" href="#">В процес на изпиране</a>

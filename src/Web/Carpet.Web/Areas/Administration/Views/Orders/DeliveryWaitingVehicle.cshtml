@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig.OrderDeliveryWaitingAddVehicleViewModel>
+
+@{
+    ViewData["Title"] = "DeliveryWaitingVehicle";
+    var count = 1;
+}
+
+<<h1 class="title text-center">СПИСЪК С ПОРЪЧКИ</h1>
+<p class="intro text-center" style="margin-top: 10px;"></p>
+
+<h4 class="title text-center">Чакащи организиране на ден за вземане</h4>
+<hr />
+<table id="ordersAllCreated" class="display" style="width:100%">
+    <thead style="font-size:14px">
+        <tr class="text-center">
+            <th>#</th>
+            <th>
+                @CustomerConstants.DisplayNamePhoneNumber
+            </th>
+            <th>
+                @CustomerConstants.DisplayNameDeliveryAddress
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsExpress)
+            </th>
+            <th>
+                @OrderConstants.DisplayNameItemQuantitySetByUser
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="font-size:12px">
+                <td>@(count++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.DeliveryAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsExpress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
+                <td>
+                    <a 
+                       asp-route="@GlobalConstants.RouteOrdersDeliveryAddVehicle"
+                       asp-route-id="@item.Id"
+                       class="btn btn-sm btn-outline-primary" style = "margin:1px; width:100%;">Add Vehicle</a>
+                    @*@Html.ActionLink("Add Vihicle", GlobalConstants.ActionAddVehicleForPickUpName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })*@
+                </td>
+                <td>
+                    <a
+                    asp-route="@GlobalConstants.RouteOrdersAddItems"
+                    asp-route-id="@item.Id"
+                    class = "btn btn-sm btn-outline-primary", style = "margin:1px; width:45%;">Add Item</a>
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })*@
+
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

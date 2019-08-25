@@ -25,8 +25,11 @@
         public const string ActionPickUpDateConfirmedByCustomerName = "PickUpDateConfirmedByCustomer";
         public const string ActionAllWaitingPickUpFromCustomerName = "AllWaitingPickUpFromCustomer";
         public const string ActionAllWaitngPickedUpName = "AllWaitngPickedUp";
-        public const string ActionAddItemsName = "AddItems";
+        public const string ActionAddItemsName = "Add/Items"; // public const string ActionAddItemsName = "AddItems";
         public const string ActionPickUpConfirmedName = "PickUpConfirmed";
+        public const string ActionDeliveryStartName = "DeliveryStart";
+        public const string ActionDeliveryWaitingVehicleName = "Delivery/Waiting/Vehicle";
+        public const string ActionDeliveryAddVehicleName = "Delivery/Add/Vehicle";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";
@@ -39,6 +42,11 @@
 
         // Area constant name
         public const string AreaAdministrationName = "Administration";
+
+        // Route constant name
+        public const string RouteOrdersDeliveryWaitingVehicle = "DeliveryWaitingVehicle";
+        public const string RouteOrdersDeliveryAddVehicle = "DeliveryAddVehicle";
+        public const string RouteOrdersAddItems = "AddItems";
 
         public const string YesString = "Да";
         public const string NoString = "Не";

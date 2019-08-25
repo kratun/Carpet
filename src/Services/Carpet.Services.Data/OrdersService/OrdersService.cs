@@ -192,6 +192,7 @@
             if (!isItemExist)
             {
                 // TODO: exception
+                throw new NullReferenceException();
             }
 
             var orderItem = new OrderItem

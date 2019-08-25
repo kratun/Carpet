@@ -20,6 +20,7 @@
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpFromCustomer;
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpHours;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -215,6 +216,7 @@
 
         // Get : Orders/AddItems
         [HttpGet]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionAddItemsName + "/{id?}", Name = GlobalConstants.RouteOrdersAddItems)]
         public async Task<IActionResult> AddItems(string id)
         {
             var order = await this.ordersService
@@ -222,7 +224,7 @@
                 .Where(x => !x.IsDeleted)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (order == null || order.StatusName != OrderConstants.StatusPickUpArrangedDateCоnfirmed)
+            if (order == null || (order.StatusName != OrderConstants.StatusPickUpArrangedDateCоnfirmed && order.StatusName != OrderConstants.StatusDeliveryArrangeDayWaiting))
             {
                 return this.RedirectToAction(nameof(this.AllWaitingPickUpHours));
             }
@@ -241,6 +243,7 @@
 
         // POST: Orders/AddItems
         [HttpPost]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionAddItemsName + "/{id?}", Name = GlobalConstants.RouteOrdersAddItems)]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddItems(OrderAddItemInputModel orderfromView)
         {
@@ -250,14 +253,10 @@
 
             result.ItemList = await this.itemsService.GetAllItemsAsync<OrderOrderItemItemAddItemsViewModel>().Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToListAsync();
 
-            if (this.ModelState.IsValid)
-            {
-                result.OrderItems = await this.orderItemsService.GetAllAsNoTrackingWithDeteletedAsync<OrderOrderItemAddItemsViewModel>().Where(oi => oi.OrderId == result.Id && !oi.IsDeleted).ToListAsync();
-            }
-            else
-            {
-
-            }
+            result.OrderItems = await this.orderItemsService
+                .GetAllAsNoTrackingWithDeteletedAsync<OrderOrderItemAddItemsViewModel>()
+                .Where(oi => oi.OrderId == result.Id && !oi.IsDeleted)
+                .ToListAsync();
 
             foreach (var item in result.OrderItems)
             {
@@ -298,27 +297,65 @@
             return this.RedirectToAction(nameof(this.AllWaitingPickUpConfirmation));
         }
 
-        // GET: Orders/Edit/5
-        public async Task<IActionResult> Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> DeliveryStart(string id)
         {
-            try
-            {
-                // TODO: Add update logic here
+            var userName = this.User.Identity.Name;
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            var result = await this.ordersService.OrderGangeStatusAsync(id, userName, OrderConstants.StatusDeliveryArrangeDayWaiting, this.ModelState);
+
+            return this.RedirectToAction(nameof(this.AllWaitngPickedUp));
+        }
+
+        // GET: Orders/Delivery/Waiting/Vehicle
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingVehicleName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryWaitingVehicle)]
+        public async Task<IActionResult> DeliveryWaitingVehicle()
+        {
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderDeliveryWaitingAddVehicleViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusDeliveryArrangeDayWaiting)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
+        }
+
+        // GET: Orders/Delivery/Add/Vehicle
+        [HttpGet]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryAddVehicleName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryAddVehicle)]
+        public async Task<IActionResult> DeliveryAddVehicle(string id)
+        {
+            var order = await this.ordersService.GetByIdAsync<OrderDeliveryAddVehicleViewModel>(id);
+
+            if (order == null)
             {
-                return View();
+                return this.RedirectToAction(nameof(this.AllCreated));
             }
+
+            order.VehicleList = await this.garageService.GetVehicleNames();
+
+            order.PickUpFor = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day + OrderConstants.AddIntOne);
+
+            return this.View(order);
+        }
+
+        // POST: Orders/Delivery/Add/Vehicle
+        [HttpPost]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryAddVehicleName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryAddVehicle)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeliveryAddVehicle()
+        {
+            //var userName = this.User.Identity.Name;
+
+            //var result = await this.ordersService.AddVehicleForPickUpAsync(orederVehicleFOrPickUp, userName, this.ModelState);
+
+            //if (!this.ModelState.IsValid)
+            //{
+            //    result.VehicleList = await this.garageService.GetVehicleNames();
+            //    return this.View(result);
+            //}
+
+            return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerOrdersName}/{GlobalConstants.ActionAllCreatedName}");
         }
 
         // GET: Orders/Delete/5
