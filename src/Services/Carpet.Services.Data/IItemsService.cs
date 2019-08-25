@@ -16,6 +16,8 @@
 
         Task<TViewModel> GetByIdAsync<TViewModel>(int id);
 
+        Task<TViewModel> GetByIdWithDeletedAsync<TViewModel>(int id);
+
         Task<ItemEditViewModel> EditByIdAsync(int id, ItemEditInputModel itemFromView, ModelStateDictionary modelState);
 
         Task<ItemDeleteViewModel> DeleteByIdAsync(int id);

@@ -23,7 +23,7 @@
         public string IsExpress { get; set; }
 
         [Display(Name = OrderConstants.DisplayNameItemQuantitySetByUser)]
-        public int ItemQuantitySetByUser { get; set; }
+        public string ItemQuantity { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
@@ -48,6 +48,9 @@
                 .ForMember(
                     destination => destination.StatusName,
                     opts => opts.MapFrom(origin => origin.Status.Name))
+                .ForMember(
+                    destination => destination.ItemQuantity,
+                    opts => opts.MapFrom(origin => origin.ItemQuantitySetByUser + " | " + origin.OrderItems.Count))
                 .ForMember(
                     destination => destination.IsExpress,
                     opts => opts.MapFrom(origin => origin.IsExpress == true ? GlobalConstants.YesString : GlobalConstants.NoString));

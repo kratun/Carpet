@@ -5,9 +5,35 @@
     var count = 1;
 }
 
-<h1>Добави услуга към поръчка</h1>
+<div class="row">
+    <div class="col-2 text-left">
+        <a asp-action="@GlobalConstants.ActionAllWaitngPickedUpName">Back to List</a>
+    </div>
+    <div class="col-8 text-center">
+        <h1>Добави услуга към поръчка</h1>
+    </div>
+    <div class="col-2 text-right">
+        <form asp-action="@GlobalConstants.ActionPickUpConfirmedName">
+            <input asp-for="Id" class="form-control" hidden />
+            <div class="form-group">
+                <input type="submit" value="Confirm Items" class="btn btn-sm btn-outline-primary" />
+            </div>
+        </form>
+    </div>
+    
+</div>
 
-<h4>@Model.OrderInfo</h4>
+
+<div class="row">
+
+    <div class="col-12 text-center">
+        <h5>@(Model.ToString())</h5>
+    </div>
+    
+    <div class="col-12 text-center">Обща площ: @(Model.OrderItems.Sum(oi => oi.ItemArea)) | Стойност на поръчка: @(Model.OrderItems.Sum(oi => oi.TotalPrice))</div>
+    
+</div>
+
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -23,12 +49,12 @@
                     <span asp-validation-for="ItemId" class="text-danger"></span>
                 </div>
                 <div class="form-group col-2">
-                    <label asp-for="ItemWidth" class="control-label"></label>
-                    <input asp-for="ItemWidth" class="form-control" value="@Model.ItemWidth"/>
+                    <label asp-for="ItemWidth" class="control-label"></label><span>*</span>
+                    <input asp-for="ItemWidth" class="form-control" value="@Model.ItemWidth" />
                     <span asp-validation-for="ItemWidth" class="text-danger"></span>
                 </div>
                 <div class="form-group col-2">
-                    <label asp-for="ItemHeight" class="control-label"></label>
+                    <label asp-for="ItemHeight" class="control-label"></label><span>*</span>
                     <input asp-for="ItemHeight" class="form-control" value="@Model.ItemHeight" />
                     <span asp-validation-for="ItemHeight" class="text-danger"></span>
                 </div>
@@ -42,11 +68,10 @@
                     <input id="addItemBtn" type="submit" value="Save" class="btn btn-primary" />
                 </div>
             </div>
+            <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
 
 
-            <div>
-                <a asp-action="Index">Back to List</a>
-            </div>
+
         </form>
     </div>
 </div>
@@ -79,34 +104,39 @@
     <tbody>
         @foreach (var item in Model.OrderItems)
         {
-        <tr style="font-size:12px">
-            <td>@(count++)</td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemWidth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemHeight)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemArea)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = Model.Id, orderitemid = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
-
-                @Html.ActionLink("Delete", "DeleteItem", new { id = Model.Id, orderitemid = item.Id  }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
-            </td>
-        </tr>
+            <tr style="font-size:12px">
+                <td>@(count++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemWidth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemHeight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemArea)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <form asp-action="DeleteItem">
+                        <input asp-for="OrderItemId" class="form-control" value=@item.Id hidden />
+                        <input asp-for="Id" class="form-control" hidden />
+                        <div class="form-group">
+                            <input type="submit" value="Delete" class="btn btn-sm btn-outline-danger" />
+                        </div>
+                    </form>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+
 
 

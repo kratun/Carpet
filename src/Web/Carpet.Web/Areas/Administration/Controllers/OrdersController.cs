@@ -197,7 +197,7 @@
         {
             var userName = this.User.Identity.Name;
 
-            var result = await this.ordersService.OrderPickUpConfirmedAsync(id, userName, this.ModelState);
+            var result = await this.ordersService.OrderGangeStatusAsync(id, userName, OrderConstants.StatusPickUpArrangedDateCоnfirmed, this.ModelState);
 
             return this.RedirectToAction(nameof(this.AllWaitingPickUpConfirmation));
         }
@@ -217,12 +217,17 @@
         [HttpGet]
         public async Task<IActionResult> AddItems(string id)
         {
-            var order = await this.ordersService.GetAllAsNoTrackingAsync<OrderAddItemsViewModel>().FirstOrDefaultAsync(x => x.Id == id);
+            var order = await this.ordersService
+                .GetAllAsNoTrackingWithDeteletedAsync<OrderAddItemsViewModel>()
+                .Where(x => !x.IsDeleted)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (order == null || order.StatusName != OrderConstants.StatusPickUpArrangedDateCоnfirmed)
             {
                 return this.RedirectToAction(nameof(this.AllWaitingPickUpHours));
             }
+
+            order.OrderItems = order.OrderItems.Where(oi => !oi.IsDeleted).ToList();
 
             foreach (var item in order.OrderItems)
             {
@@ -245,6 +250,15 @@
 
             result.ItemList = await this.itemsService.GetAllItemsAsync<OrderOrderItemItemAddItemsViewModel>().Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToListAsync();
 
+            if (this.ModelState.IsValid)
+            {
+                result.OrderItems = await this.orderItemsService.GetAllAsNoTrackingWithDeteletedAsync<OrderOrderItemAddItemsViewModel>().Where(oi => oi.OrderId == result.Id && !oi.IsDeleted).ToListAsync();
+            }
+            else
+            {
+
+            }
+
             foreach (var item in result.OrderItems)
             {
                 item.TotalPrice = this.GetTotalAmount(item);
@@ -259,17 +273,29 @@
         }
 
         // DeleteItem
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteItem(OrderDeleteItemInputModel modelFromView)
         {
             var result = await this.orderItemsService.DeleteByIdAsync(modelFromView.OrderItemId);
 
             if (!result)
             {
-                return this.RedirectToAction(nameof(this.AllWaitingPickUpHours));
+                return this.RedirectToAction(nameof(this.AllWaitngPickedUp));
             }
 
             return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerOrdersName}/{GlobalConstants.ActionAddItemsName}/{modelFromView.Id}");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PickUpConfirmed(string id)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.OrderGangeStatusAsync(id, userName, OrderConstants.StatusPickedUpConfirm, this.ModelState);
+
+            return this.RedirectToAction(nameof(this.AllWaitingPickUpConfirmation));
         }
 
         // GET: Orders/Edit/5

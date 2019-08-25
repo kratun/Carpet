@@ -10,6 +10,8 @@
     {
         public string Id { get; set; }
 
+        public string OrderId { get; set; }
+
         public int ItemId { get; set; }
 
         public OrderOrderItemItemAddItemsViewModel Item { get; set; }
@@ -29,6 +31,8 @@
         public decimal TotalPrice { get; set; }
 
         public string Description { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

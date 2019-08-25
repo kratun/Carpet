@@ -26,6 +26,7 @@
         public const string ActionAllWaitingPickUpFromCustomerName = "AllWaitingPickUpFromCustomer";
         public const string ActionAllWaitngPickedUpName = "AllWaitngPickedUp";
         public const string ActionAddItemsName = "AddItems";
+        public const string ActionPickUpConfirmedName = "PickUpConfirmed";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";

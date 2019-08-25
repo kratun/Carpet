@@ -1,6 +1,7 @@
 ﻿namespace Carpet.Services.Data.OrdersService
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -165,32 +166,6 @@
             return orderFromDb.To<OrderPickUpRangeHoursViewModel>();
         }
 
-        public async Task<bool> OrderPickUpConfirmedAsync(string id, string username, ModelStateDictionary modelState)
-        {
-            if (!modelState.IsValid)
-            {
-                return false;
-            }
-
-            var orderFromDb = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == id);
-
-            // If order with Id NOT exists
-            if (orderFromDb == null)
-            {
-                throw new ArgumentNullException(nameof(id), string.Format(OrderConstants.NullReferenceOrderIdNotFound, id));
-            }
-
-            orderFromDb.StatusId = await this.orderStatusService.GetIdByNameAsync(OrderConstants.StatusPickUpArrangedDateCоnfirmed);
-
-            orderFromDb.CreatorId = await this.employeesService.GetIdByUserNameAsync(username);
-
-            this.orderRepository.Update(orderFromDb);
-
-            await this.orderRepository.SaveChangesAsync();
-
-            return true;
-        }
-
         public async Task<OrderAddItemsViewModel> AddItemAsync(OrderAddItemInputModel orderFromView, string username, ModelStateDictionary modelState)
         {
             if (!modelState.IsValid)
@@ -199,12 +174,18 @@
                 return errorModel;
             }
 
-            var order = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == orderFromView.Id);
+            var order = await this.orderRepository.AllWithDeleted().FirstOrDefaultAsync(x => x.Id == orderFromView.Id && !x.IsDeleted);
 
             if (order == null)
             {
                 // TODO: exception
             }
+
+            var orderItemDb = order.OrderItems
+                .Where(x => !x.IsDeleted)
+                .ToList();
+
+            order.OrderItems = orderItemDb;
 
             var isItemExist = await this.itemsService.GetAllItemsAsync<Item>().AnyAsync(x => x.Id == orderFromView.ItemId);
 
@@ -229,6 +210,37 @@
             await this.orderRepository.SaveChangesAsync();
 
             return order.To<OrderAddItemsViewModel>();
+        }
+
+        public async Task<bool> OrderGangeStatusAsync(string id, string username, string newStatus, ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                return false;
+            }
+
+            var orderFromDb = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            // If order with Id NOT exists
+            if (orderFromDb == null)
+            {
+                throw new ArgumentNullException(nameof(id), string.Format(OrderConstants.NullReferenceOrderIdNotFound, id));
+            }
+
+            orderFromDb.StatusId = await this.orderStatusService.GetIdByNameAsync(newStatus);
+
+            orderFromDb.CreatorId = await this.employeesService.GetIdByUserNameAsync(username);
+
+            this.orderRepository.Update(orderFromDb);
+
+            await this.orderRepository.SaveChangesAsync();
+
+            return true;
+        }
+
+        public IQueryable<TViewModel> GetAllAsNoTrackingWithDeteletedAsync<TViewModel>()
+        {
+            return this.orderRepository.AllAsNoTrackingWithDeleted().To<TViewModel>();
         }
     }
 }

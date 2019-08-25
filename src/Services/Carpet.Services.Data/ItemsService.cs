@@ -16,7 +16,7 @@
 
     public class ItemsService : IItemsService
     {
-        private readonly IRepository<Item> itemRepository;
+        private readonly IDeletableEntityRepository<Item> itemRepository;
 
         public ItemsService(IDeletableEntityRepository<Item> itemRepository)
         {
@@ -105,6 +105,12 @@
         public async Task<TViewModel> GetByIdAsync<TViewModel>(int id)
         {
             return await this.itemRepository.All().Where(x => x.Id == id).To<TViewModel>().FirstOrDefaultAsync();
+        }
+
+        public async Task<TViewModel> GetByIdWithDeletedAsync<TViewModel>(int id)
+        {
+            return await this.itemRepository.AllWithDeleted()
+                .Where(x => x.Id == id).To<TViewModel>().FirstOrDefaultAsync();
         }
     }
 }

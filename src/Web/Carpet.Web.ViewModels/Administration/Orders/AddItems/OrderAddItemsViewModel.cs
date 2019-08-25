@@ -23,6 +23,10 @@
 
         public string Id { get; set; }
 
+        public bool IsDeleted { get; set; }
+
+        public string OrderItemId { get; set; }
+
         public string OrderInfo { get; set; }
 
         public string CustomerId { get; set; }
@@ -65,8 +69,6 @@
             var totalPrice = this.OrderItems.Sum(oi => oi.TotalPrice);
             var totalArea = this.OrderItems.Sum(oi => oi.ItemArea);
             result.AppendLine($"{this.Customer.FirstName}{(this.Customer.LastName != null ? " " + this.Customer.LastName : string.Empty)}, {this.Customer.PhoneNumber}, {this.Customer.PickUpAddress}");
-            result.AppendLine($"Total price: {totalPrice}");
-            result.AppendLine($"Total Area: {totalArea}");
 
             return result.ToString();
         }

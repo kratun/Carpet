@@ -19,6 +19,9 @@
 
         IQueryable<TViewModel> GetAllAsNoTrackingAsync<TViewModel>();
 
+
+        IQueryable<TViewModel> GetAllAsNoTrackingWithDeteletedAsync<TViewModel>();
+
         Task<TViewModel> GetByIdAsync<TViewModel>(string id);
 
         Task<OrderCreateViewModel> CreateAsync(OrderCreateInputModel orderFromView, string username, ModelStateDictionary modelState);
@@ -31,8 +34,8 @@
 
         Task<OrderPickUpRangeHoursViewModel> SetPickUpRangeHoursAsync(OrderPickUpRangeHoursInputModel orderFromView, string username, ModelStateDictionary modelState);
 
-        Task<bool> OrderPickUpConfirmedAsync(string id, string username, ModelStateDictionary modelState);
-
         Task<OrderAddItemsViewModel> AddItemAsync(OrderAddItemInputModel orderFromView, string username, ModelStateDictionary modelState);
+
+        Task<bool> OrderGangeStatusAsync(string id, string username, string newStatus, ModelStateDictionary modelState);
     }
 }

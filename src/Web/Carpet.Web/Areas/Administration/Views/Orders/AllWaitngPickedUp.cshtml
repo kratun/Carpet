@@ -28,7 +28,7 @@
                 @Html.DisplayNameFor(model => model.IsExpress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ItemQuantitySetByUser)
+                @Html.DisplayNameFor(model => model.ItemQuantity)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.HoursRange)
@@ -55,18 +55,22 @@
                     @Html.DisplayFor(modelItem => item.IsExpress)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ItemQuantitySetByUser)
+                    @Html.DisplayFor(modelItem => item.ItemQuantity)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.HoursRange)
                 </td>
                 <td>
-                    @Html.ActionLink("Add Items", GlobalConstants.ActionAddItemsName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })
+                    @Html.ActionLink("Add Items", GlobalConstants.ActionAddItemsName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin-right:1px;" })
+                    
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
 
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
+                        @Html.ActionLink("Go to Delivery", "DeliverySetVehicle", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "font-size:14px;margin-right:5px;"  })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "font-size:14px;" })
+
+                        @Html.ActionLink("Rerurn for Pickup", "RerurnForNewPickup", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin-top:1px;font-size:14px;" })
+                    
                 </td>
             </tr>
         }
