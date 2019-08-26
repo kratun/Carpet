@@ -1,4 +1,4 @@
-﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Add
+﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicle
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -18,6 +18,6 @@
         public string PhoneNumber { get; set; }
 
         [Display(Name = CustomerConstants.DisplayNamePickUpAddress)]
-        public string PickUpAddress { get; set; }
+        public string DeliveryAddress { get; set; }
     }
 }

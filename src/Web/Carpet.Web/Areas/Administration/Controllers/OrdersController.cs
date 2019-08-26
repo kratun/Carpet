@@ -12,6 +12,7 @@
     using Carpet.Web.InputModels.Administration.Orders.AddItems;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.Vehicle;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddItems;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
@@ -20,6 +21,7 @@
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpFromCustomer;
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpHours;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicle;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Http;
@@ -309,7 +311,7 @@
         }
 
         // GET: Orders/Delivery/Waiting/Vehicle
-        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingVehicleName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryWaitingVehicle)]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingVehicleName, Name = GlobalConstants.RouteOrdersDeliveryWaitingVehicle)]
         public async Task<IActionResult> DeliveryWaitingVehicle()
         {
             var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderDeliveryWaitingAddVehicleViewModel>()
@@ -334,7 +336,7 @@
 
             order.VehicleList = await this.garageService.GetVehicleNames();
 
-            order.PickUpFor = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day + OrderConstants.AddIntOne);
+            order.DeliveringFor = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day + OrderConstants.AddIntOne);
 
             return this.View(order);
         }
@@ -343,19 +345,19 @@
         [HttpPost]
         [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryAddVehicleName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryAddVehicle)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeliveryAddVehicle()
+        public async Task<IActionResult> DeliveryAddVehicle(OrderDeliveryAddVehicleInputModel orderFromView)
         {
-            //var userName = this.User.Identity.Name;
+            var userName = this.User.Identity.Name;
 
-            //var result = await this.ordersService.AddVehicleForPickUpAsync(orederVehicleFOrPickUp, userName, this.ModelState);
+            var result = await this.ordersService.DeliveryAddVehicleAsync(orderFromView, userName, this.ModelState);
 
-            //if (!this.ModelState.IsValid)
-            //{
-            //    result.VehicleList = await this.garageService.GetVehicleNames();
-            //    return this.View(result);
-            //}
+            if (!this.ModelState.IsValid)
+            {
+                result.VehicleList = await this.garageService.GetVehicleNames();
+                return this.View(result);
+            }
 
-            return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerOrdersName}/{GlobalConstants.ActionAllCreatedName}");
+            return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerOrdersName}/{GlobalConstants.ActionDeliveryWaitingVehicleName}");
         }
 
         // GET: Orders/Delete/5

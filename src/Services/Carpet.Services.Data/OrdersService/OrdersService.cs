@@ -15,10 +15,12 @@
     using Carpet.Web.InputModels.Administration.Orders.AddItems;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.Vehicle;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddItems;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicle;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
@@ -242,6 +244,38 @@
         public IQueryable<TViewModel> GetAllAsNoTrackingWithDeteletedAsync<TViewModel>()
         {
             return this.orderRepository.AllAsNoTrackingWithDeleted().To<TViewModel>();
+        }
+
+        public async Task<OrderDeliveryAddVehicleViewModel> DeliveryAddVehicleAsync(OrderDeliveryAddVehicleInputModel orderFromView, string username, ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                var errorModel = await this.GetByIdAsync<OrderDeliveryAddVehicleViewModel>(orderFromView.Id);
+                errorModel.DeliveringFor = orderFromView.DeliveringFor;
+                return errorModel;
+            }
+
+            var orderFromDb = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == orderFromView.Id);
+
+            // If customer with Id NOT exists return existing view model
+            if (orderFromDb == null)
+            {
+                throw new ArgumentNullException(nameof(orderFromView.Id), string.Format(OrderConstants.NullReferenceOrderIdNotFound, orderFromView.Id));
+            }
+
+            orderFromDb.DeliveringFor = orderFromView.DeliveringFor;
+            var orderDeliveryVehicleEmploee = new OrderDeliveryVehicleEmployee { OrderId = orderFromDb.Id, VehicleEmployeeId = orderFromView.RegistrationNumber };
+            orderFromDb.DeliveryVehicles.Add(orderDeliveryVehicleEmploee);
+
+            orderFromDb.StatusId = await this.orderStatusService.GetIdByNameAsync(OrderConstants.StatusDeliveryArrangeHourRangeWaiting);
+
+            orderFromDb.CreatorId = await this.employeesService.GetIdByUserNameAsync(username);
+
+            this.orderRepository.Update(orderFromDb);
+
+            await this.orderRepository.SaveChangesAsync();
+
+            return orderFromDb.To<OrderDeliveryAddVehicleViewModel>();
         }
     }
 }

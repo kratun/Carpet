@@ -6,9 +6,9 @@
     using Carpet.Common.Constants;
 
     [AttributeUsage(AttributeTargets.Property)]
-    public class DateBeforeAttribute : ValidationAttribute
+    public class DateAfterAttribute : ValidationAttribute
     {
-        public DateBeforeAttribute(string dateToCompareToFieldName)
+        public DateAfterAttribute(string dateToCompareToFieldName)
         {
             this.DateToCompareToFieldName = dateToCompareToFieldName;
         }
@@ -21,13 +21,13 @@
 
             DateTime laterDate = DateTime.Parse(validationContext.ObjectType.GetProperty(this.DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null) != null ? validationContext.ObjectType.GetProperty(this.DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null).ToString() : "00:00");
 
-            if (laterDate > earlierDate)
+            if (laterDate < earlierDate)
             {
                 return ValidationResult.Success;
             }
             else
             {
-                return new ValidationResult(OrderConstants.ErrorDateBeforeAttribute);
+                return new ValidationResult(OrderConstants.ErrorDateAfterAttribute);
             }
         }
     }

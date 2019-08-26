@@ -13,11 +13,11 @@
 
         [Required(ErrorMessage = OrderConstants.ErrorFieldRequired)]
         [DateBefore(OrderConstants.PropertyNamePickUpForEndHour)]
-        [Display(Name = OrderConstants.DisplayNamePickUpForStartHour)]
+        [Display(Name = OrderConstants.DisplayNameStartHour)]
         public string PickUpForStartHour { get; set; }
 
         [Required(ErrorMessage = OrderConstants.ErrorFieldRequired)]
-        [Display(Name = OrderConstants.DisplayNamePickUpForEndHour)]
+        [Display(Name = OrderConstants.DisplayNameEndHour)]
         public string PickUpForEndHour { get; set; }
     }
 }

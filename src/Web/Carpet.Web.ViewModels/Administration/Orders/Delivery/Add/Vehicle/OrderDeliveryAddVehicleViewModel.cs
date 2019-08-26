@@ -1,8 +1,9 @@
-﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Add
+﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicle
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     using AutoMapper;
     using Carpet.Common.Constants;
@@ -26,8 +27,11 @@
         [Display(Name = OrderConstants.DisplayNameIsExpress)]
         public string IsExpress { get; set; }
 
-        [Display(Name = OrderConstants.DisplayNameItemQuantitySetByUser)]
-        public int ItemQuantitySetByUser { get; set; }
+        [Display(Name = OrderConstants.DisplayNameItemQuantity)]
+        public int ItemQuantity { get; set; }
+
+        [Display(Name = OrderConstants.DisplayNameTotalArea)]
+        public decimal TotalArea { get; set; }
 
         [Display(Name = OrderConstants.DisplayNameCreatedOn)]
         public DateTime CreatedOn { get; set; }
@@ -35,10 +39,13 @@
         [Display(Name = OrderConstants.DisplayNameStatus)]
         public string StatusName { get; set; }
 
+        [Display(Name = OrderConstants.DisplayNamePickedUpDate)]
+        public DateTime PickUpOn { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        [Display(Name = OrderConstants.DisplayNamePickUpDate)]
-        public DateTime PickUpFor { get; set; }
+        [Display(Name = OrderConstants.DisplayNameDeliveryDate)]
+        public DateTime DeliveringFor { get; set; }
 
         [Display(Name = VehicleConstants.DisplayNameRegistrationNumber)]
         public string RegistrationNumber { get; set; }
@@ -52,6 +59,12 @@
                 .ForMember(
                     destination => destination.StatusName,
                     opts => opts.MapFrom(origin => origin.Status.Name))
+                .ForMember(
+                    destination => destination.ItemQuantity,
+                    opts => opts.MapFrom(origin => origin.OrderItems.Count))
+                .ForMember(
+                    destination => destination.TotalArea,
+                    opts => opts.MapFrom(origin => origin.OrderItems.Sum(x => x.ItemHeight * x.ItemWidth)))
                 .ForMember(
                     destination => destination.IsExpress,
                     opts => opts.MapFrom(origin => origin.IsExpress == true ? GlobalConstants.YesString : GlobalConstants.NoString));

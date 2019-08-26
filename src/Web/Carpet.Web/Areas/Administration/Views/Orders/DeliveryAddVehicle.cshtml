@@ -1,16 +1,16 @@
-﻿@model Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp.OrderAddVehicleToPickUpViewModel
+﻿@model Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicle.OrderDeliveryAddVehicleViewModel
 
 @{
-    ViewData["Title"] = "AddVehicleToPickUp";
+    ViewData["Title"] = "DeliveryAddVehicle";
 }
 
-<h1 class="row justify-content-md-center">Добавяне на</h1>
+    <h1 class="row justify-content-md-center">Добавяне към поръчка на</h1>
 
-<h4 class="row justify-content-md-center" style="margin-top:15px;">Превозно средство и дата за вземане към поръчка</h4>
+<h4 class="row justify-content-md-center" style="margin-top:15px;">Превозно средство и дата за Връщане</h4>
 <hr class="row justify-content-md-center" />
-<div class="row justify-content-md-center"  style="font-size:14px">
+<div class="row justify-content-md-center" style="font-size:14px">
     <div class="col-md-9">
-        <form asp-action="AddVehicleForPickUp">
+        <form asp-action="@GlobalConstants.RouteOrdersDeliveryAddVehicle">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="Id" class="form-control" hidden />
             <div class="row">
@@ -37,21 +37,26 @@
                     <span asp-validation-for="IsExpress" class="text-danger"></span>
                 </div>
                 <div class="form-group col-4">
-                    <label asp-for="ItemQuantitySetByUser" class="control-label"></label>
-                    <input asp-for="ItemQuantitySetByUser" class="form-control" disabled />
-                    <span asp-validation-for="ItemQuantitySetByUser" class="text-danger"></span>
+                    <label asp-for="ItemQuantity" class="control-label"></label>
+                    <input asp-for="ItemQuantity" class="form-control" disabled />
+                    <span asp-validation-for="ItemQuantity" class="text-danger"></span>
                 </div>
                 <div class="form-group col-4">
-                    <label asp-for="CreatedOn" class="control-label"></label>
-                    <input asp-for="CreatedOn" class="form-control" disabled />
-                    <span asp-validation-for="CreatedOn" class="text-danger"></span>
+                    <label asp-for="TotalArea" class="control-label"></label>
+                    <input asp-for="TotalArea" class="form-control" disabled />
+                    <span asp-validation-for="TotalArea" class="text-danger"></span>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-6">
-                    <label asp-for="Customer.PickUpAddress" class="control-label"></label>
-                    <input asp-for="Customer.PickUpAddress" class="form-control" disabled />
-                    <span asp-validation-for="Customer.PickUpAddress" class="text-danger"></span>
+                    <label asp-for="Customer.DeliveryAddress" class="control-label"></label>
+                    @{var googleSearchPickUpAddress = "//google.com/maps/search/" + (string.Join("+", Model.Customer.DeliveryAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList()));
+                                        <a target="_blank" href=@googleSearchPickUpAddress class="form-control btn btn-outline-primary">
+                                            @Model.Customer.DeliveryAddress
+                                        </a>
+                    }
+                    
+                    <span asp-validation-for="Customer.DeliveryAddress" class="text-danger"></span>
                 </div>
                 <div class="form-group col-6">
                     <label asp-for="StatusName" class="control-label"></label>
@@ -67,21 +72,22 @@
                     </select>
                     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
                 </div>
+                <input asp-for="PickUpOn" class="form-control" hidden />
                 <div class="form-group col-6">
-                    <label asp-for="PickUpFor" class="control-label"></label><span>*</span>
-                    <input asp-for="PickUpFor" class="form-control" />
-                    <span asp-validation-for="PickUpFor" class="text-danger"></span>
+                    <label asp-for="DeliveringFor" class="control-label"></label><span>*</span>
+                    <input asp-for="DeliveringFor" class="form-control" />
+                    <span asp-validation-for="DeliveringFor" class="text-danger"></span>
                 </div>
             </div>
             <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
             <div class="form-group">
                 <input type="submit" value="Set Vehicle and Date " class="btn btn-primary btn-block" />
             </div>
-            <div>
-                <a asp-area="@GlobalConstants.AreaAdministrationName"
-                   asp-controller="@GlobalConstants.ContollerOrdersName"
-                   asp-action="@GlobalConstants.ActionAllCreatedName">Back to List</a>
-            </div>
+
         </form>
+        <div>
+            <a asp-route="@GlobalConstants.RouteOrdersDeliveryWaitingVehicle">Back to List</a>
+        </div>
     </div>
 </div>
+

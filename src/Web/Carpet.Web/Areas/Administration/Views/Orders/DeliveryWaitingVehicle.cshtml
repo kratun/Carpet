@@ -8,7 +8,7 @@
 <<h1 class="title text-center">СПИСЪК С ПОРЪЧКИ</h1>
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
-<h4 class="title text-center">Чакащи организиране на ден за вземане</h4>
+<h4 class="title text-center">Чакащи организиране на ден за Връщане</h4>
 <hr />
 <table id="ordersAllCreated" class="display" style="width:100%">
     <thead style="font-size:14px">
@@ -42,7 +42,12 @@
                     @Html.DisplayFor(modelItem => item.Customer.PhoneNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Customer.DeliveryAddress)
+                    @*/*TODO: *//*Replace whitespace in addres with "+"*/*@
+                    @{var googleSearchPickUpAddress = "//google.com/maps/search/" + (string.Join("+", item.Customer.DeliveryAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList()));
+                    <a target="_blank" href=@googleSearchPickUpAddress>
+                        @Html.DisplayFor(modelItem => item.Customer.DeliveryAddress)
+                    </a>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.IsExpress)

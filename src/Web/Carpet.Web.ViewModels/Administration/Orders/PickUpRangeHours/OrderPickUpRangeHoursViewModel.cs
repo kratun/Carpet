@@ -47,10 +47,10 @@
         [Display(Name = VehicleConstants.DisplayNameRegistrationNumber)]
         public string RegistrationNumber => this.PickUpVehicles?.FirstOrDefault().VehicleEmployee.Vehicle.RegistrationNumber;
 
-        [Display(Name = OrderConstants.DisplayNamePickUpForStartHour)]
+        [Display(Name = OrderConstants.DisplayNameStartHour)]
         public string PickUpForStartHour { get; set; }
 
-        [Display(Name = OrderConstants.DisplayNamePickUpForEndHour)]
+        [Display(Name = OrderConstants.DisplayNameEndHour)]
         public string PickUpForEndHour { get; set; }
 
         public ICollection<OrderPickUpVehicleEmployeeViewModel> PickUpVehicles { get; set; }

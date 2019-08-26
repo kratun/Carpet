@@ -27,22 +27,28 @@
         public const string DisplayNameIsExpress = "Експресна";
         public const string DisplayNameHasFlavor = "Ароматизиране";
         public const string DisplayNameItemQuantitySetByUser = "Брой артикули";
+        public const string DisplayNameItemQuantity = "Брой артикули";
         public const string DisplayNameCreatedOn = "Създаден на";
         public const string DisplayNameStatus = "Статус на поръчка";
         public const string DisplayNamePickUpDate = "Дата за взимане";
-        public const string DisplayNamePickUpForStartHour = "Начален час";
-        public const string DisplayNamePickUpForEndHour = "Краен час";
+        public const string DisplayNamePickedUpDate = "Дата на взимане";
+        public const string DisplayNameDeliveryDate = "Дата за връщане";
+        public const string DisplayNameStartHour = "Начален час";
+        public const string DisplayNameEndHour = "Краен час";
         public const string DisplayNameHoursRange = "Часови диапазон";
         public const string DisplayNameWidth = "Дължина";
         public const string DisplayNameHeight = "Ширина";
         public const string DisplayNameDescription = "Бележки";
         public const string DisplayNameItem = "Услуга";
+        public const string DisplayNameTotalArea = "Обща площ";
 
         public const string PropertyNamePickUpForEndHour = "PickUpForEndHour";
 
         public const string ErrorFieldRequired = "Полето {0} е задължително!";
         public const string ErrorFieldItemQuantitySetByUserRange = "Полето {0} може да бъде в диапазона {1} - {2}";
         public const string ErrorFieldPickUpForStartHour = "Началният час съвпада или е след крайният час.";
+        public const string ErrorDateBeforeAttribute = "Началният час съвпада или е след крайният час.";
+        public const string ErrorDateAfterAttribute = "Датата за взимане съвпада или е преди датата на вземане.";
 
         public const string NullReferenceCustomerId = "Не е намерен клиент с Id: {0}.";
         public const string NullReferenceStatusNameNotFound = "Не е намерен Статус с име: {0}.";

@@ -35,10 +35,10 @@
         [Display(Name = OrderConstants.DisplayNameHoursRange)]
         public string HoursRange => this.PickUpForStartHour + " - " + this.PickUpForEndHour;
 
-        [Display(Name = OrderConstants.DisplayNamePickUpForStartHour)]
+        [Display(Name = OrderConstants.DisplayNameStartHour)]
         public string PickUpForStartHour { get; set; }
 
-        [Display(Name = OrderConstants.DisplayNamePickUpForEndHour)]
+        [Display(Name = OrderConstants.DisplayNameEndHour)]
         public string PickUpForEndHour { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
