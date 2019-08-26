@@ -1,16 +1,16 @@
-﻿@model Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicles.OrderDeliveryAddVehicleViewModel
+﻿@model Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.RangeHours.OrderDeliveryAddRangeHoursViewModel
 
 @{
-    ViewData["Title"] = "DeliveryAddVehicle";
+    ViewData["Title"] = "DeliveryAddRangeHours";
 }
 
-    <h1 class="row justify-content-md-center">Добавяне към поръчка на</h1>
+<h1 class="row justify-content-md-center">Добавяне към поръчка на</h1>
 
-<h4 class="row justify-content-md-center" style="margin-top:15px;">Превозно средство и дата за Връщане</h4>
+<h4 class="row justify-content-md-center" style="margin-top:15px;">Превозно средство и дата за връщане</h4>
 <hr class="row justify-content-md-center" />
 <div class="row justify-content-md-center" style="font-size:14px">
     <div class="col-md-9">
-        <form asp-action="@GlobalConstants.RouteOrdersDeliveryAddVehicle">
+        <form asp-route="@GlobalConstants.RouteOrdersDeliveryAddRangeHours">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="Id" class="form-control" hidden />
             <div class="row">
@@ -42,20 +42,15 @@
                     <span asp-validation-for="ItemQuantity" class="text-danger"></span>
                 </div>
                 <div class="form-group col-4">
-                    <label asp-for="TotalArea" class="control-label"></label>
-                    <input asp-for="TotalArea" class="form-control" disabled />
-                    <span asp-validation-for="TotalArea" class="text-danger"></span>
+                    <label asp-for="CreatedOn" class="control-label"></label>
+                    <input asp-for="CreatedOn" class="form-control" disabled />
+                    <span asp-validation-for="CreatedOn" class="text-danger"></span>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-6">
                     <label asp-for="Customer.DeliveryAddress" class="control-label"></label>
-                    @{var googleSearchPickUpAddress = "//google.com/maps/search/" + (string.Join("+", Model.Customer.DeliveryAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList()));
-                                        <a target="_blank" href=@googleSearchPickUpAddress class="form-control btn btn-outline-primary">
-                                            @Model.Customer.DeliveryAddress
-                                        </a>
-                    }
-                    
+                    <input asp-for="Customer.DeliveryAddress" class="form-control" disabled />
                     <span asp-validation-for="Customer.DeliveryAddress" class="text-danger"></span>
                 </div>
                 <div class="form-group col-6">
@@ -65,29 +60,39 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-6">
-                    <label asp-for="RegistrationNumber"></label><span>*</span>
-                    <select class="form-control" asp-for="RegistrationNumber" asp-items="@(List<SelectListItem>)Model.VehicleList">
-                        <option value="">Избери превозно средство</option>
-                    </select>
+                <div class="form-group col-3">
+                    <label asp-for="DeliveringFor" class="control-label"></label>
+                    <input asp-for="DeliveringFor" class="form-control" disabled />
+                    <span asp-validation-for="DeliveringFor" class="text-danger"></span>
+                </div>
+                <div class="form-group col-3">
+                    <label asp-for="RegistrationNumber" class="control-label"></label>
+                    <input asp-for="RegistrationNumber" class="form-control" disabled />
                     <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
                 </div>
-                <input asp-for="PickUpOn" class="form-control" hidden />
-                <div class="form-group col-6">
-                    <label asp-for="DeliveringFor" class="control-label"></label><span>*</span>
-                    <input asp-for="DeliveringFor" class="form-control" />
-                    <span asp-validation-for="DeliveringFor" class="text-danger"></span>
+                <div class="form-group col-3">
+                    <label asp-for="DeliveringForStartHour" class="control-label"></label>
+                    <select class="form-control" asp-for="DeliveringForStartHour" asp-items="@(List<SelectListItem>)Model.DeliveryForStartHours">
+                        <option value="">Начален час</option>
+                    </select>
+                    <span asp-validation-for="DeliveringForStartHour" class="text-danger"></span>
+                </div>
+                <div class="form-group col-3">
+                    <label asp-for="DeliveringForEndHour" class="control-label"></label>
+                    <select class="form-control" asp-for="DeliveringForEndHour" asp-items="@(List<SelectListItem>)Model.DeliveryForEndHours">
+                        <option value="">Краен час</option>
+                    </select>
+                    <span asp-validation-for="DeliveringForEndHour" class="text-danger"></span>
                 </div>
             </div>
             <div style="margin-bottom:15px; font-size:10px">* Задължително поле</div>
             <div class="form-group">
-                <input type="submit" value="Set Vehicle and Date " class="btn btn-primary btn-block" />
+                <input type="submit" value="Set Range Hours " class="btn btn-primary btn-block" />
             </div>
-
+            <div>
+                <a asp-route="@GlobalConstants.RouteOrdersDeliveryWaitingRangeHours">Back to List</a>
+            </div>
         </form>
-        <div>
-            <a asp-route="@GlobalConstants.RouteOrdersDeliveryWaitingVehicle">Back to List</a>
-        </div>
     </div>
 </div>
 

@@ -30,6 +30,8 @@
         public const string ActionDeliveryStartName = "DeliveryStart";
         public const string ActionDeliveryWaitingVehicleName = "Delivery/Waiting/Vehicle";
         public const string ActionDeliveryAddVehicleName = "Delivery/Add/Vehicle";
+        public const string ActionDeliveryWaitingRangeHoursName = "Delivery/Waiting/RangeHours";
+        public const string ActionDeliveryAddRangeHoursName = "Delivery/Add/RangeHours";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";
@@ -45,7 +47,9 @@
 
         // Route constant name
         public const string RouteOrdersDeliveryWaitingVehicle = "DeliveryWaitingVehicle";
+        public const string RouteOrdersDeliveryWaitingRangeHours = "DeliveryWaitingRangeHours";
         public const string RouteOrdersDeliveryAddVehicle = "DeliveryAddVehicle";
+        public const string RouteOrdersDeliveryAddRangeHours = "DeliveryAddRangeHours";
         public const string RouteOrdersAddItems = "AddItems";
 
         public const string YesString = "Да";

@@ -10,8 +10,8 @@
         public const string DisplayNameFirstName = "Име";
         public const string DisplayNameLastName = "Фамилия";
         public const string DisplayNamePhoneNumber = "Телефон";
-        public const string DisplayNamePickUpAddress = "Адрес за взимане";
-        public const string DisplayNameDeliveryAddress = "Адрес за доставка";
+        public const string DisplayNamePickUpAddress = "Адрес за вземане";
+        public const string DisplayNameDeliveryAddress = "Адрес за връщане";
         public const string DisplayNameCreatedOn = "Създаден на";
         public const string ErrorFieldRequired = "Полето {0} е задължително!";
         public const string ErrorFieldFirstNameRegex = "{0}то трябва да е изписано на кирилица във формат \"Мария\" или \"Анна-Мария\", или \"Анна Мария\" без допълнителни интервали.";

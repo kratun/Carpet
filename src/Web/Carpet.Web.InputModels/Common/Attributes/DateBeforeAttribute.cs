@@ -17,7 +17,7 @@
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            DateTime earlierDate = DateTime.Parse(value.ToString());
+            DateTime earlierDate = value != null ? DateTime.Parse(value.ToString()) : DateTime.MaxValue;
 
             DateTime laterDate = DateTime.Parse(validationContext.ObjectType.GetProperty(this.DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null) != null ? validationContext.ObjectType.GetProperty(this.DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null).ToString() : "00:00");
 

@@ -1,4 +1,4 @@
-﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicle
+﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.RangeHours
 {
     using System;
     using System.Collections.Generic;
@@ -11,18 +11,21 @@
     using Carpet.Services.Mapping;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
-    public class OrderDeliveryAddVehicleViewModel : IMapFrom<Order>, IHaveCustomMappings
+    public class OrderDeliveryAddRangeHoursViewModel : IMapFrom<Order>, IMapFrom<Vehicle>, IHaveCustomMappings
     {
-        public OrderDeliveryAddVehicleViewModel()
+        public OrderDeliveryAddRangeHoursViewModel()
         {
-            this.VehicleList = new HashSet<SelectListItem>();
+            this.DeliveryVehicles = new HashSet<OrderDeliveryVehicleEmployeeDeliveryAddRangeHoursViewModel>();
+
+            this.DeliveryForStartHours = new List<SelectListItem>();
+            this.DeliveryForEndHours = new List<SelectListItem>();
         }
 
         public string Id { get; set; }
 
         public string CustomerId { get; set; }
 
-        public OrderCustomerDeliveryAddVehicleViewModel Customer { get; set; }
+        public OrderCustomerDeliveryRangeHoursViewModel Customer { get; set; }
 
         [Display(Name = OrderConstants.DisplayNameIsExpress)]
         public string IsExpress { get; set; }
@@ -30,17 +33,11 @@
         [Display(Name = OrderConstants.DisplayNameItemQuantity)]
         public int ItemQuantity { get; set; }
 
-        [Display(Name = OrderConstants.DisplayNameTotalArea)]
-        public decimal TotalArea { get; set; }
-
         [Display(Name = OrderConstants.DisplayNameCreatedOn)]
         public DateTime CreatedOn { get; set; }
 
         [Display(Name = OrderConstants.DisplayNameStatus)]
         public string StatusName { get; set; }
-
-        [Display(Name = OrderConstants.DisplayNamePickedUpDate)]
-        public DateTime PickUpOn { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
@@ -48,23 +45,30 @@
         public DateTime DeliveringFor { get; set; }
 
         [Display(Name = VehicleConstants.DisplayNameRegistrationNumber)]
-        public string RegistrationNumber { get; set; }
+        public string RegistrationNumber => this.DeliveryVehicles.FirstOrDefault().VehicleEmployee.Vehicle.RegistrationNumber;
 
-        public ICollection<SelectListItem> VehicleList { get; set; }
+        [Display(Name = OrderConstants.DisplayNameStartHour)]
+        public string DeliveringForStartHour { get; set; }
+
+        [Display(Name = OrderConstants.DisplayNameEndHour)]
+        public string DeliveringForEndHour { get; set; }
+
+        public ICollection<OrderDeliveryVehicleEmployeeDeliveryAddRangeHoursViewModel> DeliveryVehicles { get; set; }
+
+        public ICollection<SelectListItem> DeliveryForStartHours { get; set; }
+
+        public ICollection<SelectListItem> DeliveryForEndHours { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration
-                .CreateMap<Order, OrderDeliveryAddVehicleViewModel>()
+                .CreateMap<Order, OrderDeliveryAddRangeHoursViewModel>()
                 .ForMember(
                     destination => destination.StatusName,
                     opts => opts.MapFrom(origin => origin.Status.Name))
                 .ForMember(
                     destination => destination.ItemQuantity,
                     opts => opts.MapFrom(origin => origin.OrderItems.Count))
-                .ForMember(
-                    destination => destination.TotalArea,
-                    opts => opts.MapFrom(origin => origin.OrderItems.Sum(x => x.ItemHeight * x.ItemWidth)))
                 .ForMember(
                     destination => destination.IsExpress,
                     opts => opts.MapFrom(origin => origin.IsExpress == true ? GlobalConstants.YesString : GlobalConstants.NoString));

@@ -12,6 +12,7 @@
     using Carpet.Web.InputModels.Administration.Orders.AddItems;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.RangeHours;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.Vehicle;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddItems;
@@ -21,8 +22,10 @@
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpFromCustomer;
     using Carpet.Web.ViewModels.Administration.Orders.AllWaitingPickUpHours;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
-    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicle;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.RangeHours;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicles;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig.RangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -358,6 +361,61 @@
             }
 
             return this.Redirect($"/{GlobalConstants.AreaAdministrationName}/{GlobalConstants.ContollerOrdersName}/{GlobalConstants.ActionDeliveryWaitingVehicleName}");
+        }
+
+        // GET: Orders/Delivery/Waiting/RangeHours
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingRangeHoursName, Name = GlobalConstants.RouteOrdersDeliveryWaitingRangeHours)]
+        public async Task<IActionResult> DeliveryWaitingRangeHours()
+        {
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderDeliveryWaitingRangeHoursViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusDeliveryArrangeHourRangeWaiting)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
+        }
+
+        // GET: Orders/Delivery/Add/RangeHours
+        [HttpGet]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryAddRangeHoursName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryAddRangeHours)]
+        public async Task<IActionResult> DeliveryAddRangeHours(string id)
+        {
+            var order = await this.ordersService.GetByIdAsync<OrderDeliveryAddRangeHoursViewModel>(id);
+
+            if (order == null || order.StatusName != OrderConstants.StatusDeliveryArrangeHourRangeWaiting)
+            {
+                return this.RedirectToAction(nameof(this.DeliveryWaitingRangeHours));
+            }
+
+            var hourList = OrderConstants.HourList.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+            order.DeliveryForStartHours = hourList.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+            order.DeliveryForEndHours = hourList.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+
+            return this.View(order);
+        }
+        
+        // POST: Orders/Delivery/Add/RangeHours
+        [HttpPost]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryAddRangeHoursName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryAddRangeHours)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeliveryAddRangeHours(OrderDeliveryAddRangeHoursInputModel orderFromView)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.SetDeliveryRangeHoursAsync(orderFromView, userName, this.ModelState);
+
+            var hourList = OrderConstants.HourList.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+            result.DeliveryForStartHours = hourList.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+            result.DeliveryForEndHours = hourList.Select(x => new SelectListItem { Text = x, Value = x }).ToList();
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(result);
+            }
+
+            return this.RedirectToAction(nameof(this.DeliveryWaitingRangeHours));
         }
 
         // GET: Orders/Delete/5

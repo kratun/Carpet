@@ -15,12 +15,14 @@
     using Carpet.Web.InputModels.Administration.Orders.AddItems;
     using Carpet.Web.InputModels.Administration.Orders.AddVehicleForPickUp;
     using Carpet.Web.InputModels.Administration.Orders.Create;
+    using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.RangeHours;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.Vehicle;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddItems;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
     using Carpet.Web.ViewModels.Administration.Orders.Create;
-    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicle;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.RangeHours;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicles;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
@@ -276,6 +278,39 @@
             await this.orderRepository.SaveChangesAsync();
 
             return orderFromDb.To<OrderDeliveryAddVehicleViewModel>();
+        }
+
+        public async Task<OrderDeliveryAddRangeHoursViewModel> SetDeliveryRangeHoursAsync(OrderDeliveryAddRangeHoursInputModel orderFromView, string username, ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                var errorModel = await this.GetByIdAsync<OrderDeliveryAddRangeHoursViewModel>(orderFromView.Id);
+                errorModel.DeliveringForStartHour = orderFromView.DeliveringForStartHour;
+                errorModel.DeliveringForEndHour = orderFromView.DeliveringForEndHour;
+
+                return errorModel;
+            }
+
+            var orderFromDb = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == orderFromView.Id);
+
+            // If order with Id NOT exists
+            if (orderFromDb == null)
+            {
+                throw new ArgumentNullException(nameof(orderFromView.Id), string.Format(OrderConstants.NullReferenceOrderIdNotFound, orderFromView.Id));
+            }
+
+            orderFromDb.DeliveringForStartHour = orderFromView.DeliveringForStartHour;
+            orderFromDb.DeliveringForEndHour = orderFromView.DeliveringForEndHour;
+
+            orderFromDb.StatusId = await this.orderStatusService.GetIdByNameAsync(OrderConstants.StatusDeliveryArrangedDateWaiting);
+
+            orderFromDb.CreatorId = await this.employeesService.GetIdByUserNameAsync(username);
+
+            this.orderRepository.Update(orderFromDb);
+
+            await this.orderRepository.SaveChangesAsync();
+
+            return orderFromDb.To<OrderDeliveryAddRangeHoursViewModel>();
         }
     }
 }

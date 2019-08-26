@@ -10,13 +10,14 @@
         public const string StatusPickedUpConfirm = "Взета от клиент поръчка";
         public const string StatusWashingProcessing = "Вашата поръчка се обработва. След приключване, ще се свържем с Вас за да организираме ден на доставка.";
         public const string StatusWashed = "Очаквайте връзка с оператор за организиране на ден и час на доставка.";
-        public const string StatusDeliveryArrangeDayWaiting = "Чакаща организиране на ден за предаване";
-        public const string StatusDeliveryArrangeHourRangeWaiting = "Чакаща организиране на час за предаване";
-        public const string StatusDeliveryArrangedDateCоnfirmed = "Потвърдени от клиент дата и часови диапазон за предаване";
+        public const string StatusDeliveryArrangeDayWaiting = "Чакаща организиране на ден за връщане";
+        public const string StatusDeliveryArrangeHourRangeWaiting = "Чакаща организиране на час за връщане";
+        public const string StatusDeliveryArrangedDateWaiting = "Чакаща потвърждение от клиент на дата и часови диапазон за връщане";
+        public const string StatusDeliveryArrangedDateCоnfirmed = "Потвърдени от клиент дата и часови диапазон за връщане";
         public const string StatusDeliverConfirmed = "Предаден на клиент поръчка";
         public const string StatusPaymentConfirmed = "Потвърдено плащане от клиент";
         public const string StatusInsallmentPayment = "Частично платена от клиент";
-        public const string StatusWaitingPickUpByCustomer = "Чака взимане от офис";
+        public const string StatusWaitingPickUpByCustomer = "Чака вземане от офис";
         public const string StatusUnclaimedItems = "Непотърсени вещи";
         public const string StatusScrappedItems = "Бракувани вещи";
 
@@ -30,8 +31,8 @@
         public const string DisplayNameItemQuantity = "Брой артикули";
         public const string DisplayNameCreatedOn = "Създаден на";
         public const string DisplayNameStatus = "Статус на поръчка";
-        public const string DisplayNamePickUpDate = "Дата за взимане";
-        public const string DisplayNamePickedUpDate = "Дата на взимане";
+        public const string DisplayNamePickUpDate = "Дата за вземане";
+        public const string DisplayNamePickedUpDate = "Дата на вземане";
         public const string DisplayNameDeliveryDate = "Дата за връщане";
         public const string DisplayNameStartHour = "Начален час";
         public const string DisplayNameEndHour = "Краен час";
@@ -43,12 +44,13 @@
         public const string DisplayNameTotalArea = "Обща площ";
 
         public const string PropertyNamePickUpForEndHour = "PickUpForEndHour";
+        public const string PropertyNameDeliveringForEndHour = "DeliveringForEndHour";
 
         public const string ErrorFieldRequired = "Полето {0} е задължително!";
         public const string ErrorFieldItemQuantitySetByUserRange = "Полето {0} може да бъде в диапазона {1} - {2}";
-        public const string ErrorFieldPickUpForStartHour = "Началният час съвпада или е след крайният час.";
-        public const string ErrorDateBeforeAttribute = "Началният час съвпада или е след крайният час.";
-        public const string ErrorDateAfterAttribute = "Датата за взимане съвпада или е преди датата на вземане.";
+        public const string ErrorFieldPickUpForStartHour = "Началният час съвпада или е след крайния час.";
+        public const string ErrorDateBeforeAttribute = "Началният час съвпада или е след крайния час.";
+        public const string ErrorDateAfterAttribute = "Датата за връщане съвпада или е преди датата на вземане.";
 
         public const string NullReferenceCustomerId = "Не е намерен клиент с Id: {0}.";
         public const string NullReferenceStatusNameNotFound = "Не е намерен Статус с име: {0}.";
