@@ -1,0 +1,164 @@
+﻿@model Carpet.Web.ViewModels.Administration.Orders.Delivery.Confirmed.Index.OrderDeliveryConfirmedIndexViewModel
+
+@{
+    ViewData["Title"] = "DeliveryConfirmed";
+}
+
+<h1 class="title text-center">ПОТВЪРДИ ПЛАЩАНЕ</h1>
+<p class="intro text-center" style="margin-top: 10px;"></p>
+
+<h4 class="title text-center">За поръчка # @Model.Id / @(Model.CreatedOn.ToString("dd.MM.yyyy")) г.</h4>
+<hr />
+<div>
+    <div class="row">
+        <div class="col-7" style="border:1px solid; vertical-align:middle;">
+            <dl class="row" style="margin-top:8px;">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Customer.FullName):
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Customer.FullName)
+                </dd>
+
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.PickUpOn):
+                </dt>
+                <dd class="col-sm-8">
+                    @Model.PickUpOn.ToString("dd.MM.yyyy") г.
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Customer.PickUpAddress):
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Customer.PickUpAddress)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Customer.DeliveryAddress):
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Customer.DeliveryAddress)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-5">
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.IsExpress):
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.IsExpress)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.HasFlavor):
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.HasFlavor)
+                </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Description):
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                
+            </dl>
+
+        </div>
+    </div>
+    <hr />
+        
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.TotalItemQuantity):
+                </dt>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => model.TotalItemQuantity)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.TotalArea):
+                </dt>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => model.TotalArea)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.TotalOrderAmount):
+                </dt>
+                <dd class="col-sm-2">
+                    @Html.DisplayFor(model => model.TotalOrderAmount)
+                </dd>
+            </dl>
+
+        
+    
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @OrderConstants.DisplayNameItem
+            </th>
+            <th>
+                @OrderConstants.DisplayNameWidth
+            </th>
+            <th>
+                @OrderConstants.DisplayNameHeight
+            </th>
+            <th>
+                @ItemConstants.DisplayNameArea
+            </th>
+            <th>
+                @ItemConstants.DisplayNameVacuumCleaningAddOnPrice
+            </th>
+            <th>
+                @ItemConstants.DisplayNameTotalPrice
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemWidth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemHeight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemArea)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasVacuumCleaning)
+                </td>
+                <td>
+                    @{
+                        var totalPrice = item.Item.OrdinaryPrice;
+                        if (item.IsExpress) { totalPrice += item.Item.ExpressAddOnPrice; }
+                        if (item.HasVacuumCleaning == GlobalConstants.YesString) { totalPrice += item.Item.VacuumCleaningAddOnPrice; }
+                        if (item.HasFlavor) { totalPrice += item.Item.FlavorAddOnPrice; }
+                        totalPrice *= item.ItemArea;
+                        item.TotalPrice = totalPrice;
+                    }
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+

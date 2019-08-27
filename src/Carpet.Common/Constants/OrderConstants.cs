@@ -34,6 +34,7 @@
         public const string DisplayNamePickUpDate = "Дата за вземане";
         public const string DisplayNamePickedUpDate = "Дата на вземане";
         public const string DisplayNameDeliveryDate = "Дата за връщане";
+        public const string DisplayNameDeliverOnDate = "Дата на връщане";
         public const string DisplayNameStartHour = "Начален час";
         public const string DisplayNameEndHour = "Краен час";
         public const string DisplayNameHoursRange = "Часови диапазон";
@@ -42,6 +43,7 @@
         public const string DisplayNameDescription = "Бележки";
         public const string DisplayNameItem = "Услуга";
         public const string DisplayNameTotalArea = "Обща площ";
+        public const string DisplayNameId = "Номер на поръчка";
 
         public const string PropertyNamePickUpForEndHour = "PickUpForEndHour";
         public const string PropertyNameDeliveringForEndHour = "DeliveringForEndHour";

@@ -14,6 +14,7 @@
     using Carpet.Web.InputModels.Administration.Orders.Create;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.RangeHours;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.Vehicle;
+    using Carpet.Web.InputModels.Administration.Orders.Delivery.Waiting.Confirmation;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddItems;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
@@ -24,7 +25,10 @@
     using Carpet.Web.ViewModels.Administration.Orders.Create;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.RangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicles;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Confirmed.Index;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig.Confirmation;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig.Payment;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig.RangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.PickUpRangeHours;
     using Microsoft.AspNetCore.Http;
@@ -394,7 +398,7 @@
 
             return this.View(order);
         }
-        
+
         // POST: Orders/Delivery/Add/RangeHours
         [HttpPost]
         [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryAddRangeHoursName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryAddRangeHours)]
@@ -416,6 +420,69 @@
             }
 
             return this.RedirectToAction(nameof(this.DeliveryWaitingRangeHours));
+        }
+
+        // GET: Orders/Delivery/Waiting/Confirmation
+        [HttpGet]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingConfirmationName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryWaitingConfirmation)]
+        public async Task<IActionResult> DeliveryWaitingConfirmation()
+        {
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderDeliveryWaitingConfirmationViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusDeliveryArrangedDateWaiting)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
+        }
+
+        // GET: Orders/Delivery/Waiting/Confirmation
+        [HttpPost]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingConfirmationName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryWaitingConfirmation)]
+        public async Task<IActionResult> DeliveryWaitingConfirmation(OrderDeliveryWaitingConfirmationInputModel orderFromView)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.OrderGangeStatusAsync(orderFromView.Id, userName, OrderConstants.StatusDeliveryArrangedDateCоnfirmed, this.ModelState);
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            return this.RedirectToAction(nameof(this.DeliveryWaitingConfirmation));
+        }
+
+        // GET: Orders/Delivery/Waiting/Payment
+        [HttpGet]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingPaymentName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryWaitingPayment)]
+        public async Task<IActionResult> DeliveryWaitingPayment()
+        {
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderDeliveryWaitningPaymentViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusDeliveryArrangedDateCоnfirmed)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
+        }
+
+        [HttpGet]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryConfirmedName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryConfirmed)]
+        public async Task<IActionResult> DeliveryConfirmed(string id)
+        {
+            var order = await this.ordersService.GetByIdAsync<OrderDeliveryConfirmedIndexViewModel>(id);
+
+            if (order == null || order.StatusName != OrderConstants.StatusDeliveryArrangedDateCоnfirmed)
+            {
+                return this.RedirectToAction(nameof(this.DeliveryWaitingPayment));
+            }
+
+            order.OrderItems = await this.orderItemsService
+                .GetAllAsNoTrackingWithDeteletedAsync<OrderOrderItemDeliveryConfirmedIndexViewModel>()
+                .Where(x => x.OrderId == id)
+                .Where(x => !x.IsDeleted)
+                .ToListAsync();
+
+            return this.View(order);
         }
 
         // GET: Orders/Delete/5

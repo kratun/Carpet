@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig.Confirmation.OrderDeliveryWaitingConfirmationViewModel>
+
+@{
+    ViewData["Title"] = "DeliveryWaitingConfirmation";
+    var count = 1;
+    var date = Model.Count() > 0 ? "за: " + Model.First().DeliveringFor.ToString("dd.MM.yyyy") + " г." : string.Empty;
+}
+
+<<h1 class="title text-center">Списък с поръчки за връщане</h1>
+<p class="intro text-center" style="margin-top: 10px;"></p>
+
+<h4 class="title text-center">Чакащи потвърждение на дата от клиента @date</h4>
+<hr />
+<table id="ordersAllCreated" class="display" style="width:100%">
+    <thead style="font-size:14px">
+        <tr class="text-center">
+            <th>#</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.DeliveryAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsExpress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HoursRange)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="font-size:12px">
+                <td>@(count++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.DeliveryAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsExpress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HoursRange)
+                </td>
+                <td>
+                    <form asp-route="@GlobalConstants.RouteOrdersDeliveryWaitingConfirmation"
+                          asp-route-id="@item.Id">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="@item.Id" class="form-control" hidden />
+                        <div class="form-group">
+                            <input type="submit" value="Confirm" class="btn btn-sm btn-outline-primary" style="margin:1px; width:100%;" />
+                        </div>
+                    </form>
+                    @*@Html.ActionLink("Confirm", GlobalConstants.ActionPickUpDateConfirmedByCustomerName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })*@
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
+
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
