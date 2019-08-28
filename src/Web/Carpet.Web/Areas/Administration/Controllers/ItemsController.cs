@@ -48,12 +48,20 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ItemCreateInputModel itemCreate)
         {
-            var result = await this.itemsService.CreateAsync(itemCreate, this.ModelState);
-
             if (!this.ModelState.IsValid)
             {
-                return this.View(result);
+                return this.View(AutoMapper.Mapper.Map<ItemIndexViewModel>(itemCreate));
             }
+
+            var isNameExist = await this.itemsService.GetAllItemsAsync<ItemIndexViewModel>().AnyAsync(x => x.Name == itemCreate.Name);
+
+            if (isNameExist)
+            {
+                this.ModelState.AddModelError(nameof(itemCreate.Name), string.Format(ItemConstants.ArgumentExceptionItemName, itemCreate.Name));
+                return this.View(AutoMapper.Mapper.Map<ItemIndexViewModel>(itemCreate));
+            }
+
+            var result = await this.itemsService.CreateAsync(itemCreate);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -70,12 +78,21 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ItemEditInputModel itemEdit)
         {
-            var result = await this.itemsService.EditByIdAsync(id, itemEdit, this.ModelState);
-
             if (!this.ModelState.IsValid)
             {
-                return this.View(result);
+                return this.View(AutoMapper.Mapper.Map<ItemEditViewModel>(itemEdit));
             }
+
+            var isNameExist = await this.itemsService.GetAllItemsAsync<ItemEditViewModel>().FirstOrDefaultAsync(x => x.Name == itemEdit.Name);
+
+            if (isNameExist != null && isNameExist.Id != id)
+            {
+                this.ModelState.AddModelError(nameof(itemEdit.Name), string.Format(ItemConstants.ArgumentExceptionItemName, itemEdit.Name));
+                return this.View(AutoMapper.Mapper.Map<ItemIndexViewModel>(itemEdit));
+            }
+
+            var result = await this.itemsService.EditByIdAsync(id, itemEdit);
+
 
             return this.RedirectToAction(nameof(this.Index));
         }

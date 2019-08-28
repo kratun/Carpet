@@ -5,8 +5,9 @@
     using Carpet.Common.Constants;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
+    using Carpet.Web.ViewModels.Administration.Items;
 
-    public class ItemCreateInputModel : IMapTo<Item>, IMapFrom<Item>
+    public class ItemCreateInputModel : IMapTo<Item>, IMapFrom<Item>, IMapTo<ItemIndexViewModel>
     {
         [Required]
         [Display(Name = ItemConstants.DisplayNameName)]

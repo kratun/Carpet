@@ -22,6 +22,7 @@
         [Display(Name = OrderConstants.DisplayNameId)]
         public string Id { get; set; }
 
+        [Display(Name = OrderConstants.DisplayNameOrderCreateDate)]
         public DateTime CreatedOn { get; set; }
 
         public bool IsDeleted { get; set; }

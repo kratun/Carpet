@@ -8,6 +8,8 @@
 
     public class ItemEditViewModel : IMapTo<Item>, IMapFrom<Item>
     {
+        public int Id { get; set; }
+
         [Display(Name = ItemConstants.DisplayNameName)]
         public string Name { get; set; }
 

@@ -2,16 +2,40 @@
 
 @{
     ViewData["Title"] = "DeliveryConfirmed";
+    var count = 1;
 }
 
-<h1 class="title text-center">ПОТВЪРДИ ПЛАЩАНЕ</h1>
+<div class="row">
+    <div class="col-2">
+
+        <a asp-action="Index">Back to List</a>
+
+
+    </div>
+    <div class="col-8">
+        <h1 class="title text-center">ПОТВЪРДИ ПЛАЩАНЕ</h1>
+
+    </div>
+    <div class="col-2">
+        <form asp-area="@GlobalConstants.AreaAdministrationName"
+              asp-controller="@GlobalConstants.ContollerOrdersName"
+              asp-action="@GlobalConstants.ActionDeliveryStartName">
+            <input asp-for="Id" class="form-control" hidden />
+            <div class="form-group text-right">
+                <input type="submit" value="Confirmed Payment" class="btn btn-sm btn-outline-primary" />
+            </div>
+        </form>
+        
+
+    </div>
+</div>
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
 <h4 class="title text-center">За поръчка # @Model.Id / @(Model.CreatedOn.ToString("dd.MM.yyyy")) г.</h4>
 <hr />
 <div>
     <div class="row">
-        <div class="col-7" style="border:1px solid; vertical-align:middle;">
+        <div class="col-7"> @*style="border:1px solid; vertical-align:middle;"*@
             <dl class="row" style="margin-top:8px;">
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Customer.FullName):
@@ -21,10 +45,10 @@
                 </dd>
 
                 <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.PickUpOn):
+                    @Html.DisplayNameFor(model => model.CreatedOn):
                 </dt>
                 <dd class="col-sm-8">
-                    @Model.PickUpOn.ToString("dd.MM.yyyy") г.
+                    @Model.CreatedOn.ToString("dd.MM.yyyy") г.
                 </dd>
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Customer.PickUpAddress):
@@ -60,65 +84,61 @@
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.Description)
                 </dd>
-                
+
             </dl>
 
         </div>
     </div>
     <hr />
-        
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.TotalItemQuantity):
-                </dt>
-                <dd class="col-sm-2">
-                    @Html.DisplayFor(model => model.TotalItemQuantity)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.TotalArea):
-                </dt>
-                <dd class="col-sm-2">
-                    @Html.DisplayFor(model => model.TotalArea)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.TotalOrderAmount):
-                </dt>
-                <dd class="col-sm-2">
-                    @Html.DisplayFor(model => model.TotalOrderAmount)
-                </dd>
-            </dl>
 
-        
-    
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalItemQuantity):
+        </dt>
+        <dd class="col-sm-2">
+            @Html.DisplayFor(model => model.TotalItemQuantity) бр.
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalArea):
+        </dt>
+        <dd class="col-sm-2">
+            @Html.DisplayFor(model => model.TotalArea) кв. м.
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalOrderAmount):
+        </dt>
+        <dd class="col-sm-2">
+            @Html.DisplayFor(model => model.TotalOrderAmount) лв.
+        </dd>
+    </dl>
+
+
+
 </div>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                #
             </th>
             <th>
                 @OrderConstants.DisplayNameItem
             </th>
             <th>
-                @OrderConstants.DisplayNameWidth
+                @OrderConstants.DisplayNameWidth м.
             </th>
             <th>
-                @OrderConstants.DisplayNameHeight
+                @OrderConstants.DisplayNameHeight м.
             </th>
             <th>
-                @ItemConstants.DisplayNameArea
+                @ItemConstants.DisplayNameArea кв. м.
             </th>
             <th>
                 @ItemConstants.DisplayNameVacuumCleaningAddOnPrice
             </th>
             <th>
-                @ItemConstants.DisplayNameTotalPrice
+                @ItemConstants.DisplayNameTotalPrice лв.
             </th>
         </tr>
     </thead>
@@ -127,7 +147,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id)
+                    @(count++)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Item.Name)
@@ -142,13 +162,13 @@
                     @Html.DisplayFor(modelItem => item.ItemArea)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.HasVacuumCleaning)
+                    @(item.HasVacuumCleaning == true ? GlobalConstants.YesString : GlobalConstants.NoString)
                 </td>
                 <td>
                     @{
                         var totalPrice = item.Item.OrdinaryPrice;
                         if (item.IsExpress) { totalPrice += item.Item.ExpressAddOnPrice; }
-                        if (item.HasVacuumCleaning == GlobalConstants.YesString) { totalPrice += item.Item.VacuumCleaningAddOnPrice; }
+                        if (item.HasVacuumCleaning) { totalPrice += item.Item.VacuumCleaningAddOnPrice; }
                         if (item.HasFlavor) { totalPrice += item.Item.FlavorAddOnPrice; }
                         totalPrice *= item.ItemArea;
                         item.TotalPrice = totalPrice;

@@ -2,6 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+
     using AutoMapper;
     using Carpet.Common.Constants;
     using Carpet.Data.Models;
@@ -32,7 +33,7 @@
         public bool IsExpress { get; set; }
 
         [Display(Name = ItemConstants.DisplayNameVacuumCleaningAddOnPrice)]
-        public string HasVacuumCleaning { get; set; }
+        public bool HasVacuumCleaning { get; set; }
 
         [Display(Name = ItemConstants.DisplayNameTotalPrice)]
         public decimal TotalPrice { get; set; }
@@ -50,10 +51,10 @@
                     opts => opts.MapFrom(origin => origin.HasFlavor))
                 .ForMember(
                     destination => destination.IsExpress,
-                    opts => opts.MapFrom(origin => origin.IsExpress))
-                .ForMember(
-                    destination => destination.HasVacuumCleaning,
-                    opts => opts.MapFrom(origin => origin.OrderItems.Select(x => x.HasVacuumCleaning == true ? GlobalConstants.YesString : GlobalConstants.NoString)));
+                    opts => opts.MapFrom(origin => origin.IsExpress));
+                //.ForMember(
+                //    destination => destination.HasVacuumCleaning,
+                //    opts => opts.MapFrom(origin => origin.OrderItems.Select(x => x.HasVacuumCleaning == true ? GlobalConstants.YesString : GlobalConstants.NoString)));
         }
     }
 }

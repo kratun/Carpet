@@ -32,6 +32,7 @@
         public const string DisplayNameCreatedOn = "Създаден на";
         public const string DisplayNameStatus = "Статус на поръчка";
         public const string DisplayNamePickUpDate = "Дата за вземане";
+        public const string DisplayNameOrderCreateDate = "Дата на поръчка";
         public const string DisplayNamePickedUpDate = "Дата на вземане";
         public const string DisplayNameDeliveryDate = "Дата за връщане";
         public const string DisplayNameDeliverOnDate = "Дата на връщане";
