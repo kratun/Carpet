@@ -4,18 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Carpet.Common.Constants;
-    using Carpet.Data;
-    using Carpet.Data.Common.Repositories;
     using Carpet.Data.Models;
-    using Carpet.Data.Repositories;
     using Carpet.Web.InputModels.Administration.Items;
     using Carpet.Web.ViewModels.Administration.Items;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using Moq;
-    using UnravelTravel.Services.Data.Tests;
     using Xunit;
 
     public class ItemServiceTests : BaseServiceTests

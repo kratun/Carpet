@@ -8,7 +8,7 @@
     using Carpet.Services.Mapping;
     using Carpet.Web.ViewModels.Administration.Customers;
 
-    public class CustomerEditInputModel : IMapTo<Customer>, IMapFrom<Customer>, IMapTo<CustomerDetailsViewModel>, IMapFrom<CustomerEditViewModel>
+    public class CustomerEditInputModel : IMapTo<Customer>, IMapFrom<Customer>, IMapTo<CustomerDetailsViewModel>, IMapFrom<CustomerEditViewModel>, IMapTo<CustomerEditViewModel>
     {
         [Required]
         public string Id { get; set; }

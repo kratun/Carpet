@@ -13,13 +13,13 @@
 
         Task<bool> IsCustomerExistAsync(string id);
 
-        Task<CustomerCreateViewModel> CreateAsync(CustomerCreateInputModel customerFromView, ModelStateDictionary modelState);
+        Task<CustomerCreateViewModel> CreateAsync(CustomerCreateInputModel customerFromView);
 
-        Task<CustomerAddAddressViewModel> AddAddressToCustomerAsync(CustomerAddAddressInputModel customerFromView, ModelStateDictionary modelState);
+        Task<CustomerAddAddressViewModel> AddAddressToCustomerAsync(CustomerAddAddressInputModel customerFromView);
 
         Task<TViewModel> GetByIdAsync<TViewModel>(string id);
 
-        Task<CustomerEditViewModel> EditByIdAsync(string id, CustomerEditInputModel customerFromView, ModelStateDictionary modelState);
+        Task<CustomerEditViewModel> EditByIdAsync(string id, CustomerEditInputModel customerFromView);
 
         Task<CustomerDeleteViewModel> DeleteByIdAsync(string id);
     }

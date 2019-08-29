@@ -3,6 +3,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Carpet.Common.Constants;
     using Carpet.Services.Data.CustomerService;
     using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.ViewModels.Administration.Customers;
@@ -47,12 +48,21 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CustomerCreateInputModel customerCreate)
         {
-            var result = await this.customersService.CreateAsync(customerCreate, this.ModelState);
-
             if (!this.ModelState.IsValid)
             {
-                return this.View(result);
+                return this.View(AutoMapper.Mapper.Map<CustomerCreateViewModel>(customerCreate));
             }
+
+            var hasAnyCustomerWithPhoneNumber = await this.customersService.GetAllCustomersAsync<CustomerCreateViewModel>().AnyAsync(x => x.PhoneNumber == customerCreate.PhoneNumber);
+
+            // If customer with phone number exists return existing view model
+            if (hasAnyCustomerWithPhoneNumber)
+            {
+                this.ModelState.AddModelError(string.Empty, string.Format(CustomerConstants.ArgumentExceptionCustomerExistAddAddress));
+                return this.View(AutoMapper.Mapper.Map<CustomerCreateViewModel>(customerCreate));
+            }
+
+            var result = await this.customersService.CreateAsync(customerCreate);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -75,12 +85,28 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAddress(CustomerAddAddressInputModel customerAddAddress)
         {
-            var result = await this.customersService.AddAddressToCustomerAsync(customerAddAddress, this.ModelState);
-
             if (!this.ModelState.IsValid)
             {
-                return this.View(result);
+                return this.View(this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress)));
             }
+
+            var hasAnyCustomerWithMaxSameData = await this.customersService.GetAllCustomersAsync<CustomerAddAddressViewModel>().Where(x => x.PhoneNumber == customerAddAddress.PhoneNumber).AnyAsync(x => HasMaxSameCustomerData(x, customerAddAddress.FirstName, customerAddAddress.LastName, customerAddAddress.PhoneNumber, customerAddAddress.PickUpAddress, customerAddAddress.DeliveryAddress));
+
+            if (hasAnyCustomerWithMaxSameData)
+            {
+                this.ModelState.AddModelError(string.Empty, CustomerConstants.ArgumentExceptionCustomerExist);
+                return this.View(this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress)));
+            }
+
+            var hasAnyCustomerWithMinSameData = await this.customersService.GetAllCustomersAsync<CustomerAddAddressViewModel>().Where(x => x.PhoneNumber == customerAddAddress.PhoneNumber).AnyAsync(x => !HasMinSameCustomerData(x, customerAddAddress.FirstName, customerAddAddress.LastName, customerAddAddress.PhoneNumber));
+
+            if (hasAnyCustomerWithMinSameData)
+            {
+                this.ModelState.AddModelError(string.Empty, string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerAddAddress.PhoneNumber));
+                return this.View(this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress)));
+            }
+
+            var result = await this.customersService.AddAddressToCustomerAsync(customerAddAddress);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -97,12 +123,23 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, CustomerEditInputModel customerEdit)
         {
-            var result = await this.customersService.EditByIdAsync(id, customerEdit, this.ModelState);
-
             if (!this.ModelState.IsValid)
             {
-                return this.View(result);
+                return this.View(this.View(AutoMapper.Mapper.Map<CustomerEditViewModel>(customerEdit)));
             }
+
+            var hasAnyCustomerWithSameData = await this.customersService
+                .GetAllCustomersAsync<CustomerEditViewModel>()
+                .AnyAsync(x => x != null && x.FirstName == customerEdit.FirstName && x.LastName == customerEdit.LastName && x.PhoneNumber == customerEdit.PhoneNumber && x.PickUpAddress == customerEdit.PickUpAddress && ((x.DeliveryAddress == null && customerEdit.DeliveryAddress == null) || x.DeliveryAddress == customerEdit.DeliveryAddress));
+
+            if (hasAnyCustomerWithSameData)
+            {
+                this.ModelState.AddModelError(string.Empty, CustomerConstants.ArgumentExceptionCustomerExist);
+
+                return this.View(AutoMapper.Mapper.Map<CustomerEditViewModel>(customerEdit));
+            }
+
+            var result = await this.customersService.EditByIdAsync(id, customerEdit);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -122,6 +159,20 @@
             var customer = await this.customersService.DeleteByIdAsync(id);
 
             return this.RedirectToAction(nameof(this.Index));
+        }
+
+        private static bool HasMaxSameCustomerData(CustomerAddAddressViewModel checkForCustomer, string firstName, string lastName, string phoneNumber, string pickUpAddress, string deliveryAddress)
+        {
+            return HasMinSameCustomerData(checkForCustomer, firstName, lastName, phoneNumber) &&
+                            checkForCustomer.PickUpAddress == pickUpAddress && ((checkForCustomer.DeliveryAddress == null && deliveryAddress == null) || checkForCustomer.DeliveryAddress == deliveryAddress);
+        }
+
+        private static bool HasMinSameCustomerData(CustomerAddAddressViewModel checkForCustomer, string firstName, string lastName, string phoneNumber)
+        {
+            return checkForCustomer != null &&
+                                        checkForCustomer.FirstName == firstName &&
+                                        checkForCustomer.LastName == lastName &&
+                                        checkForCustomer.PhoneNumber == phoneNumber;
         }
     }
 }

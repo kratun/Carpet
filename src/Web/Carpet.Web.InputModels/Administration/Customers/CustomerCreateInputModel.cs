@@ -8,7 +8,7 @@
     using Carpet.Services.Mapping;
     using Carpet.Web.ViewModels.Administration.Customers;
 
-    public class CustomerCreateInputModel : IMapTo<Customer>, IMapFrom<Customer>
+    public class CustomerCreateInputModel : IMapTo<Customer>, IMapTo<CustomerCreateViewModel>
     {
         [Required(ErrorMessage =CustomerConstants.ErrorFieldRequired)]
         [MinLength(CustomerConstants.FirstNameMinValue, ErrorMessage = CustomerConstants.ErrorFieldNameLength)]
@@ -23,12 +23,12 @@
         [NotMapped]
         public string FullName => string.Concat(this.FirstName != null ? this.FirstName + " " : string.Empty, this.LastName != null ? this.LastName : string.Empty).Trim();
 
-        [Required]
+        [Required(ErrorMessage = CustomerConstants.ErrorFieldRequired)]
         [Display(Name = CustomerConstants.DisplayNamePhoneNumber)]
         [RegularExpression(CustomerConstants.PhoneValidation)]
         public string PhoneNumber { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = CustomerConstants.ErrorFieldRequired)]
         [Display(Name = CustomerConstants.DisplayNamePickUpAddress)]
         [MinLength(CustomerConstants.AddressMinLength)]
         public string PickUpAddress { get; set; }

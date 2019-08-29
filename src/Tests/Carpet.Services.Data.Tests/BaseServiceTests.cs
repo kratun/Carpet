@@ -1,4 +1,4 @@
-﻿namespace UnravelTravel.Services.Data.Tests
+﻿namespace Carpet.Services.Data.Tests
 {
     using System;
     using System.Reflection;
@@ -29,7 +29,7 @@
             var services = this.SetServices();
 
             this.ServiceProvider = services.BuildServiceProvider();
-            this.DbContext = this.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            this.DbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
         }
 
         protected IServiceProvider ServiceProvider { get; set; }
