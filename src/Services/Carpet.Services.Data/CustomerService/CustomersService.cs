@@ -10,7 +10,6 @@
     using Carpet.Services.Mapping;
     using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.ViewModels.Administration.Customers;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
 
     public class CustomersService : ICustomersService

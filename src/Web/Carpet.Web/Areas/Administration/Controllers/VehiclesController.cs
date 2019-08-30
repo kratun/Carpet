@@ -51,12 +51,23 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VehicleCreateInputModel vehicleCreate)
         {
-            var result = await this.vehiclesService.CreateAsync(vehicleCreate, this.ModelState);
-
             if (!this.ModelState.IsValid)
             {
-                return this.View(result);
+                return this.View(AutoMapper.Mapper.Map<VehicleCreateViewModel>(vehicleCreate));
             }
+
+            var checkForRegistrationNumber = await this.vehiclesService
+                .GetAllAsync<VehicleCreateViewModel>()
+                .FirstOrDefaultAsync(x => x.RegistrationNumber == vehicleCreate.RegistrationNumber);
+
+            // If customer with phone number exists return existing view model
+            if (checkForRegistrationNumber != null)
+            {
+                this.ModelState.AddModelError(nameof(vehicleCreate.RegistrationNumber), string.Format(VehicleConstants.ArgumentExceptionRegistrationNumber, vehicleCreate.RegistrationNumber));
+                return this.View(AutoMapper.Mapper.Map<VehicleCreateViewModel>(vehicleCreate));
+            }
+
+            var result = await this.vehiclesService.CreateAsync(vehicleCreate);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -73,12 +84,23 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, VehicleEditInputModel vehicleEdit)
         {
-            var result = await this.vehiclesService.EditByIdAsync(id, vehicleEdit, this.ModelState);
-
             if (!this.ModelState.IsValid)
             {
-                return this.View(result);
+                return this.View(AutoMapper.Mapper.Map<VehicleEditViewModel>(vehicleEdit));
             }
+
+            var checkForRegistrationNumber = await this.vehiclesService
+                .GetAllAsync<VehicleEditViewModel>()
+                .FirstOrDefaultAsync(x => x.RegistrationNumber == vehicleEdit.RegistrationNumber);
+
+            // If vehicle with Registration Number exists and id's are different do not delete. Return existing view model
+            if (checkForRegistrationNumber != null && checkForRegistrationNumber.Id != id)
+            {
+                this.ModelState.AddModelError(nameof(vehicleEdit.RegistrationNumber), string.Format(VehicleConstants.ArgumentExceptionRegistrationNumber, vehicleEdit.RegistrationNumber));
+                return this.View(AutoMapper.Mapper.Map<VehicleEditViewModel>(vehicleEdit));
+            }
+
+            var result = await this.vehiclesService.EditByIdAsync(id, vehicleEdit);
 
             return this.RedirectToAction(nameof(this.Index));
         }

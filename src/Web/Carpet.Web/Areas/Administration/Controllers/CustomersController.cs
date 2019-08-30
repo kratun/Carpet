@@ -62,6 +62,11 @@
                 return this.View(AutoMapper.Mapper.Map<CustomerCreateViewModel>(customerCreate));
             }
 
+            if (string.IsNullOrEmpty(customerCreate.DeliveryAddress))
+            {
+                customerCreate.DeliveryAddress = customerCreate.PickUpAddress;
+            }
+
             var result = await this.customersService.CreateAsync(customerCreate);
 
             return this.RedirectToAction(nameof(this.Index));
@@ -87,7 +92,12 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress)));
+                return this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress));
+            }
+
+            if (string.IsNullOrEmpty(customerAddAddress.DeliveryAddress))
+            {
+                customerAddAddress.DeliveryAddress = customerAddAddress.PickUpAddress;
             }
 
             var hasAnyCustomerWithMaxSameData = await this.customersService.GetAllCustomersAsync<CustomerAddAddressViewModel>().Where(x => x.PhoneNumber == customerAddAddress.PhoneNumber).AnyAsync(x => HasMaxSameCustomerData(x, customerAddAddress.FirstName, customerAddAddress.LastName, customerAddAddress.PhoneNumber, customerAddAddress.PickUpAddress, customerAddAddress.DeliveryAddress));
@@ -95,7 +105,7 @@
             if (hasAnyCustomerWithMaxSameData)
             {
                 this.ModelState.AddModelError(string.Empty, CustomerConstants.ArgumentExceptionCustomerExist);
-                return this.View(this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress)));
+                return this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress));
             }
 
             var hasAnyCustomerWithMinSameData = await this.customersService.GetAllCustomersAsync<CustomerAddAddressViewModel>().Where(x => x.PhoneNumber == customerAddAddress.PhoneNumber).AnyAsync(x => !HasMinSameCustomerData(x, customerAddAddress.FirstName, customerAddAddress.LastName, customerAddAddress.PhoneNumber));
@@ -103,7 +113,7 @@
             if (hasAnyCustomerWithMinSameData)
             {
                 this.ModelState.AddModelError(string.Empty, string.Format(CustomerConstants.ArgumentExceptionCustomerPhone, customerAddAddress.PhoneNumber));
-                return this.View(this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress)));
+                return this.View(AutoMapper.Mapper.Map<CustomerAddAddressViewModel>(customerAddAddress));
             }
 
             var result = await this.customersService.AddAddressToCustomerAsync(customerAddAddress);
@@ -126,6 +136,11 @@
             if (!this.ModelState.IsValid)
             {
                 return this.View(this.View(AutoMapper.Mapper.Map<CustomerEditViewModel>(customerEdit)));
+            }
+
+            if (string.IsNullOrEmpty(customerEdit.DeliveryAddress))
+            {
+                customerEdit.DeliveryAddress = customerEdit.PickUpAddress;
             }
 
             var hasAnyCustomerWithSameData = await this.customersService

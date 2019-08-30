@@ -6,8 +6,9 @@
     using Carpet.Common.Constants;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
+    using Carpet.Web.ViewModels.Administration.Vehicles;
 
-    public class VehicleCreateInputModel : IMapTo<Vehicle>, IMapFrom<Vehicle>
+    public class VehicleCreateInputModel : IMapTo<Vehicle>, IMapFrom<Vehicle>, IMapTo<VehicleCreateViewModel>
     {
         [Required(ErrorMessage = VehicleConstants.ErrorFieldRequired)]
         [MinLength(VehicleConstants.MakeMinValue, ErrorMessage = VehicleConstants.ErrorFieldMakeLength)]

@@ -13,11 +13,11 @@
     {
         IQueryable<TViewModel> GetAllAsync<TViewModel>();
 
-        Task<VehicleCreateViewModel> CreateAsync(VehicleCreateInputModel vehicleFromView, ModelStateDictionary modelState);
+        Task<VehicleCreateViewModel> CreateAsync(VehicleCreateInputModel vehicleFromView);
 
         Task<TViewModel> GetByIdAsync<TViewModel>(int id);
 
-        Task<VehicleEditViewModel> EditByIdAsync(int id, VehicleEditInputModel vehicleFromView, ModelStateDictionary modelState);
+        Task<VehicleEditViewModel> EditByIdAsync(int id, VehicleEditInputModel vehicleFromView);
 
         Task<VehicleDeleteViewModel> DeleteByIdAsync(int id);
 

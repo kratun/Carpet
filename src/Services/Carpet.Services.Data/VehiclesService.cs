@@ -24,24 +24,8 @@
             this.vehicleRepository = vehicleRepository;
         }
 
-        public async Task<VehicleCreateViewModel> CreateAsync(VehicleCreateInputModel vehicleFromView, ModelStateDictionary modelState)
+        public async Task<VehicleCreateViewModel> CreateAsync(VehicleCreateInputModel vehicleFromView)
         {
-            if (!modelState.IsValid)
-            {
-                return vehicleFromView.To<Vehicle>().To<VehicleCreateViewModel>();
-            }
-
-            var checkForRegistrationNumber = await this.vehicleRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.RegistrationNumber == vehicleFromView.RegistrationNumber);
-
-            // If customer with phone number exists return existing view model
-            if (checkForRegistrationNumber != null)
-            {
-                modelState.AddModelError(nameof(vehicleFromView.RegistrationNumber), string.Format(VehicleConstants.ArgumentExceptionRegistrationNumber, vehicleFromView.RegistrationNumber));
-                return vehicleFromView.To<Vehicle>().To<VehicleCreateViewModel>();
-            }
-
             var vehicleToDb = vehicleFromView.To<Vehicle>();
 
             await this.vehicleRepository.AddAsync(vehicleToDb);
@@ -68,32 +52,15 @@
             return vehicle.To<VehicleDeleteViewModel>();
         }
 
-        public async Task<VehicleEditViewModel> EditByIdAsync(int id, VehicleEditInputModel vehicleFromView, ModelStateDictionary modelState)
+        public async Task<VehicleEditViewModel> EditByIdAsync(int id, VehicleEditInputModel vehicleFromView)
         {
-            if (!modelState.IsValid)
-            {
-                return vehicleFromView.To<Vehicle>().To<VehicleEditViewModel>();
-            }
-
             var vehicleDeleteAfterEdit = await this.vehicleRepository
                 .All()
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (vehicleDeleteAfterEdit == null)
             {
-                Exception innerException = new Exception(nameof(id));
-                throw new NullReferenceException(string.Format(CustomerConstants.NullReferenceCustomerId, id), innerException);
-            }
-
-            var checkForRegistrationNumber = await this.vehicleRepository
-                .All()
-                .FirstOrDefaultAsync(x => x.RegistrationNumber == vehicleFromView.RegistrationNumber);
-
-            // If vehicle with Registration Number exists and id's are different do not delete. Return existing view model
-            if (checkForRegistrationNumber != null && vehicleDeleteAfterEdit.Id != checkForRegistrationNumber.Id)
-            {
-                modelState.AddModelError(nameof(vehicleFromView.RegistrationNumber), string.Format(VehicleConstants.ArgumentExceptionRegistrationNumber, vehicleFromView.RegistrationNumber));
-                return vehicleFromView.To<Vehicle>().To<VehicleEditViewModel>();
+                throw new NullReferenceException(string.Format(VehicleConstants.NullReferenceId, id));
             }
 
             var newVehicle = vehicleFromView.To<Vehicle>();

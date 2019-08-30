@@ -9,9 +9,7 @@
     using Carpet.Data.Models;
     using Carpet.Services.Data.CustomerService;
     using Carpet.Web.InputModels.Administration.Customers;
-    using Carpet.Web.InputModels.Administration.Items;
     using Carpet.Web.ViewModels.Administration.Customers;
-    using Carpet.Web.ViewModels.Administration.Items;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Xunit;
