@@ -5,6 +5,7 @@
 
     using Carpet.Common.Constants;
     using Carpet.Services.Data;
+    using Carpet.Services.Data.EmployeeService;
     using Carpet.Web.InputModels.Administration.Customers;
     using Carpet.Web.InputModels.Administration.Employees.Delete;
     using Carpet.Web.InputModels.Administration.Employees.Edit;
@@ -79,6 +80,10 @@
             // TODO: Refactor this
             var employeeViewModel = await this.employeesService.GetNotHiredUserAsync(id);
 
+            var roles = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+
+            employeeViewModel.RoleList = roles;
+
             return this.View(employeeViewModel);
         }
 
@@ -88,7 +93,18 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Create(EmployeeCreateInputModel employeeCreate)
         {
-            var result = await this.employeesService.CreateAsync(employeeCreate, this.ModelState);
+            if (!this.ModelState.IsValid)
+            {
+                var errorModel = AutoMapper.Mapper.Map<EmployeeCreateViewModel>(employeeCreate);
+
+                var roles = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+
+                errorModel.RoleList = roles;
+
+                return this.View(errorModel);
+            }
+
+            var result = await this.employeesService.CreateAsync(employeeCreate);
 
             if (!this.ModelState.IsValid)
             {
@@ -120,12 +136,18 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Edit(string id, EmployeeEditInputModel employeeEdit)
         {
-            var result = await this.employeesService.EditByIdAsync(id, employeeEdit, this.ModelState);
-
             if (!this.ModelState.IsValid)
             {
-                return this.View(result);
+                var errorModel = AutoMapper.Mapper.Map<EmployeeEditViewModel>(employeeEdit);
+
+                var roles = await this.rolesService.GetAllWithoutAdministratorAsync().Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToListAsync();
+
+                errorModel.RoleList = roles;
+
+                return this.View(errorModel);
             }
+
+            var result = await this.employeesService.EditByIdAsync(id, employeeEdit);
 
             return this.RedirectToAction(nameof(this.Index));
         }

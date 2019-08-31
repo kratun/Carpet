@@ -26,7 +26,9 @@
         public const string ErrorFieldSalaryRange = "{0}та може да е между {1} лв. и {2} лв.";
 
         public const string NullReferenceId = "Не е намерен служител с Id: {0}.";
+        public const string NullReferenceUserId = "Не е намерен потребител с Id: {0}.";
         public const string ArgumentExceptionPhoneNumberExist = "Служител с телефон: {0} съществува.";
         public const string ArgumentExceptionPhoneNumberNotExist = "Потребител с този телефон: {0} не съществува.";
+        public const string ArgumentExceptionRoleNotExist = "Роля с име: {0} не съществува.";
     }
 }

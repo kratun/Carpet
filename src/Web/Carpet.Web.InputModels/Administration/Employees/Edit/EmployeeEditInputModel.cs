@@ -7,9 +7,10 @@
     using Carpet.Common.Constants;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
+    using Carpet.Web.ViewModels.Administration.Employees.Edit;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
-    public class EmployeeEditInputModel : IMapTo<Employee>, IMapFrom<Employee>
+    public class EmployeeEditInputModel : IMapTo<Employee>, IMapFrom<Employee>, IMapTo<EmployeeEditViewModel>
     {
         public string Id { get; set; }
 

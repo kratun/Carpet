@@ -6,8 +6,9 @@
     using Carpet.Common.Constants;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
+    using Carpet.Web.ViewModels.Administration.Customers;
 
-    public class EmployeeCreateInputModel : IMapTo<Employee>, IMapFrom<Employee>
+    public class EmployeeCreateInputModel : IMapTo<Employee>, IMapFrom<Employee>, IMapTo<EmployeeCreateViewModel>
     {
         public string Id { get; set; }
 

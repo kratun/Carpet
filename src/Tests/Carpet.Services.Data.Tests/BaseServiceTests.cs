@@ -9,7 +9,7 @@
     using Carpet.Data.Repositories;
     using Carpet.Services.Data;
     using Carpet.Services.Data.CustomerService;
-    using Carpet.Services.Data.EmployeesService;
+    using Carpet.Services.Data.EmployeeService;
     using Carpet.Services.Data.OrderItemsService;
     using Carpet.Services.Data.OrdersService;
     using Carpet.Services.Data.OrderStatusService;

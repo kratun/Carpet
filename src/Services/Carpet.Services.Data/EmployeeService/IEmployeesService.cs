@@ -1,4 +1,4 @@
-﻿namespace Carpet.Services.Data
+﻿namespace Carpet.Services.Data.EmployeeService
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -14,13 +14,13 @@
     {
         IQueryable<TViewModel> GetAllAsync<TViewModel>();
 
-        Task<EmployeeCreateViewModel> CreateAsync(EmployeeCreateInputModel employeeFromView, ModelStateDictionary modelState);
+        Task<EmployeeCreateViewModel> CreateAsync(EmployeeCreateInputModel employeeFromView);
 
         Task<TViewModel> GetByIdAsync<TViewModel>(string id);
 
         Task<EmployeeCreateViewModel> GetNotHiredUserAsync(string id);
 
-        Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView, ModelStateDictionary modelState);
+        Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView);
 
         Task<EmployeeDeleteViewModel> DeleteByIdAsync(string id);
 

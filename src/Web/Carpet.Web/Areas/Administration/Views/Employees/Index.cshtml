@@ -79,8 +79,16 @@
                        asp-route-id="@employee.Id">Add / Remove Vehicle</a>
                 </td>
                 <td class="text-center">
-                    @Html.ActionLink("Edit", "Edit", new { id = employee.Id }, new { @class = "btn btn-sm btn-outline-primary" })
-                    @Html.ActionLink("Delete", "Delete", new { id = employee.Id }, new { @class = "btn btn-sm btn-outline-danger" })
+                    @if (employee.RoleName != GlobalConstants.AdministratorRoleName)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = employee.Id }, new { @class = "btn btn-sm btn-outline-primary" })
+                        <span> I </span>
+                        @Html.ActionLink("Delete", "Delete", new { id = employee.Id }, new { @class = "btn btn-sm btn-outline-danger" })
+                    }
+                    else
+                    {
+                        <span>No Actions</span>
+                    }
                 </td>
             </tr>
             }
