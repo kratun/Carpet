@@ -45,5 +45,7 @@
         Task<OrderAddItemsViewModel> AddItemAsync(OrderAddItemInputModel orderFromView, string username, ModelStateDictionary modelState);
 
         Task<bool> OrderGangeStatusAsync(string id, string username, string newStatus, ModelStateDictionary modelState);
+
+        Task<bool> OrderGangeStatusAndRemoveVehicleAsync(string id, string username, string newStatus, ModelStateDictionary modelState);
     }
 }

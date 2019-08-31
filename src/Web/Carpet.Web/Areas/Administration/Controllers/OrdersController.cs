@@ -14,6 +14,7 @@
     using Carpet.Web.InputModels.Administration.Orders.Create;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.RangeHours;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.Vehicle;
+    using Carpet.Web.InputModels.Administration.Orders.Delivery.Waiting.BackToArrangeDay;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Waiting.Confirmation;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddItems;
@@ -116,7 +117,7 @@
 
             order.VehicleList = await this.garageService.GetVehicleNames();
 
-            order.PickUpFor = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day + OrderConstants.AddIntOne);
+            order.PickUpFor = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day).AddDays((double)OrderConstants.AddIntOne);
 
             return this.View(order);
         }
@@ -343,7 +344,7 @@
 
             order.VehicleList = await this.garageService.GetVehicleNames();
 
-            order.DeliveringFor = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day + OrderConstants.AddIntOne);
+            order.DeliveringFor = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day).AddDays((double)OrderConstants.AddIntOne);
 
             return this.View(order);
         }
@@ -450,6 +451,22 @@
             }
 
             return this.RedirectToAction(nameof(this.DeliveryWaitingConfirmation));
+        }
+
+        [HttpPost]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingBackToArrangeDayName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryWaitingBackToArrangeDay)]
+        public async Task<IActionResult> DeliveryWaitingBackToArrangeDay(OrderDeliveryWaitingBackToArrangeDayInputModel orderFromView)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.OrderGangeStatusAndRemoveVehicleAsync(orderFromView.Id, userName, OrderConstants.StatusDeliveryArrangeDayWaiting, this.ModelState);
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(orderFromView.RouteString);
+            }
+
+            return this.RedirectToAction(orderFromView.RouteString);
         }
 
         // GET: Orders/Delivery/Waiting/Payment

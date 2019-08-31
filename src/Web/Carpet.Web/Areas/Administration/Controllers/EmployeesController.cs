@@ -166,6 +166,11 @@
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Delete(string id, EmployeeDeleteInputModel employeeDelete)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
             var employee = await this.employeesService.DeleteByIdAsync(employeeDelete.Id);
 
             return this.RedirectToAction(nameof(this.Index));

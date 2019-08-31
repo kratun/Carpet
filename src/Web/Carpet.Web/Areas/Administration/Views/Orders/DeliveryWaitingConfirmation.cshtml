@@ -72,9 +72,21 @@
                     @*@Html.ActionLink("Confirm", GlobalConstants.ActionPickUpDateConfirmedByCustomerName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })*@
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
-
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
+                    @{
+                        var parms = new Dictionary<string, string>
+                                {
+                            { "Id", item.Id },
+                            { "RouteString", GlobalConstants.RouteOrdersDeliveryWaitingConfirmation }
+                        };
+                    }
+                    <form asp-route="@GlobalConstants.RouteOrdersDeliveryWaitingBackToArrangeDay"
+                          asp-all-route-data="@parms">
+                        @*<input asp-for="@item.Id" class="form-control" hidden />
+                        <input asp-for="@item.RouteString" class="form-control" value="@GlobalConstants.RouteOrdersDeliveryWaitingRangeHours" hidden />*@
+                        <div class="form-group">
+                            <input type="submit" value="Back To Add Vehicle" class="btn btn-sm btn-outline-primary" style="font-size:14px;margin-right:5px;" />
+                        </div>
+                    </form>
                 </td>
             </tr>
         }

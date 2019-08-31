@@ -25,6 +25,8 @@
 
         public string CustomerId { get; set; }
 
+        public string RouteString { get; set; }
+
         public OrderCustomerDeliveryRangeHoursViewModel Customer { get; set; }
 
         [Display(Name = OrderConstants.DisplayNameIsExpress)]

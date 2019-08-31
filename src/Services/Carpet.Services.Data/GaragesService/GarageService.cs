@@ -22,13 +22,15 @@
         private readonly IVehiclesService vehiclesService;
         private readonly IEmployeesService employeesService;
         private readonly IDeletableEntityRepository<Employee> employeeRepository;
+        private readonly IDeletableEntityRepository<Order> orderRepository;
 
-        public GarageService(IDeletableEntityRepository<VehicleEmployee> garageRepository, IVehiclesService vehiclesService, IEmployeesService employeesService, IDeletableEntityRepository<Employee> employeeRepository)
+        public GarageService(IDeletableEntityRepository<VehicleEmployee> garageRepository, IVehiclesService vehiclesService, IEmployeesService employeesService, IDeletableEntityRepository<Employee> employeeRepository, IDeletableEntityRepository<Order> orderRepository)
         {
             this.garageRepository = garageRepository;
             this.vehiclesService = vehiclesService;
             this.employeesService = employeesService;
             this.employeeRepository = employeeRepository;
+            this.orderRepository = orderRepository;
         }
 
         public async Task<EmployeeAddViewModel> GetByIdAsync(string id, ModelStateDictionary modelState)
@@ -72,6 +74,25 @@
             }
 
             // TODO: CHECK ORDERS BY STATUS AND DO NOT REMOVE IF is in status StatusPickUpArrangeHourRangeWaiting, StatusPickUpArrangedDateWaiting, StatusPickUpArrangedDateCоnfirmed, StatusPickedUpConfirm, StatusDeliveryArrangeHourRangeWaiting, StatusDeliveryArrangedDateCоnfirmed, StatusDeliverConfirmed
+
+            var isInNotCorrectStatus = await this.orderRepository.AllAsNoTracking()
+                .Where(x => x.PickUpVehicles.Count < 2 || x.DeliveryVehicles.Count < 2)
+                .Where(x => x.Status.Name == OrderConstants.StatusPickUpArrangeHourRangeWaiting ||
+                x.Status.Name == OrderConstants.StatusPickUpArrangedDateWaiting ||
+                x.Status.Name == OrderConstants.StatusPickUpArrangedDateCоnfirmed ||
+                x.Status.Name == OrderConstants.StatusDeliveryArrangeHourRangeWaiting ||
+                x.Status.Name == OrderConstants.StatusDeliveryArrangedDateWaiting ||
+                x.Status.Name == OrderConstants.StatusDeliveryArrangedDateCоnfirmed)
+                .AnyAsync(x => x.PickUpVehicles.Any(z => z.VehicleEmployee.Id == vehicleEmployee.Id) ||
+                x.DeliveryVehicles.Any(z => z.VehicleEmployee.Id == vehicleEmployee.Id));
+
+            // TODO: Return false and in controller add error to modelState
+            if (isInNotCorrectStatus)
+            {
+                Exception innerException = new Exception(nameof(employeeFromView.RegistrationNumber));
+                throw new ArgumentException(string.Format(GarageConstants.ArgumentExceptionVehicleInIncorrectStatus, employeeFromView.RegistrationNumber), innerException);
+            }
+
             this.garageRepository.Delete(vehicleEmployee);
 
             await this.garageRepository.SaveChangesAsync();

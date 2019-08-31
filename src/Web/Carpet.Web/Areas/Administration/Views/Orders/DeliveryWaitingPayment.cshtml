@@ -9,7 +9,7 @@
 <h1 class="title text-center">СПИСЪК С ПОРЪЧКИ</h1>
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
-<h4 class="title text-center">Чакащи потвърждение за вземане от клиент @date</h4>
+<h4 class="title text-center">Чакащи потвърждение за връщане на клиент @date</h4>
 <hr />
 <table id="ordersAllCreated" class="display" style="width:100%">
     <thead style="font-size:14px">
@@ -76,19 +76,33 @@
 
                 </td>
                 <td>
-
-                    @*@Html.ActionLink("Send for Delivery", "DeliveryStart", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "font-size:14px;margin-right:5px;"  })*@
-                    <form asp-area="@GlobalConstants.AreaAdministrationName"
-                          asp-controller="@GlobalConstants.ContollerOrdersName"
-                          asp-action="@GlobalConstants.ActionDeliveryStartName">
-                        <input asp-for="@Id" class="form-control" hidden />
+                    @{
+                        var parms = new Dictionary<string, string>
+                                        {
+                            { "Id", item.Id },
+                            { "RouteString", GlobalConstants.RouteOrdersDeliveryWaitingPayment }
+                        };
+                    }
+                    <form asp-route="@GlobalConstants.RouteOrdersDeliveryWaitingBackToArrangeDay"
+                          asp-all-route-data="@parms">
+                        @*<input asp-for="@item.Id" class="form-control" hidden />
+            <input asp-for="@item.RouteString" class="form-control" value="@GlobalConstants.RouteOrdersDeliveryWaitingRangeHours" hidden />*@
                         <div class="form-group">
-                            <input type="submit" value="Send for Delivery" class="btn btn-sm btn-outline-primary" style="font-size:14px;margin-right:5px;" />
+                            <input type="submit" value="Back To Add Vehicle" class="btn btn-sm btn-outline-primary" style="font-size:14px;margin-right:5px;" />
                         </div>
                     </form>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "font-size:14px;" })
+                    @*@Html.ActionLink("Send for Delivery", "DeliveryStart", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "font-size:14px;margin-right:5px;"  })*@
+                    @*<form asp-area="@GlobalConstants.AreaAdministrationName"
+              asp-controller="@GlobalConstants.ContollerOrdersName"
+              asp-action="@GlobalConstants.ActionDeliveryStartName">
+            <input asp-for="@Id" class="form-control" hidden />
+            <div class="form-group">
+                <input type="submit" value="Send for Delivery" class="btn btn-sm btn-outline-primary" style="font-size:14px;margin-right:5px;" />
+            </div>
+        </form>
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "font-size:14px;" })
 
-                    @Html.ActionLink("Rerurn for Pickup", "RerurnForNewPickup", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin-top:1px;font-size:14px;" })
+        @Html.ActionLink("Rerurn for Pickup", "RerurnForNewPickup", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin-top:1px;font-size:14px;" })*@
 
                 </td>
             </tr>
