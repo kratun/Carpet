@@ -57,9 +57,21 @@
                     @Html.ActionLink("Set Hours Range", GlobalConstants.ActionPickUpRangeHoursName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
-
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
+                    @{
+                        var parms = new Dictionary<string, string>
+                                {
+                            { "Id", item.Id },
+                            { "RouteString", GlobalConstants.ActionAllWaitingPickUpHoursName}
+                        };
+                    }
+                    <form asp-area="@GlobalConstants.AreaAdministrationName"
+                          asp-controller="@GlobalConstants.ContollerOrdersName"
+                          asp-action="@GlobalConstants.ActionPickUpWaitingBackToArrangeDayName"
+                          asp-all-route-data="@parms">
+                        <div class="form-group">
+                            <input type="submit" value="Back To Add Vehicle" class="btn btn-sm btn-outline-primary" style="font-size:14px;margin-right:5px;" />
+                        </div>
+                    </form>
                 </td>
             </tr>
         }

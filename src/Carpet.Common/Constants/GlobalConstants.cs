@@ -27,6 +27,7 @@
         public const string ActionAllWaitngPickedUpName = "AllWaitngPickedUp";
         public const string ActionAddItemsName = "Add/Items"; // public const string ActionAddItemsName = "AddItems";
         public const string ActionPickUpConfirmedName = "PickUpConfirmed";
+        public const string ActionPickUpWaitingBackToArrangeDayName = "PickUpWaitingBackToArrangeDay";
         public const string ActionDeliveryStartName = "DeliveryStart";
         public const string ActionDeliveryWaitingVehicleName = "Delivery/Waiting/Vehicle";
         public const string ActionDeliveryAddVehicleName = "Delivery/Add/Vehicle";

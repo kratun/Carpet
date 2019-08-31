@@ -349,5 +349,41 @@
 
             return true;
         }
+
+        public async Task<bool> OrderGangeStatusAndRemovePickUpVehicleAsync(string id, string username, string newStatus, ModelStateDictionary modelState)
+        {
+            if (!modelState.IsValid)
+            {
+                return false;
+            }
+
+            var orderFromDb = await this.orderRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+
+            // If order with Id NOT exists
+            if (orderFromDb == null)
+            {
+                throw new ArgumentNullException(nameof(id), string.Format(OrderConstants.NullReferenceOrderIdNotFound, id));
+            }
+
+            orderFromDb.StatusId = await this.orderStatusService.GetIdByNameAsync(newStatus);
+
+            orderFromDb.CreatorId = await this.employeesService.GetIdByUserNameAsync(username);
+
+            foreach (var vehicle in orderFromDb.PickUpVehicles)
+            {
+                vehicle.DeletedOn = DateTime.UtcNow;
+                vehicle.IsDeleted = true;
+            }
+
+            orderFromDb.PickUpFor = null;
+            orderFromDb.PickUpForStartHour = null;
+            orderFromDb.PickUpForEndHour = null;
+
+            this.orderRepository.Update(orderFromDb);
+
+            await this.orderRepository.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

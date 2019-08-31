@@ -47,5 +47,7 @@
         Task<bool> OrderGangeStatusAsync(string id, string username, string newStatus, ModelStateDictionary modelState);
 
         Task<bool> OrderGangeStatusAndRemoveVehicleAsync(string id, string username, string newStatus, ModelStateDictionary modelState);
+
+        Task<bool> OrderGangeStatusAndRemovePickUpVehicleAsync(string id, string username, string newStatus, ModelStateDictionary modelState);
     }
 }

@@ -16,6 +16,7 @@
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.Vehicle;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Waiting.BackToArrangeDay;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Waiting.Confirmation;
+    using Carpet.Web.InputModels.Administration.Orders.PickUp.Waiting.BackToArrangeDay;
     using Carpet.Web.InputModels.Administration.Orders.PickUpRangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.AddItems;
     using Carpet.Web.ViewModels.Administration.Orders.AddVehicleToPickUp;
@@ -222,6 +223,21 @@
                 .ToListAsync();
 
             return this.View(orders);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PickUpWaitingBackToArrangeDay(OrderPickUpWaitingBackToArrangeDayInputModel orderFromView)
+        {
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.OrderGangeStatusAndRemovePickUpVehicleAsync(orderFromView.Id, userName, OrderConstants.StatusPickUpArrangeDayWaiting, this.ModelState);
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(orderFromView.RouteString);
+            }
+
+            return this.RedirectToAction(orderFromView.RouteString);
         }
 
         // Get : Orders/AddItems

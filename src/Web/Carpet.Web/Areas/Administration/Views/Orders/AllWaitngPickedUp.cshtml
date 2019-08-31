@@ -71,20 +71,21 @@
                 </td>
                 <td>
 
-                    @*@Html.ActionLink("Send for Delivery", "DeliveryStart", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "font-size:14px;margin-right:5px;"  })*@
-                    <form 
-                          asp-area="@GlobalConstants.AreaAdministrationName"
+                    @{
+                        var parms = new Dictionary<string, string>
+                                            {
+                            { "Id", item.Id },
+                            { "RouteString", GlobalConstants.ActionAllWaitngPickedUpName}
+                        };
+                    }
+                    <form asp-area="@GlobalConstants.AreaAdministrationName"
                           asp-controller="@GlobalConstants.ContollerOrdersName"
-                          asp-action="@GlobalConstants.ActionDeliveryStartName">
-                        <input asp-for="@Id" class="form-control" hidden />
+                          asp-action="@GlobalConstants.ActionPickUpWaitingBackToArrangeDayName"
+                          asp-all-route-data="@parms">
                         <div class="form-group">
-                            <input type="submit" value="Send for Delivery" class="btn btn-sm btn-outline-primary" style = "font-size:14px;margin-right:5px;"/>
+                            <input type="submit" value="Back To Add Vehicle" class="btn btn-sm btn-outline-primary" />
                         </div>
-                    </form>        
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "font-size:14px;" })
-
-                        @Html.ActionLink("Rerurn for Pickup", "RerurnForNewPickup", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin-top:1px;font-size:14px;" })
-                    
+                    </form>
                 </td>
             </tr>
         }
