@@ -14,6 +14,8 @@
     using Carpet.Web.InputModels.Administration.Orders.Create;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.RangeHours;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Add.Vehicle;
+    using Carpet.Web.InputModels.Administration.Orders.Delivery.Confirmed;
+    using Carpet.Web.InputModels.Administration.Orders.Delivery.Print;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Waiting.BackToArrangeDay;
     using Carpet.Web.InputModels.Administration.Orders.Delivery.Waiting.Confirmation;
     using Carpet.Web.InputModels.Administration.Orders.PickUp.Waiting.BackToArrangeDay;
@@ -28,6 +30,7 @@
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.RangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicles;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Confirmed.Index;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Print;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig.Confirmation;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig.Payment;
@@ -37,6 +40,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
+    using SelectPdf;
 
     public class OrdersController : AdministrationController
     {
@@ -53,18 +57,6 @@
             this.garageService = garageService;
             this.itemsService = itemsService;
             this.orderItemsService = orderItemsService;
-        }
-
-        // GET: Orders
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
-
-        // GET: Orders/Details/5
-        public async Task<IActionResult> Details(int id)
-        {
-            return View();
         }
 
         // GET: Orders/Create
@@ -455,6 +447,7 @@
         // GET: Orders/Delivery/Waiting/Confirmation
         [HttpPost]
         [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingConfirmationName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryWaitingConfirmation)]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeliveryWaitingConfirmation(OrderDeliveryWaitingConfirmationInputModel orderFromView)
         {
             var userName = this.User.Identity.Name;
@@ -471,6 +464,7 @@
 
         [HttpPost]
         [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryWaitingBackToArrangeDayName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryWaitingBackToArrangeDay)]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeliveryWaitingBackToArrangeDay(OrderDeliveryWaitingBackToArrangeDayInputModel orderFromView)
         {
             var userName = this.User.Identity.Name;
@@ -518,27 +512,66 @@
             return this.View(order);
         }
 
-        // GET: Orders/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        [HttpPost]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryConfirmedName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryConfirmed)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeliveryConfirmed(OrderDeliveryConfirmedByOperatorInputModel model)
         {
-            return View();
+            var userName = this.User.Identity.Name;
+
+            var result = await this.ordersService.OrderGangeStatusAsync(model.Id, userName, OrderConstants.StatusDeliverConfirmed, this.ModelState);
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            return this.RedirectToAction(nameof(this.DeliveryWaitingPayment));
         }
 
-        // POST: Orders/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, IFormCollection collection)
+        [HttpGet]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryGetPDFName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryGetPDF)]
+        public IActionResult DeliveryGetPDF(OrderDeliveryPrintUrlInputModel model)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            // instantiate a html to pdf converter object
+            HtmlToPdf converter = new HtmlToPdf();
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            // create a new pdf document converting an url
+            var urlAsString = "https://localhost:44319/Pdf/Print/" + model.Id;
+            PdfDocument doc = converter.ConvertUrl(urlAsString);
+
+            // save pdf document
+            byte[] pdf = doc.Save();
+
+            // close pdf document
+            doc.Close();
+
+            // return resulted pdf document
+            FileResult fileResult = new FileContentResult(pdf, "application/pdf");
+            if (string.IsNullOrEmpty(model.PhoneNumber))
             {
-                return View();
+                model.PhoneNumber = "Document_";
             }
+            else
+            {
+                model.PhoneNumber += "_";
+            }
+
+            fileResult.FileDownloadName = model.PhoneNumber + DateTime.UtcNow.ToString("dd.MM.yyyy") + ".pdf";
+            return fileResult;
+        }
+
+        // GET: Orders/Delete/5
+        public async Task<IActionResult> DeliveryPrint(string id)
+        {
+            var order = await this.ordersService.GetAllAsNoTrackingAsync<OrderDeliveryPrintViewModel>().FirstOrDefaultAsync(x => x.Id == id);
+
+            if (order == null)
+            {
+                order = new OrderDeliveryPrintViewModel();
+            }
+
+            return this.View(order);
         }
 
         private decimal GetTotalAmount(OrderOrderItemAddItemsViewModel orderItem)

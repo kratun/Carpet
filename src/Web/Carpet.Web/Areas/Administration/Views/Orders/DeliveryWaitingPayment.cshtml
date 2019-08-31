@@ -63,16 +63,19 @@
                     @Html.DisplayFor(modelItem => item.HoursRange)
                 </td>
                 <td>
+                    @{
+                        var parm = new Dictionary<string, string>
+                                                        {
+                            { "Id", item.Id },
+                            { "PhoneNumber", item.Customer.PhoneNumber }
+                        };
+                    }
                     @Html.ActionLink("Payment", GlobalConstants.RouteOrdersDeliveryConfirmed, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })
-                    @*<form asp-route="@GlobalConstants.RouteOrdersDeliveryConfirmed"
-                          asp-route-id="@item.Id">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input asp-for="@item.Id" class="form-control" hidden />
-                        <div class="form-group">
-                            <input type="submit" value="Confirm" class="btn btn-sm btn-outline-primary" style="margin:1px; width:100%;" />
-                        </div>
-                    </form>*@
-                    @*@Html.ActionLink("Add Items", GlobalConstants.ActionAddItemsName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin-right:1px;" })*@
+                    @*@Html.ActionLink("Get Print", GlobalConstants.RouteOrdersDeliveryGetPDF, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })*@
+                    <a class="btn btn-sm btn-outline-warning"
+                       style="margin:1px; width:100%;"
+                       asp-route="@GlobalConstants.RouteOrdersDeliveryGetPDF"
+                       asp-all-route-data="@parm">Get Print</a>
 
                 </td>
                 <td>

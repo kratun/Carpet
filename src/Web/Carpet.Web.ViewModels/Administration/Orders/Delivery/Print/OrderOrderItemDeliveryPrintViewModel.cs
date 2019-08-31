@@ -1,6 +1,5 @@
-﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Confirmed.Index
+﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Print
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
 
     using AutoMapper;
@@ -8,7 +7,7 @@
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
 
-    public class OrderOrderItemDeliveryConfirmedIndexViewModel : IMapFrom<OrderItem>, IHaveCustomMappings
+    public class OrderOrderItemDeliveryPrintViewModel : IMapFrom<OrderItem>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -16,7 +15,7 @@
 
         public int ItemId { get; set; }
 
-        public OrderOrderItemItemDeliveryConfirmedIndexViewModel Item { get; set; }
+        public OrderOrderItemItemDeliveryPrintViewModel Item { get; set; }
 
         [Display(Name = OrderConstants.DisplayNameWidth)]
         public decimal ItemWidth { get; set; }
@@ -45,7 +44,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration
-                .CreateMap<Order, OrderOrderItemDeliveryConfirmedIndexViewModel>()
+                .CreateMap<Order, OrderOrderItemDeliveryPrintViewModel>()
                 .ForMember(
                     destination => destination.HasFlavor,
                     opts => opts.MapFrom(origin => origin.HasFlavor))

@@ -1,4 +1,4 @@
-﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Confirmed.Index
+﻿namespace Carpet.Web.ViewModels.Administration.Orders.Delivery.Print
 {
     using System;
     using System.Collections.Generic;
@@ -11,11 +11,11 @@
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
 
-    public class OrderDeliveryConfirmedIndexViewModel : IMapFrom<Order>, IHaveCustomMappings
+    public class OrderDeliveryPrintViewModel : IMapFrom<Order>, IHaveCustomMappings
     {
-        public OrderDeliveryConfirmedIndexViewModel()
+        public OrderDeliveryPrintViewModel()
         {
-            this.OrderItems = new HashSet<OrderOrderItemDeliveryConfirmedIndexViewModel>();
+            this.OrderItems = new HashSet<OrderOrderItemDeliveryPrintViewModel>();
         }
 
         [Display(Name = OrderConstants.DisplayNameId)]
@@ -32,7 +32,7 @@
 
         public string CustomerId { get; set; }
 
-        public OrderCustomerDeliveryConfirmedIndexViewModel Customer { get; set; }
+        public OrderCustomerDeliveryPrintViewModel Customer { get; set; }
 
         public string CreatorId { get; set; }
 
@@ -59,7 +59,7 @@
 
         public decimal TotalOrderAmount => this.OrderItems.Sum(oi => oi.TotalPrice);
 
-        public ICollection<OrderOrderItemDeliveryConfirmedIndexViewModel> OrderItems { get; set; }
+        public ICollection<OrderOrderItemDeliveryPrintViewModel> OrderItems { get; set; }
 
         public override string ToString()
         {
@@ -74,7 +74,7 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration
-                .CreateMap<Order, OrderDeliveryConfirmedIndexViewModel>()
+                .CreateMap<Order, OrderDeliveryPrintViewModel>()
                 .ForMember(
                     destination => destination.OrderInfo,
                     opts => opts.MapFrom(origin => origin.ToString()))

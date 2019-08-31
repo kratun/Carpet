@@ -38,6 +38,7 @@
         public const string ActionDeliveryConfirmedName = "Delivery/Confirmed";
         public const string ActionDeliveryConfirmedPaymentName = "Delivery/Confirmed/Payment";
         public const string ActionDeliveryWaitingBackToArrangeDayName = "Delivery/Waiting/BackToArrangeDay";
+        public const string ActionDeliveryGetPDFName = "Delivery/GetPDF";
 
         // Controller constant name
         public const string ContollerHomeName = "Home";
@@ -62,6 +63,7 @@
         public const string RouteOrdersDeliveryConfirmed = "DeliveryConfirmed";
         public const string RouteOrdersDeliveryConfirmedPayment = "DeliveryConfirmedPayment";
         public const string RouteOrdersDeliveryWaitingBackToArrangeDay = "DeliveryWaitingBackToArrangeDay";
+        public const string RouteOrdersDeliveryGetPDF = "DeliveryGetPDF";
 
         public const string YesString = "Да";
         public const string NoString = "Не";
