@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Carpet.Web.ViewModels.Administration.Orders.Delivery.Completed.OrderDeliveryCompletedViewModel>
+
+@{
+    ViewData["Title"] = "DeliveryWaitingPayment";
+    var count = 1;
+    var date = DateTime.UtcNow.ToString("dd.MM.yyyy") + " г.";
+}
+
+    <h1 class="title text-center">Приключени поръчки към @date</h1>
+<p class="intro text-center" style="margin-top: 10px;"></p>
+
+<hr />
+<table id="ordersAllCreated" class="display" style="width:100%">
+    <thead style="font-size:14px">
+        <tr class="text-center">
+            <th>#</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.DeliveryAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsExpress)
+            </th>
+            <th>@Html.DisplayNameFor(model => model.TotalItemQuantity)</th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalOrderAmount)
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var Id = item.Id;
+
+            <tr style="font-size:12px">
+                <td>@(count++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.DeliveryAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsExpress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalItemQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalArea)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalOrderAmount)
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>

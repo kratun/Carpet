@@ -29,6 +29,7 @@
     using Carpet.Web.ViewModels.Administration.Orders.Create;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.RangeHours;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Add.Vehicles;
+    using Carpet.Web.ViewModels.Administration.Orders.Delivery.Completed;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Confirmed.Index;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Print;
     using Carpet.Web.ViewModels.Administration.Orders.Delivery.Waitnig;
@@ -579,6 +580,18 @@
             }
 
             return this.View(order);
+        }
+
+        [HttpGet]
+        [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryCompletedName, Name = GlobalConstants.RouteOrdersDeliveryCompleted)]
+        public async Task<IActionResult> DeliveryCompleted()
+        {
+            var orders = await this.ordersService.GetAllAsNoTrackingAsync<OrderDeliveryCompletedViewModel>()
+                .Where(x => x.StatusName == OrderConstants.StatusDeliverConfirmed)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToListAsync();
+
+            return this.View(orders);
         }
 
         private decimal GetTotalAmount(OrderOrderItemAddItemsViewModel orderItem)

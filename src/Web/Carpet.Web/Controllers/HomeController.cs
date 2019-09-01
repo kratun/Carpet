@@ -9,7 +9,17 @@
             return this.View();
         }
 
+        public IActionResult Contacts()
+        {
+            return this.View();
+        }
+
         public IActionResult Privacy()
+        {
+            return this.View();
+        }
+
+        public IActionResult Terms()
         {
             return this.View();
         }

@@ -109,9 +109,13 @@
 
             string pictureFileName = employeeCreate.PhoneNumber + "_" + DateTime.UtcNow.ToString("dd.MM.yyyy");
 
-            string pictureUrl = await this.cloudinaryService.UploadPictureAsync(
-                employeeCreate.PictureLink,
-                pictureFileName);
+            string pictureUrl = null;
+            if (employeeCreate.PictureLink != null)
+            {
+                pictureUrl = await this.cloudinaryService.UploadPictureAsync(
+                    employeeCreate.PictureLink,
+                    pictureFileName);
+            }
 
             var result = await this.employeesService.CreateAsync(employeeCreate, pictureUrl);
 
@@ -152,9 +156,14 @@
             }
 
             string pictureFileName = employeeEdit.PhoneNumber + "_" + DateTime.UtcNow.ToString("dd.MM.yyyy");
-            string pictureUrl = await this.cloudinaryService.UploadPictureAsync(
-                employeeEdit.PictureLink,
-                pictureFileName);
+            string pictureUrl = null;
+
+            if (employeeEdit.PictureLink != null)
+            {
+                pictureUrl = await this.cloudinaryService.UploadPictureAsync(
+                    employeeEdit.PictureLink,
+                    pictureFileName);
+            }
 
             var result = await this.employeesService.EditByIdAsync(id, employeeEdit, pictureUrl);
 
