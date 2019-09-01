@@ -5,7 +5,7 @@
     var count = 1;
 }
 
-<<h1 class="title text-center">СПИСЪК С ПОРЪЧКИ</h1>
+<h1 class="title text-center">СПИСЪК С ПОРЪЧКИ</h1>
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
 <h4 class="title text-center">Чакащи организиране на ден за Връщане</h4>
@@ -69,10 +69,10 @@
                     <a
                     asp-route="@GlobalConstants.RouteOrdersAddItems"
                     asp-route-id="@item.Id"
-                    class = "btn btn-sm btn-outline-primary", style = "margin:1px; width:45%;">Add Item</a>
+                    class = "btn btn-sm btn-outline-primary", style = "margin:1px; width:100%;">Add Item</a>
                     @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })*@
 
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
+                    @*@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })*@
                 </td>
             </tr>
         }

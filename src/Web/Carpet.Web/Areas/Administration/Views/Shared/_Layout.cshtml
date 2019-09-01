@@ -154,7 +154,7 @@
             function (settings, data, dataIndex) {
                 var min = new Date($('#min').val());
                 var max = new Date($('#max').val());
-                var date = new Date(data[5]) || 0; // use data for the date column
+                var date = new Date(data[1]) || 0; // use data for the date column
 
                 if ((isNaN(min) && isNaN(max)) ||
                     (isNaN(min) && date <= max) ||

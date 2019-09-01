@@ -31,7 +31,7 @@
                 @Html.DisplayNameFor(model => model.CreatedOn)
             </th>
             <th></th>
-            <th></th>
+            @*<th></th>*@
         </tr>
     </thead>
     <tbody>
@@ -57,11 +57,11 @@
             <td>
                 @Html.ActionLink("Add Vihicle", GlobalConstants.ActionAddVehicleForPickUpName, new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:100%;" })
             </td>
-            <td>
+            @*<td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-primary", @style = "margin:1px; width:45%;" })
                 
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-outline-danger", @style = "margin:1px; width:45%;" })
-            </td>
+            </td>*@
         </tr>
         }
     </tbody>

@@ -6,14 +6,38 @@
     var date = DateTime.UtcNow.ToString("dd.MM.yyyy") + " г.";
 }
 
-    <h1 class="title text-center">Приключени поръчки към @date</h1>
+<h1 class="title text-center">Приключени поръчки към @date</h1>
 <p class="intro text-center" style="margin-top: 10px;"></p>
 
 <hr />
-<table id="ordersAllCreated" class="display" style="width:100%">
+
+<div class="row">
+
+    <table border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td>Начална дата:</td>
+                <td style="padding:5px"><input type="text" id="min" name="min"></td>
+            </tr>
+            <tr>
+                <td>Крайна дата:</td>
+                <td style="padding:5px"><input type="text" id="max" name="max"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="row">
+    <hr style="color:black; width:300px;height:1px; margin-bottom:10px" />
+</div>
+
+<table id="example" class="display" style="width:100%">
     <thead style="font-size:14px">
         <tr class="text-center">
             <th>#</th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Customer.PhoneNumber)
             </th>
@@ -33,7 +57,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.TotalOrderAmount)
             </th>
-            
+
         </tr>
     </thead>
     <tbody>
@@ -43,6 +67,9 @@
 
             <tr style="font-size:12px">
                 <td>@(count++)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedOn)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Customer.PhoneNumber)
                 </td>
@@ -64,7 +91,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.TotalOrderAmount)
                 </td>
-                
+
             </tr>
         }
     </tbody>
