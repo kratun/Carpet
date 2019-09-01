@@ -25,6 +25,7 @@
             await dbContext.OrderStatuses.AddAsync(new OrderStatus { Name = OrderConstants.StatusWashed });
             await dbContext.OrderStatuses.AddAsync(new OrderStatus { Name = OrderConstants.StatusDeliveryArrangeDayWaiting });
             await dbContext.OrderStatuses.AddAsync(new OrderStatus { Name = OrderConstants.StatusDeliveryArrangeHourRangeWaiting });
+            await dbContext.OrderStatuses.AddAsync(new OrderStatus { Name = OrderConstants.StatusDeliveryArrangedDateWaiting });
             await dbContext.OrderStatuses.AddAsync(new OrderStatus { Name = OrderConstants.StatusDeliveryArrangedDateCоnfirmed });
             await dbContext.OrderStatuses.AddAsync(new OrderStatus { Name = OrderConstants.StatusDeliverConfirmed });
             await dbContext.OrderStatuses.AddAsync(new OrderStatus { Name = OrderConstants.StatusPaymentConfirmed });
