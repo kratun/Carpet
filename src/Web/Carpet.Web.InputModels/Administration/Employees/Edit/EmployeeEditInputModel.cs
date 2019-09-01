@@ -8,6 +8,7 @@
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
     using Carpet.Web.ViewModels.Administration.Employees.Edit;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     public class EmployeeEditInputModel : IMapTo<Employee>, IMapFrom<Employee>, IMapTo<EmployeeEditViewModel>
@@ -38,6 +39,9 @@
         [Range(typeof(decimal), EmployeeConstants.SalaryMinValue, EmployeeConstants.SalaryMaxValue, ErrorMessage = EmployeeConstants.ErrorFieldSalaryRange)]
         [Display(Name = EmployeeConstants.DisplayNameSalary)]
         public decimal Salary { get; set; }
+
+        [Display(Name = EmployeeConstants.DisplayNamePicture)]
+        public IFormFile PictureLink { get; set; }
 
         [Required(ErrorMessage = EmployeeConstants.ErrorFieldRequired)]
         [Display(Name = EmployeeConstants.DisplayNameEmployeeRoleName)]

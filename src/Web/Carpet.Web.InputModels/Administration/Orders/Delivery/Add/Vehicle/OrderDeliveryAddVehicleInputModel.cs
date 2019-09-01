@@ -22,6 +22,5 @@
         [DateAfter("PickUpOn")]
         [Display(Name = OrderConstants.DisplayNameDeliveryDate)]
         public DateTime DeliveringFor { get; set; }
-
     }
 }

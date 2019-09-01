@@ -8,6 +8,7 @@
     using Carpet.Common.Constants;
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     public class EmployeeEditViewModel : IMapTo<Employee>, IMapFrom<Employee>, IMapTo<CarpetUser>, IMapFrom<CarpetUser>, IHaveCustomMappings
@@ -30,6 +31,9 @@
 
         [Display(Name = EmployeeConstants.DisplayNameSalary)]
         public decimal Salary { get; set; }
+
+        [Display(Name = EmployeeConstants.DisplayNamePicture)]
+        public IFormFile PictureLink { get; set; }
 
         public string UserId { get; set; }
 

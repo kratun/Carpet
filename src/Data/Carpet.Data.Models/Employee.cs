@@ -39,6 +39,8 @@
         [Display(Name = EmployeeConstants.DisplayNameSalary)]
         public decimal Salary { get; set; }
 
+        public string Picture { get; set; }
+
         public string RoleName { get; set; }
 
         public string UserId { get; set; }

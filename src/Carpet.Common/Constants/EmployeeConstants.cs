@@ -17,6 +17,7 @@
         public const string DisplayNameCreatedOn = "Създаден на";
         public const string DisplayNameEmployeeRoleName = "Роля";
         public const string DisplayNameEmployeeEmail = "Имейл";
+        public const string DisplayNamePicture = "Снимка";
 
         public const string ErrorFieldRequired = "Полето {0} е задължително!";
         public const string ErrorFieldFirstNameRegex = "{0}то трябва да е изписано на кирилица във формат \"Мария\" или \"Анна-Мария\", или \"Анна Мария\" без допълнителни интервали.";

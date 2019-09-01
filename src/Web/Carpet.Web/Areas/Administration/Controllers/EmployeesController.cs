@@ -1,5 +1,6 @@
 ﻿namespace Carpet.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -22,12 +23,14 @@
         private readonly IEmployeesService employeesService;
         private readonly IRolesService rolesService;
         private readonly ICarpetUsersService usersService;
+        private readonly ICloudinaryService cloudinaryService;
 
-        public EmployeesController(IEmployeesService employeesService, IRolesService rolesService, ICarpetUsersService usersService)
+        public EmployeesController(IEmployeesService employeesService, IRolesService rolesService, ICarpetUsersService usersService, ICloudinaryService cloudinaryService)
         {
             this.employeesService = employeesService;
             this.rolesService = rolesService;
             this.usersService = usersService;
+            this.cloudinaryService = cloudinaryService;
         }
 
         // GET: Employees
@@ -104,12 +107,13 @@
                 return this.View(errorModel);
             }
 
-            var result = await this.employeesService.CreateAsync(employeeCreate);
+            string pictureFileName = employeeCreate.PhoneNumber + "_" + DateTime.UtcNow.ToString("dd.MM.yyyy");
 
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(result);
-            }
+            string pictureUrl = await this.cloudinaryService.UploadPictureAsync(
+                employeeCreate.PictureLink,
+                pictureFileName);
+
+            var result = await this.employeesService.CreateAsync(employeeCreate, pictureUrl);
 
             return this.RedirectToAction(nameof(this.Index));
         }
@@ -147,7 +151,12 @@
                 return this.View(errorModel);
             }
 
-            var result = await this.employeesService.EditByIdAsync(id, employeeEdit);
+            string pictureFileName = employeeEdit.PhoneNumber + "_" + DateTime.UtcNow.ToString("dd.MM.yyyy");
+            string pictureUrl = await this.cloudinaryService.UploadPictureAsync(
+                employeeEdit.PictureLink,
+                pictureFileName);
+
+            var result = await this.employeesService.EditByIdAsync(id, employeeEdit, pictureUrl);
 
             return this.RedirectToAction(nameof(this.Index));
         }

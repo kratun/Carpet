@@ -14,13 +14,13 @@
     {
         IQueryable<TViewModel> GetAllAsync<TViewModel>();
 
-        Task<EmployeeCreateViewModel> CreateAsync(EmployeeCreateInputModel employeeFromView);
+        Task<EmployeeCreateViewModel> CreateAsync(EmployeeCreateInputModel employeeFromView, string pictureUrl);
 
         Task<TViewModel> GetByIdAsync<TViewModel>(string id);
 
         Task<EmployeeCreateViewModel> GetNotHiredUserAsync(string id);
 
-        Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView);
+        Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView, string pictureUrl);
 
         Task<EmployeeDeleteViewModel> DeleteByIdAsync(string id);
 

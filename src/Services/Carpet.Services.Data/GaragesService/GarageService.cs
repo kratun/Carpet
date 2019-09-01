@@ -74,7 +74,6 @@
             }
 
             // TODO: CHECK ORDERS BY STATUS AND DO NOT REMOVE IF is in status StatusPickUpArrangeHourRangeWaiting, StatusPickUpArrangedDateWaiting, StatusPickUpArrangedDateCоnfirmed, StatusPickedUpConfirm, StatusDeliveryArrangeHourRangeWaiting, StatusDeliveryArrangedDateCоnfirmed, StatusDeliverConfirmed
-
             var isInNotCorrectStatus = await this.orderRepository.AllAsNoTracking()
                 .Where(x => x.PickUpVehicles.Count < 2 || x.DeliveryVehicles.Count < 2)
                 .Where(x => x.Status.Name == OrderConstants.StatusPickUpArrangeHourRangeWaiting ||

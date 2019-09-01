@@ -8,6 +8,5 @@
         public int VehicleId { get; set; }
 
         public VehicleDeliveryAddRangeHoursViewModel Vehicle { get; set; }
-
     }
 }

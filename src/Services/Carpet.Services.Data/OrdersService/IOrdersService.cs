@@ -23,7 +23,6 @@
 
         IQueryable<TViewModel> GetAllAsNoTrackingAsync<TViewModel>();
 
-
         IQueryable<TViewModel> GetAllAsNoTrackingWithDeteletedAsync<TViewModel>();
 
         Task<TViewModel> GetByIdAsync<TViewModel>(string id);

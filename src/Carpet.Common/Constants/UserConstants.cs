@@ -28,9 +28,5 @@
         public const string ErrorFieldLastNameLength = "{0}та трябва да е изписана на кирилица и да е минимум {1} букви.";
         public const string ErrorFieldPasswordMismatch = "Паролата не съвпада.";
         public const string ErrorFieldPasswordLength = "{0}та трабва е поне {2} имаксимум {1} символа.";
-
-        //public const string NullReferenceId = "Не е намерен служител с Id: {0}.";
-        //public const string ArgumentExceptionPhoneNumberExist = "Служител с телефон: {0} съществува.";
-        //public const string ArgumentExceptionPhoneNumberNotExist = "Потребител с този телефон: {0} не съществува.";
     }
 }

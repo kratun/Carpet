@@ -29,7 +29,7 @@
             var services = this.SetServices();
 
             this.ServiceProvider = services.BuildServiceProvider();
-            this.DbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            this.DbContext = this.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         }
 
         protected IServiceProvider ServiceProvider { get; set; }

@@ -49,14 +49,16 @@
         private readonly IGarageService garageService;
         private readonly IItemsService itemsService;
         private readonly IOrderItemsService orderItemsService;
+        private readonly ICloudinaryService cloudinaryService;
 
-        public OrdersController(IOrdersService ordersService, ICustomersService customersService, IGarageService garageService, IItemsService itemsService, IOrderItemsService orderItemsService)
+        public OrdersController(IOrdersService ordersService, ICustomersService customersService, IGarageService garageService, IItemsService itemsService, IOrderItemsService orderItemsService, ICloudinaryService cloudinaryService)
         {
             this.ordersService = ordersService;
             this.customersService = customersService;
             this.garageService = garageService;
             this.itemsService = itemsService;
             this.orderItemsService = orderItemsService;
+            this.cloudinaryService = cloudinaryService;
         }
 
         // GET: Orders/Create
@@ -533,6 +535,17 @@
         [Route(GlobalConstants.AreaAdministrationName + "/" + GlobalConstants.ContollerOrdersName + "/" + GlobalConstants.ActionDeliveryGetPDFName + "/{id?}", Name = GlobalConstants.RouteOrdersDeliveryGetPDF)]
         public IActionResult DeliveryGetPDF(OrderDeliveryPrintUrlInputModel model)
         {
+            if (string.IsNullOrEmpty(model.PhoneNumber))
+            {
+                model.PhoneNumber = "Document_";
+            }
+            else
+            {
+                model.PhoneNumber += "_";
+            }
+
+            var fileName = model.PhoneNumber + DateTime.UtcNow.ToString("dd.MM.yyyy") + ".pdf";
+
             // instantiate a html to pdf converter object
             HtmlToPdf converter = new HtmlToPdf();
 
@@ -546,18 +559,12 @@
             // close pdf document
             doc.Close();
 
+            this.cloudinaryService.UploadPdfBytesAsync(pdf, fileName);
+
             // return resulted pdf document
             FileResult fileResult = new FileContentResult(pdf, "application/pdf");
-            if (string.IsNullOrEmpty(model.PhoneNumber))
-            {
-                model.PhoneNumber = "Document_";
-            }
-            else
-            {
-                model.PhoneNumber += "_";
-            }
 
-            fileResult.FileDownloadName = model.PhoneNumber + DateTime.UtcNow.ToString("dd.MM.yyyy") + ".pdf";
+            fileResult.FileDownloadName = fileName;
             return fileResult;
         }
 

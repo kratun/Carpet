@@ -229,7 +229,6 @@
 
             var deleteItem = await this.ItemsServiceMock.DeleteByIdAsync(id);
 
-
             var result = await this.ItemsServiceMock.GetByIdWithDeletedAsync<ItemDetailsViewModel>(item.Id);
 
             Assert.Equal(deleteItem.Id, result.Id);

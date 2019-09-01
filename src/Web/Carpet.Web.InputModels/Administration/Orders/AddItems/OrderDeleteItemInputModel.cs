@@ -1,8 +1,9 @@
-﻿using Carpet.Common.Constants;
-using System.ComponentModel.DataAnnotations;
-
-namespace Carpet.Web.InputModels.Administration.Orders.AddItems
+﻿namespace Carpet.Web.InputModels.Administration.Orders.AddItems
 {
+    using System.ComponentModel.DataAnnotations;
+
+    using Carpet.Common.Constants;
+
     public class OrderDeleteItemInputModel
     {
         [Required(ErrorMessage = OrderConstants.ErrorFieldRequired)]

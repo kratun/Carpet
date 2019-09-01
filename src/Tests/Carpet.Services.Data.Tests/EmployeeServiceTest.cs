@@ -66,9 +66,9 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var employeeFromDbFirst = await service.CreateAsync(employee);
+            var employeeFromDbFirst = await service.CreateAsync(employee, string.Empty);
             await service.DeleteByIdAsync(employeeFromDbFirst.Id);
-            var employeeFromDb = await service.CreateAsync(employee);
+            var employeeFromDb = await service.CreateAsync(employee, string.Empty);
             Assert.NotEqual(employeeFromDb.Id, employeeFromDbFirst.Id);
             Assert.Equal(employeeFromDb.PhoneNumber, employeeFromDbFirst.PhoneNumber);
             Assert.Equal(employeeFromDb.PhoneNumber, employeeFromDbFirst.PhoneNumber);
@@ -117,9 +117,9 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var resultPhoneNumber = await service.CreateAsync(employee);
+            var resultPhoneNumber = await service.CreateAsync(employee, string.Empty);
 
-            var exceptionPhoneNumber = await Assert.ThrowsAsync<ArgumentException>(() => service.CreateAsync(employee));
+            var exceptionPhoneNumber = await Assert.ThrowsAsync<ArgumentException>(() => service.CreateAsync(employee, string.Empty));
 
             Assert.Equal(string.Format(string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberExist, resultPhoneNumber.PhoneNumber)), exceptionPhoneNumber.Message);
         }
@@ -166,7 +166,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var exceptionUserId = await Assert.ThrowsAsync<NullReferenceException>(() => service.CreateAsync(employee));
+            var exceptionUserId = await Assert.ThrowsAsync<NullReferenceException>(() => service.CreateAsync(employee, string.Empty));
 
             Assert.Equal(string.Format(EmployeeConstants.NullReferenceUserId, employee.Id), exceptionUserId.Message);
         }
@@ -213,7 +213,7 @@
                 RoleName = "Wrong",
             };
 
-            var exceptionRole = await Assert.ThrowsAsync<ArgumentNullException>(() => service.CreateAsync(employeeWrongRole));
+            var exceptionRole = await Assert.ThrowsAsync<ArgumentNullException>(() => service.CreateAsync(employeeWrongRole, string.Empty));
 
             Assert.Equal(string.Format(EmployeeConstants.ArgumentExceptionRoleNotExist, employeeWrongRole.RoleName), exceptionRole.Message);
         }
@@ -270,9 +270,9 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var result = await service.CreateAsync(employee);
+            var result = await service.CreateAsync(employee, string.Empty);
 
-            var exception = await Assert.ThrowsAsync<NullReferenceException>(() => service.EditByIdAsync(wrongId, employeeEdit));
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(() => service.EditByIdAsync(wrongId, employeeEdit, string.Empty));
 
             Assert.Equal(string.Format(string.Format(EmployeeConstants.NullReferenceId, wrongId)), exception.Message);
         }
@@ -319,7 +319,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var result = await service.CreateAsync(employee);
+            var result = await service.CreateAsync(employee, string.Empty);
 
             var employeeEdit = new EmployeeEditInputModel
             {
@@ -331,7 +331,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => service.EditByIdAsync(result.Id, employeeEdit));
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => service.EditByIdAsync(result.Id, employeeEdit, string.Empty));
 
             Assert.Equal(string.Format(EmployeeConstants.ArgumentExceptionPhoneNumberNotExist, employeeEdit.PhoneNumber), exception.Message);
         }
@@ -378,7 +378,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var result = await service.CreateAsync(employee);
+            var result = await service.CreateAsync(employee, string.Empty);
 
             var employeeEdit = new EmployeeEditInputModel
             {
@@ -390,7 +390,7 @@
                 RoleName = "Wrong",
             };
 
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => service.EditByIdAsync(result.Id, employeeEdit));
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => service.EditByIdAsync(result.Id, employeeEdit, string.Empty));
 
             Assert.Equal(string.Format(EmployeeConstants.ArgumentExceptionRoleNotExist, employeeEdit.RoleName), exception.Message);
         }
@@ -437,7 +437,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var result = await service.CreateAsync(employee);
+            var result = await service.CreateAsync(employee, string.Empty);
 
             var employeeEdit = new EmployeeEditInputModel
             {
@@ -449,7 +449,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var actual = await service.EditByIdAsync(result.Id, employeeEdit);
+            var actual = await service.EditByIdAsync(result.Id, employeeEdit, string.Empty);
 
             Assert.Equal(actual.FirstName, employeeEdit.FirstName);
         }
@@ -501,7 +501,7 @@
                 Id = wrongId,
             };
 
-            var result = await service.CreateAsync(employee);
+            var result = await service.CreateAsync(employee, string.Empty);
 
             var exception = await Assert.ThrowsAsync<NullReferenceException>(() => service.DeleteByIdAsync(employeeDelete.Id));
 
@@ -550,7 +550,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var result = await service.CreateAsync(employee);
+            var result = await service.CreateAsync(employee, string.Empty);
 
             var actual = await service.DeleteByIdAsync(result.Id);
 
@@ -600,7 +600,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var result = await service.CreateAsync(employee);
+            var result = await service.CreateAsync(employee, string.Empty);
 
             var actual = await service.GetByIdAsync<EmployeeIndexViewModel>(result.Id);
 
@@ -650,7 +650,7 @@
                 RoleName = GlobalConstants.OperatorRoleName,
             };
 
-            var result = await service.CreateAsync(employee);
+            var result = await service.CreateAsync(employee, string.Empty);
 
             var username = await dbContext.Employees.FirstOrDefaultAsync(x => x.Id == result.Id);
 

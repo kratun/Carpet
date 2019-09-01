@@ -7,6 +7,7 @@
     using Carpet.Data.Models;
     using Carpet.Services.Mapping;
     using Carpet.Web.ViewModels.Administration.Customers;
+    using Microsoft.AspNetCore.Http;
 
     public class EmployeeCreateInputModel : IMapTo<Employee>, IMapFrom<Employee>, IMapTo<EmployeeCreateViewModel>
     {
@@ -40,5 +41,8 @@
         [Required(ErrorMessage = EmployeeConstants.ErrorFieldRequired)]
         [Display(Name = EmployeeConstants.DisplayNameEmployeeRoleName)]
         public string RoleName { get; set; }
+
+        [Display(Name = EmployeeConstants.DisplayNamePicture)]
+        public IFormFile PictureLink { get; set; }
     }
 }

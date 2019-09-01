@@ -31,7 +31,7 @@
             this.context = context;
         }
 
-        public async Task<EmployeeCreateViewModel> CreateAsync(EmployeeCreateInputModel employeeFromView)
+        public async Task<EmployeeCreateViewModel> CreateAsync(EmployeeCreateInputModel employeeFromView, string pictureUrl)
         {
             var checkForId = await this.employeeRepository.All().FirstOrDefaultAsync(x => x.PhoneNumber == employeeFromView.PhoneNumber);
 
@@ -60,6 +60,7 @@
             var employeeToDb = employeeFromView.To<Employee>();
             employeeToDb.Id = Guid.NewGuid().ToString();
             employeeToDb.User = user;
+            employeeToDb.Picture = pictureUrl;
 
             await this.employeeRepository.AddAsync(employeeToDb);
 
@@ -92,7 +93,7 @@
             return employee.To<EmployeeDeleteViewModel>();
         }
 
-        public async Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView)
+        public async Task<EmployeeEditViewModel> EditByIdAsync(string id, EmployeeEditInputModel employeeFromView, string pictureUrl)
         {
             var employeeFromDb = await this.employeeRepository.All().FirstOrDefaultAsync(x => x.Id == employeeFromView.Id);
 
@@ -127,6 +128,7 @@
             employeeFromDb.PhoneNumber = employeeFromView.PhoneNumber;
             employeeFromDb.RoleName = employeeFromView.RoleName;
             employeeFromDb.Salary = employeeFromView.Salary;
+            employeeFromDb.Picture = pictureUrl;
 
             this.employeeRepository.Update(employeeFromDb);
 

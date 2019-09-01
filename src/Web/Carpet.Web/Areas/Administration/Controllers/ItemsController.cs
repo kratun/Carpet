@@ -93,7 +93,6 @@
 
             var result = await this.itemsService.EditByIdAsync(id, itemEdit);
 
-
             return this.RedirectToAction(nameof(this.Index));
         }
 

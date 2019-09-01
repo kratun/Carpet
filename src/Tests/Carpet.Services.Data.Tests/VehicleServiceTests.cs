@@ -4,15 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Carpet.Common.Constants;
     using Carpet.Data.Models;
     using Carpet.Web.InputModels.Administration.Vehicles;
     using Carpet.Web.ViewModels.Administration.Vehicles;
-    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Xunit;
-
 
     public class VehicleServiceTests : BaseServiceTests
     {
@@ -206,7 +205,6 @@
         [Fact]
         public async Task GetVehicleNames()
         {
-            var id = 2;
             var first = new VehicleCreateInputModel
             {
                 Make = "Mazda",

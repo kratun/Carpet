@@ -20,6 +20,7 @@
     using Carpet.Web.InputModels.Administration.Items;
     using Carpet.Web.ViewModels;
     using Carpet.Web.ViewModels.Administration.Items;
+    using CloudinaryDotNet;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -49,6 +50,16 @@
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection"))
                 .UseLazyLoadingProxies());
+
+            // Coudinary
+            Account cloudinaryCredentials = new Account(
+                this.configuration["Cloudinary:CloudName"],
+                this.configuration["Cloudinary:ApiKey"],
+                this.configuration["Cloudinary:ApiSecret"]);
+
+            Cloudinary cloudinaryUtility = new Cloudinary(cloudinaryCredentials);
+
+            services.AddSingleton(cloudinaryUtility);
 
             services
                 .AddIdentity<CarpetUser, CarpetRole>(options =>
@@ -117,6 +128,7 @@
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IOrderStatusService, OrderStatusService>();
             services.AddTransient<IOrderItemsService, OrderItemsService>();
+            services.AddTransient<ICloudinaryService, CloudinaryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
